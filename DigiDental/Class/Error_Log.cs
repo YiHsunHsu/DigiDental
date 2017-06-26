@@ -13,8 +13,9 @@ namespace DigiDental.Class
             {
                 Directory.CreateDirectory(errorLogFolder);
             }
-            string fileName = DateTime.Now.ToShortDateString() + @".txt";
-            File.AppendAllText(errorLogFolder + @"\" + fileName, ErrMsg);
+            string fileName = DateTime.Now.ToString("yyyyMMdd") + @".txt";
+            string OutputMsg = "*****" + DateTime.Now + "*****\r\n" + ErrMsg + "\r\n";
+            File.AppendAllText(errorLogFolder + @"\" + fileName, OutputMsg);
         }
     }
 }

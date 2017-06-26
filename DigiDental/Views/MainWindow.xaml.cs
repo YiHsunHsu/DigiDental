@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using DigiDental.ViewModels;
+using System.Windows;
 
 namespace DigiDental.Views
 {
@@ -8,7 +9,7 @@ namespace DigiDental.Views
     public partial class MainWindow : Window
     {
         private bool isLoaded = false;
-
+        private string HostName { get; set; }
         public MainWindow()
         {
             InitializeComponent();
@@ -18,8 +19,9 @@ namespace DigiDental.Views
                 Loading loading = new Loading();
 
                 bool? result = loading.ShowDialog();
-                if (result ?? true)
+                if ((bool)result)
                 {
+                    HostName = loading.HostName;
                     isLoaded = true;
                     Visibility = Visibility.Visible;
                 }
