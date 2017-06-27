@@ -85,6 +85,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Class\ConfigManage.cs" />
+    <Compile Include="Class\ExtensionMethods.cs" />
     <Compile Include="Class\IPValidationRule.cs" />
     <Compile Include="Class\ValidatorHelper.cs" />
     <Compile Include="Clients.cs">

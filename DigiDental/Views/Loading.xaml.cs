@@ -1,12 +1,10 @@
 ﻿using DigiDental.Class;
 using DigiDental.DataAccess.DbObject;
-using DigiDental.ViewModels;
 using System;
 using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Windows;
-using System.Windows.Threading;
 
 namespace DigiDental.Views
 {
@@ -27,12 +25,14 @@ namespace DigiDental.Views
         {
             InitializeComponent();
         }
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+
+        private void Window_ContentRendered(object sender, EventArgs e)
         {
             try
             {
                 Status.Text = "伺服器位置確認中...";
                 Status.Refresh();
+
                 //判斷app.config
                 if (!ConfigManage.ReadSetting("Server"))//尚未設置
                 {
@@ -44,7 +44,7 @@ namespace DigiDental.Views
                         ConfigManage.AddUpdateAppCongig("Server", serverIP);
                     }
                 }
-                
+
                 Status.Text = "嘗試連接伺服器...";
                 Status.Refresh();
 
@@ -61,7 +61,7 @@ namespace DigiDental.Views
                     pi.Patient_Gender = true;
                     pi.Patient_Birth = DateTime.Parse("1986-08-11");
                     pi.Patient_IDNumber = "W100399932";
-                    
+
                     Status.Text = "取得本機資訊...";
                     Status.Refresh();
 
@@ -77,7 +77,7 @@ namespace DigiDental.Views
                             LocalIP = ip.ToString();
                         }
                     }
-                    
+
                     Status.Text = "確認本機註冊資訊...";
                     Status.Refresh();
 
@@ -88,11 +88,17 @@ namespace DigiDental.Views
                     string VerificationCodeClient = string.Empty;
                     if (isExistClient.Count() > 0)//已註冊//判斷VerificationCode 與Server的狀態
                     {
+                        Status.Text = "本機已註冊...";
+                        Status.Refresh();
+
                         Clients c = isExistClient.First();
                         VerificationCodeClient = c.Agency_VerificationCode;
                     }
                     else//第一次使用，輸入驗證碼
                     {
+                        Status.Text = "本機尚未註冊...";
+                        Status.Refresh();
+
                         InputDialog idVerify = new InputDialog("第一次登入，請輸入產品驗證碼:", "Verify");
                         if (idVerify.ShowDialog() == true)
                         {
@@ -107,7 +113,7 @@ namespace DigiDental.Views
                             dde.SaveChanges();
                         }
                     }
-                    
+
                     Status.Text = "取得伺服器認證資訊...";
                     Status.Refresh();
 
@@ -133,7 +139,7 @@ namespace DigiDental.Views
                                 {
                                     MessageBoxTips = "此為試用版本，試用日期至" + ((DateTime)a.Agency_TrialPeriod).ToShortDateString();
                                     MessageBox.Show(MessageBoxTips, "提示", MessageBoxButton.OK, MessageBoxImage.Information);
-                                    
+
                                     Status.Text = "病患資訊確認中...";
                                     Status.Refresh();
 
@@ -177,22 +183,22 @@ namespace DigiDental.Views
                 {
                     Status.Text = "成功登入，歡迎使用DigiDental...";
                     Status.Refresh();
-                    Thread.Sleep(1000);
                 }
                 else
                 {
                     Status.Text = "登入失敗，原因:" + MessageBoxTips;
                     Status.Refresh();
-                    Thread.Sleep(1000);
                 }
                 //回傳結果
                 DialogResult = ReturnDialogResult;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Error_Log.ErrorMessageOutput(ex.ToString());
                 DialogResult = ReturnDialogResult;
             }
+            Thread.Sleep(1000);
+            Close();
         }
         /// <summary>
         /// 新增新病患
@@ -228,13 +234,6 @@ namespace DigiDental.Views
                                     );
             dde.SaveChanges();
         }
-    }
-    public static class ExtensionMethods
-    {
-        private static Action EmptyDelegate = delegate () { };
-        public static void Refresh(this UIElement uiElement)
-        {
-            uiElement.Dispatcher.Invoke(DispatcherPriority.Render, EmptyDelegate);
-        }
+
     }
 }

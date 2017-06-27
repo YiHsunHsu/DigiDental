@@ -8,27 +8,20 @@ namespace DigiDental.Views
     /// </summary>
     public partial class MainWindow : Window
     {
-        private bool isLoaded = false;
         private string HostName { get; set; }
         public MainWindow()
         {
             InitializeComponent();
-            Visibility = Visibility.Hidden;
-            if (!isLoaded)
-            {
-                Loading loading = new Loading();
+            Loading Loading = new Loading();
 
-                bool? result = loading.ShowDialog();
-                if ((bool)result)
-                {
-                    HostName = loading.HostName;
-                    isLoaded = true;
-                    Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    Application.Current.Shutdown();
-                }
+            bool? result = Loading.ShowDialog();
+            if ((bool)result)
+            {
+                HostName = Loading.HostName;
+            }
+            else
+            {
+                Application.Current.Shutdown();
             }
         }
     }
