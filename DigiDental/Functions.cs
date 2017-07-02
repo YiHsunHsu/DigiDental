@@ -12,25 +12,19 @@ namespace DigiDental
     using System;
     using System.Collections.Generic;
     
-    public partial class Patients
+    public partial class Functions
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Patients()
+        public Functions()
         {
-            this.Registrations = new HashSet<Registrations>();
+            this.Agencys = new HashSet<Agencys>();
         }
     
-        public string Patient_ID { get; set; }
-        public string Patient_Number { get; set; }
-        public string Patient_Name { get; set; }
-        public bool Patient_Gender { get; set; }
-        public System.DateTime Patient_Birth { get; set; }
-        public string Patient_IDNumber { get; set; }
-        public string Patient_Photo { get; set; }
-        public System.DateTime UpdateDate { get; set; }
-        public System.DateTime CreateDate { get; set; }
+        public int Function_ID { get; set; }
+        public string Function_Title { get; set; }
+        public bool Function_IsEnable { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Registrations> Registrations { get; set; }
+        public virtual ICollection<Agencys> Agencys { get; set; }
     }
 }

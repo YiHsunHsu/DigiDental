@@ -1,0 +1,47 @@
+﻿<Window x:Class="DigiDental.Views.Settings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:svm="clr-namespace:DigiDental.ViewModels.ViewModelBase"
+        xmlns:s="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="clr-namespace:DigiDental.Views"
+        mc:Ignorable="d"
+        Title="設定" Height="300" Width="500" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <svm:RadioButtonConverter x:Key="radioButtonConverterKey"></svm:RadioButtonConverter>
+        <s:Int32 x:Key="1">1</s:Int32>
+        <s:Int32 x:Key="2">2</s:Int32>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.14*"></RowDefinition>
+            <RowDefinition Height="0.14*"></RowDefinition>
+            <RowDefinition Height="0.14*"></RowDefinition>
+            <RowDefinition Height="0.14*"></RowDefinition>
+            <RowDefinition Height="0.14*"></RowDefinition>
+            <RowDefinition Height="0.14*"></RowDefinition>
+            <RowDefinition Height="0.14*"></RowDefinition>
+            <RowDefinition Height="0.14*"></RowDefinition>
+            <RowDefinition Height="0.16*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" Content="影像路徑設定:"/>
+        <TextBox Grid.Row="1" Name="txtImagePath" Text="{Binding ImagePath}"/>
+        <Label Grid.Row="2" Content="Wifi Card路徑設定:"/>
+        <TextBox Grid.Row="3" Name="txtWifiCardPath" Text="{Binding WifiCardPath}"/>
+        <Label Grid.Row="4" Content="預設功能起始頁:"/>
+        <StackPanel Grid.Row="5" Orientation="Horizontal" VerticalAlignment="Center">
+            <RadioButton GroupName="StartFunction" Content="瀏覽模式" IsChecked="{Binding StartFunction, Converter={StaticResource ResourceKey=radioButtonConverterKey},  ConverterParameter={StaticResource 1}}" />
+            <RadioButton GroupName="StartFunction" Content="片套模式" IsChecked="{Binding StartFunction, Converter={StaticResource ResourceKey=radioButtonConverterKey},  ConverterParameter={StaticResource 2}}" />
+        </StackPanel>
+        <Label Grid.Row="6" Content="片套模式設定:"/>
+        <StackPanel Grid.Row="7" Orientation="Horizontal" VerticalAlignment="Center">
+            <RadioButton GroupName="Mode" Content="橫幅" IsChecked="{Binding ViewType, Converter={StaticResource ResourceKey=radioButtonConverterKey}, ConverterParameter=0}"/>
+            <RadioButton GroupName="Mode" Content="直幅" IsChecked="{Binding ViewType, Converter={StaticResource ResourceKey=radioButtonConverterKey}, ConverterParameter=1}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="8" Orientation="Horizontal" Margin="5">
+            <Button Content="儲存" Width="75" Margin="10,0,10,0" Click="Button_OK_Click"/>
+            <Button Content="取消" Width="75" Margin="10,0,10,0" Click="Button_Cancel_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

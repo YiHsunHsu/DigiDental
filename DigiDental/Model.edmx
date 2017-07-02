@@ -14,7 +14,11 @@
           <Property Name="Agency_VerificationCode" Type="varchar" MaxLength="100" />
           <Property Name="Agency_IsVerify" Type="bit" />
           <Property Name="Agency_TrialPeriod" Type="date" />
-          <Property Name="Agency_IsTry" Type="bit" StoreGeneratedPattern="Computed" />
+          <Property Name="Agency_IsTry" Type="bit" />
+          <Property Name="Agency_ViewType" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="Agency_ImagePath" Type="varchar" MaxLength="200" />
+          <Property Name="Agency_WifiCardPath" Type="varchar" MaxLength="200" />
+          <Property Name="Function_ID" Type="int" Nullable="false" />
           <Property Name="UpdateTime" Type="datetime" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="CreateTime" Type="datetime" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
@@ -40,6 +44,14 @@
           <Property Name="Connecting_Log_Error" Type="varchar(max)" />
           <Property Name="CreateTime" Type="datetime" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
+        <EntityType Name="Functions">
+          <Key>
+            <PropertyRef Name="Function_ID" />
+          </Key>
+          <Property Name="Function_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Function_Title" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Function_IsEnable" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="Images">
           <Key>
             <PropertyRef Name="Image_ID" />
@@ -58,6 +70,7 @@
           <Property Name="Patient_Gender" Type="bit" Nullable="false" />
           <Property Name="Patient_Birth" Type="date" Nullable="false" />
           <Property Name="Patient_IDNumber" Type="nvarchar" MaxLength="15" Nullable="false" />
+          <Property Name="Patient_Photo" Type="varchar" MaxLength="100" />
           <Property Name="UpdateDate" Type="datetime" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="CreateDate" Type="datetime" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
@@ -79,6 +92,18 @@
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
+        <Association Name="FK_Agencys_Functions">
+          <End Role="Functions" Type="Self.Functions" Multiplicity="1" />
+          <End Role="Agencys" Type="Self.Agencys" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Functions">
+              <PropertyRef Name="Function_ID" />
+            </Principal>
+            <Dependent Role="Agencys">
+              <PropertyRef Name="Function_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Images_Registrations">
           <End Role="Registrations" Type="Self.Registrations" Multiplicity="1" />
           <End Role="Images" Type="Self.Images" Multiplicity="*" />
@@ -107,10 +132,15 @@
           <EntitySet Name="Agencys" EntityType="Self.Agencys" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Clients" EntityType="Self.Clients" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Connecting_Logs" EntityType="Self.Connecting_Logs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Functions" EntityType="Self.Functions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Images" EntityType="Self.Images" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Patients" EntityType="Self.Patients" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Registrations" EntityType="Self.Registrations" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Agencys_Functions" Association="Self.FK_Agencys_Functions">
+            <End Role="Functions" EntitySet="Functions" />
+            <End Role="Agencys" EntitySet="Agencys" />
+          </AssociationSet>
           <AssociationSet Name="FK_Images_Registrations" Association="Self.FK_Images_Registrations">
             <End Role="Registrations" EntitySet="Registrations" />
             <End Role="Images" EntitySet="Images" />
@@ -124,19 +154,6 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DigiDentalModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Agencys">
-          <Key>
-            <PropertyRef Name="Agency_Code" />
-          </Key>
-          <Property Name="Agency_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Agency_ServerIP" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Agency_VerificationCode" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Agency_IsVerify" Type="Boolean" annotation:StoreGeneratedPattern="None" />
-          <Property Name="Agency_TrialPeriod" Type="DateTime" Precision="0" />
-          <Property Name="Agency_IsTry" Type="Boolean" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="UpdateTime" Type="DateTime" Nullable="false" Precision="3" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" annotation:StoreGeneratedPattern="Computed" />
-        </EntityType>
         <EntityType Name="Images">
           <Key>
             <PropertyRef Name="Image_ID" />
@@ -146,20 +163,6 @@
           <Property Name="Registration_ID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Registrations" Relationship="Self.FK_Images_Registrations" FromRole="Images" ToRole="Registrations" />
         </EntityType>
-        <EntityType Name="Patients">
-          <Key>
-            <PropertyRef Name="Patient_ID" />
-          </Key>
-          <Property Name="Patient_ID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Patient_Number" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Patient_Name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Patient_Gender" Type="Boolean" Nullable="false" annotation:StoreGeneratedPattern="None" />
-          <Property Name="Patient_Birth" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Patient_IDNumber" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="3" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" annotation:StoreGeneratedPattern="Computed" />
-          <NavigationProperty Name="Registrations" Relationship="Self.FK_Registrations_Patients" FromRole="Patients" ToRole="Registrations" />
-        </EntityType>
         <EntityType Name="Registrations">
           <Key>
             <PropertyRef Name="Registration_ID" />
@@ -168,7 +171,7 @@
           <Property Name="Registration_Date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="Patient_ID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Images" Relationship="Self.FK_Images_Registrations" FromRole="Registrations" ToRole="Images" />
-          <NavigationProperty Name="Patients" Relationship="Self.FK_Registrations_Patients" FromRole="Registrations" ToRole="Patients" />
+          <NavigationProperty Name="Patients" Relationship="DigiDentalModel.FK_Registrations_Patients" FromRole="Registrations" ToRole="Patients" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -192,34 +195,27 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Registrations_Patients">
-          <End Role="Patients" Type="Self.Patients" Multiplicity="1" />
-          <End Role="Registrations" Type="Self.Registrations" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Patients">
-              <PropertyRef Name="Patient_ID" />
-            </Principal>
-            <Dependent Role="Registrations">
-              <PropertyRef Name="Patient_ID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="DigiDentalEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Agencys" EntityType="Self.Agencys" />
           <EntitySet Name="Images" EntityType="Self.Images" />
-          <EntitySet Name="Patients" EntityType="Self.Patients" />
           <EntitySet Name="Registrations" EntityType="Self.Registrations" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
           <AssociationSet Name="FK_Images_Registrations" Association="Self.FK_Images_Registrations">
             <End Role="Registrations" EntitySet="Registrations" />
             <End Role="Images" EntitySet="Images" />
           </AssociationSet>
-          <AssociationSet Name="FK_Registrations_Patients" Association="Self.FK_Registrations_Patients">
+          <EntitySet Name="Clients" EntityType="DigiDentalModel.Clients" />
+          <EntitySet Name="Connecting_Logs" EntityType="DigiDentalModel.Connecting_Logs" />
+          <EntitySet Name="Patients" EntityType="DigiDentalModel.Patients" />
+          <AssociationSet Name="FK_Registrations_Patients" Association="DigiDentalModel.FK_Registrations_Patients">
             <End Role="Patients" EntitySet="Patients" />
             <End Role="Registrations" EntitySet="Registrations" />
           </AssociationSet>
-          <EntitySet Name="Clients" EntityType="DigiDentalModel.Clients" />
-          <EntitySet Name="Connecting_Logs" EntityType="DigiDentalModel.Connecting_Logs" />
+          <EntitySet Name="Agencys" EntityType="DigiDentalModel.Agencys" />
+          <EntitySet Name="Functions" EntityType="DigiDentalModel.Functions" />
+          <AssociationSet Name="FK_Agencys_Functions" Association="DigiDentalModel.FK_Agencys_Functions">
+            <End Role="Functions" EntitySet="Functions" />
+            <End Role="Agencys" EntitySet="Agencys" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Clients">
           <Key>
@@ -243,46 +239,84 @@
           <Property Name="Connecting_Log_Error" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
+        <EntityType Name="Patients">
+          <Key>
+            <PropertyRef Name="Patient_ID" />
+          </Key>
+          <Property Name="Patient_ID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Patient_Number" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Patient_Name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Patient_Gender" Type="Boolean" Nullable="false" />
+          <Property Name="Patient_Birth" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Patient_IDNumber" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Patient_Photo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="UpdateDate" Type="DateTime" Nullable="false" Precision="3" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="Registrations" Relationship="DigiDentalModel.FK_Registrations_Patients" FromRole="Patients" ToRole="Registrations" />
+        </EntityType>
+        <Association Name="FK_Registrations_Patients">
+          <End Type="DigiDentalModel.Patients" Role="Patients" Multiplicity="1" />
+          <End Type="DigiDentalModel.Registrations" Role="Registrations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patients">
+              <PropertyRef Name="Patient_ID" />
+            </Principal>
+            <Dependent Role="Registrations">
+              <PropertyRef Name="Patient_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Agencys">
+          <Key>
+            <PropertyRef Name="Agency_Code" />
+          </Key>
+          <Property Name="Agency_Code" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Agency_ServerIP" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="Agency_VerificationCode" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Agency_IsVerify" Type="Boolean" />
+          <Property Name="Agency_TrialPeriod" Type="DateTime" Precision="0" />
+          <Property Name="Agency_IsTry" Type="Boolean" />
+          <Property Name="Agency_ViewType" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="Agency_ImagePath" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Agency_WifiCardPath" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Function_ID" Type="Int32" Nullable="false" />
+          <Property Name="UpdateTime" Type="DateTime" Nullable="false" Precision="3" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="Functions" Relationship="DigiDentalModel.FK_Agencys_Functions" FromRole="Agencys" ToRole="Functions" />
+        </EntityType>
+        <EntityType Name="Functions">
+          <Key>
+            <PropertyRef Name="Function_ID" />
+          </Key>
+          <Property Name="Function_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Function_Title" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Function_IsEnable" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Agencys" Relationship="DigiDentalModel.FK_Agencys_Functions" FromRole="Functions" ToRole="Agencys" />
+        </EntityType>
+        <Association Name="FK_Agencys_Functions">
+          <End Type="DigiDentalModel.Functions" Role="Functions" Multiplicity="1" />
+          <End Type="DigiDentalModel.Agencys" Role="Agencys" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Functions">
+              <PropertyRef Name="Function_ID" />
+            </Principal>
+            <Dependent Role="Agencys">
+              <PropertyRef Name="Function_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="DigiDentalModelStoreContainer" CdmEntityContainer="DigiDentalEntities">
-          <EntitySetMapping Name="Agencys">
-            <EntityTypeMapping TypeName="DigiDentalModel.Agencys">
-              <MappingFragment StoreEntitySet="Agencys">
-                <ScalarProperty Name="Agency_Code" ColumnName="Agency_Code" />
-                <ScalarProperty Name="Agency_ServerIP" ColumnName="Agency_ServerIP" />
-                <ScalarProperty Name="Agency_VerificationCode" ColumnName="Agency_VerificationCode" />
-                <ScalarProperty Name="Agency_IsVerify" ColumnName="Agency_IsVerify" />
-                <ScalarProperty Name="Agency_TrialPeriod" ColumnName="Agency_TrialPeriod" />
-                <ScalarProperty Name="Agency_IsTry" ColumnName="Agency_IsTry" />
-                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
-                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Images">
             <EntityTypeMapping TypeName="DigiDentalModel.Images">
               <MappingFragment StoreEntitySet="Images">
                 <ScalarProperty Name="Image_ID" ColumnName="Image_ID" />
                 <ScalarProperty Name="Image_Path" ColumnName="Image_Path" />
                 <ScalarProperty Name="Registration_ID" ColumnName="Registration_ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Patients">
-            <EntityTypeMapping TypeName="DigiDentalModel.Patients">
-              <MappingFragment StoreEntitySet="Patients">
-                <ScalarProperty Name="Patient_ID" ColumnName="Patient_ID" />
-                <ScalarProperty Name="Patient_Number" ColumnName="Patient_Number" />
-                <ScalarProperty Name="Patient_Name" ColumnName="Patient_Name" />
-                <ScalarProperty Name="Patient_Gender" ColumnName="Patient_Gender" />
-                <ScalarProperty Name="Patient_Birth" ColumnName="Patient_Birth" />
-                <ScalarProperty Name="Patient_IDNumber" ColumnName="Patient_IDNumber" />
-                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -327,6 +361,48 @@
                 <ScalarProperty Name="Connecting_Log_IP" ColumnName="Connecting_Log_IP" />
                 <ScalarProperty Name="Connecting_Log_HostName" ColumnName="Connecting_Log_HostName" />
                 <ScalarProperty Name="Connecting_Log_ID" ColumnName="Connecting_Log_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Patients">
+            <EntityTypeMapping TypeName="DigiDentalModel.Patients">
+              <MappingFragment StoreEntitySet="Patients">
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="Patient_Photo" ColumnName="Patient_Photo" />
+                <ScalarProperty Name="Patient_IDNumber" ColumnName="Patient_IDNumber" />
+                <ScalarProperty Name="Patient_Birth" ColumnName="Patient_Birth" />
+                <ScalarProperty Name="Patient_Gender" ColumnName="Patient_Gender" />
+                <ScalarProperty Name="Patient_Name" ColumnName="Patient_Name" />
+                <ScalarProperty Name="Patient_Number" ColumnName="Patient_Number" />
+                <ScalarProperty Name="Patient_ID" ColumnName="Patient_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Agencys">
+            <EntityTypeMapping TypeName="DigiDentalModel.Agencys">
+              <MappingFragment StoreEntitySet="Agencys">
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="Function_ID" ColumnName="Function_ID" />
+                <ScalarProperty Name="Agency_WifiCardPath" ColumnName="Agency_WifiCardPath" />
+                <ScalarProperty Name="Agency_ImagePath" ColumnName="Agency_ImagePath" />
+                <ScalarProperty Name="Agency_ViewType" ColumnName="Agency_ViewType" />
+                <ScalarProperty Name="Agency_IsTry" ColumnName="Agency_IsTry" />
+                <ScalarProperty Name="Agency_TrialPeriod" ColumnName="Agency_TrialPeriod" />
+                <ScalarProperty Name="Agency_IsVerify" ColumnName="Agency_IsVerify" />
+                <ScalarProperty Name="Agency_VerificationCode" ColumnName="Agency_VerificationCode" />
+                <ScalarProperty Name="Agency_ServerIP" ColumnName="Agency_ServerIP" />
+                <ScalarProperty Name="Agency_Code" ColumnName="Agency_Code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Functions">
+            <EntityTypeMapping TypeName="DigiDentalModel.Functions">
+              <MappingFragment StoreEntitySet="Functions">
+                <ScalarProperty Name="Function_IsEnable" ColumnName="Function_IsEnable" />
+                <ScalarProperty Name="Function_Title" ColumnName="Function_Title" />
+                <ScalarProperty Name="Function_ID" ColumnName="Function_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

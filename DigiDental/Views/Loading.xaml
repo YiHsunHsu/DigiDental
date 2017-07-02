@@ -5,7 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DigiDental.Views"
         mc:Ignorable="d"
-        Title="Loading" Height="400" Width="500" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" ContentRendered="Window_ContentRendered">
+        Title="Loading" Height="400" Width="500" 
+        ResizeMode="NoResize" WindowStartupLocation="CenterScreen"  WindowStyle="None"
+        Background="Salmon"
+        ContentRendered="Window_ContentRendered">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.8*"></RowDefinition>

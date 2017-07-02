@@ -19,7 +19,8 @@ namespace DigiDental.Views
         private bool ReturnDialogResult = false;
         
         private DigiDentalEntities dde;
-        private Patients pi;
+        public Agencys Agencys { get; set; }
+        public Patients Patients { get; set; }
 
         public Loading()
         {
@@ -52,16 +53,7 @@ namespace DigiDental.Views
                 if (new ConnectionString().CheckConnection())
                 {
                     dde = new DigiDentalEntities();
-
-                    //測試資料
-                    pi = new Patients();
-                    pi.Patient_ID = "0001";
-                    pi.Patient_Number = "E0001";
-                    pi.Patient_Name = "Eason";
-                    pi.Patient_Gender = true;
-                    pi.Patient_Birth = DateTime.Parse("1986-08-11");
-                    pi.Patient_IDNumber = "W100399932";
-
+                    
                     Status.Text = "取得本機資訊...";
                     Status.Refresh();
 
@@ -90,9 +82,8 @@ namespace DigiDental.Views
                     {
                         Status.Text = "本機已註冊...";
                         Status.Refresh();
-
-                        Clients c = isExistClient.First();
-                        VerificationCodeClient = c.Agency_VerificationCode;
+                        
+                        VerificationCodeClient = isExistClient.First().Agency_VerificationCode;
                     }
                     else//第一次使用，輸入驗證碼
                     {
@@ -123,21 +114,21 @@ namespace DigiDental.Views
                                             select cas;
                     if (checkAgencyStatus.Count() > 0)
                     {
-                        Agencys a = checkAgencyStatus.First();
-                        bool? IsVerify = a.Agency_IsVerify;
-                        bool? IsTry = a.Agency_IsTry;
+                        Agencys = checkAgencyStatus.First();
+                        bool? IsVerify = Agencys.Agency_IsVerify;
+                        bool? IsTry = Agencys.Agency_IsTry;
                         if ((bool)IsVerify)
                         {
                             if ((bool)IsTry)
                             {
-                                if (a.Agency_TrialPeriod < DateTime.Now.Date)
+                                if (Agencys.Agency_TrialPeriod < DateTime.Now.Date)
                                 {
                                     MessageBoxTips = "試用期限已到，請聯絡資訊廠商";
                                     MessageBox.Show(MessageBoxTips, "提示", MessageBoxButton.OK, MessageBoxImage.Stop);
                                 }
                                 else
                                 {
-                                    MessageBoxTips = "此為試用版本，試用日期至" + ((DateTime)a.Agency_TrialPeriod).ToShortDateString();
+                                    MessageBoxTips = "此為試用版本，試用日期至" + ((DateTime)Agencys.Agency_TrialPeriod).ToShortDateString();
                                     MessageBox.Show(MessageBoxTips, "提示", MessageBoxButton.OK, MessageBoxImage.Information);
 
                                     Status.Text = "病患資訊確認中...";
@@ -205,18 +196,37 @@ namespace DigiDental.Views
         /// </summary>
         private void addNewPatient()
         {
-            //pi = (Application.Current as App).p;
 
-            if (pi.Patient_ID != null)
+            //Data from AppStartup
+
+            if (((Application.Current as App).p).Patient_ID != null)
             {
+                Patients = (Application.Current as App).p;
                 var isExistPatient = from iep in dde.Patients
-                                     where iep.Patient_ID == pi.Patient_ID
+                                     where iep.Patient_ID == Patients.Patient_ID
                                      select iep;
                 if (isExistPatient.Count() == 0)
                 {
-                    dde.Patients.Add(pi);
+                    dde.Patients.Add(Patients);
                     dde.SaveChanges();
                 }
+                else
+                {
+                    Patients = isExistPatient.First();
+                }
+            }
+            else
+            {
+                //測試資料
+                Patients = new Patients()
+                {
+                    Patient_ID = "0001",
+                    Patient_Number = "E0001",
+                    Patient_Name = "Eason",
+                    Patient_Gender = true,
+                    Patient_Birth = DateTime.Parse("1986-08-11"),
+                    Patient_IDNumber = "W100399932"
+                };
             }
         }
         /// <summary>
@@ -234,6 +244,5 @@ namespace DigiDental.Views
                                     );
             dde.SaveChanges();
         }
-
     }
 }

@@ -44,8 +44,10 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -68,6 +70,20 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Class\Error_Log.cs" />
+    <Compile Include="Models\TabItemModel.cs" />
+    <Compile Include="ViewModels\SettingsViewModel.cs" />
+    <Compile Include="ViewModels\UserControlViewModels\ListFunctionViewModel.cs" />
+    <Compile Include="ViewModels\UserControlViewModels\TemplateFunctionViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelBase\RadioButtonConverter.cs" />
+    <Compile Include="Views\Settings.xaml.cs">
+      <DependentUpon>Settings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\ListFunction.xaml.cs">
+      <DependentUpon>ListFunction.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\TemplateFunction.xaml.cs">
+      <DependentUpon>TemplateFunction.xaml</DependentUpon>
+    </Compile>
     <Page Include="Views\InputDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -98,6 +114,9 @@
     </Compile>
     <Compile Include="DataAccess\DbObject\ConnectionString.cs" />
     <Compile Include="DataAccess\DbObject\DBEntities.cs" />
+    <Compile Include="Functions.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="Images.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -116,7 +135,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\Patients.cs" />
     <Compile Include="Patients.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -140,6 +158,18 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\Settings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\ListFunction.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\TemplateFunction.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

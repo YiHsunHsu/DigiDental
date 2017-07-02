@@ -20,7 +20,13 @@ namespace DigiDental
         public Nullable<bool> Agency_IsVerify { get; set; }
         public Nullable<System.DateTime> Agency_TrialPeriod { get; set; }
         public Nullable<bool> Agency_IsTry { get; set; }
+        public string Agency_ViewType { get; set; }
+        public string Agency_ImagePath { get; set; }
+        public string Agency_WifiCardPath { get; set; }
+        public int Function_ID { get; set; }
         public System.DateTime UpdateTime { get; set; }
         public System.DateTime CreateTime { get; set; }
+    
+        public virtual Functions Functions { get; set; }
     }
 }
