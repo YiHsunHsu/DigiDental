@@ -15,7 +15,6 @@ namespace DigiDental.ViewModels
             set
             {
                 agencys = value;
-                OnPropertyChanged("Agencys");
                 if (!string.IsNullOrEmpty(agencys.Agency_ImagePath))
                     ShowImportFunction = true;
                 else
@@ -64,18 +63,23 @@ namespace DigiDental.ViewModels
                 if (tabControlSelectedItem != value)
                 {
                     tabControlSelectedItem = value;
-                    OnPropertyChanged("TabControlSelectedItem");
+                    //OnPropertyChanged("TabControlSelectedItem");
                 }
             }
         }
-        private ListFunctionViewModel lfvm;
-        private TemplateFunctionViewModel tfvm;
         public MainWindowViewModel(string hostName, Agencys agencys, Patients patients)
         {
             HostName = hostName;
             Agencys = agencys;
             Patients = patients;
 
+            LoadFunctions();
+        }
+
+        private ListFunctionViewModel lfvm;
+        private TemplateFunctionViewModel tfvm;
+        private void LoadFunctions()
+        {
             if (dde == null)
             {
                 dde = new DigiDentalEntities();
@@ -84,7 +88,7 @@ namespace DigiDental.ViewModels
                         where f.Function_IsEnable == true
                         select f;
             foreach (var func in funcs)
-            { 
+            {
                 switch (func.Function_ID)
                 {
                     case 1:

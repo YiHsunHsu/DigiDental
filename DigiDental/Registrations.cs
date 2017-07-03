@@ -24,8 +24,8 @@ namespace DigiDental
         public System.DateTime Registration_Date { get; set; }
         public string Patient_ID { get; set; }
     
+        public virtual Patients Patients { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Images> Images { get; set; }
-        public virtual Patients Patients { get; set; }
     }
 }

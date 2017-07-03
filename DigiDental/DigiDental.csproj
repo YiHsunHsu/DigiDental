@@ -70,7 +70,29 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Class\Error_Log.cs" />
+    <Compile Include="Class\ImageProcess.cs" />
+    <Compile Include="Clients.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Connecting_Logs.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Functions.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Images.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\TabItemModel.cs" />
+    <Compile Include="Patients.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Registrations.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysdiagrams.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\UserControlViewModels\ListFunctionViewModel.cs" />
     <Compile Include="ViewModels\UserControlViewModels\TemplateFunctionViewModel.cs" />
@@ -104,22 +126,10 @@
     <Compile Include="Class\ExtensionMethods.cs" />
     <Compile Include="Class\IPValidationRule.cs" />
     <Compile Include="Class\ValidatorHelper.cs" />
-    <Compile Include="Clients.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Commands\RelayCommandO.cs" />
-    <Compile Include="Connecting_Logs.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
     <Compile Include="DataAccess\DbObject\ConnectionString.cs" />
     <Compile Include="DataAccess\DbObject\DBEntities.cs" />
-    <Compile Include="Functions.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Images.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
     <Compile Include="Model.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -134,15 +144,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Model.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Patients.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Registrations.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="sysdiagrams.cs">
-      <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\InputDialogViewModel.cs" />
     <Compile Include="ViewModels\LoadingViewModel.cs" />

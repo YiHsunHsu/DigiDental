@@ -14,6 +14,6 @@
             <RowDefinition Height="0.8*"></RowDefinition>
             <RowDefinition Height="0.2*"></RowDefinition>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="1" Name="Status" VerticalAlignment="Center"  Text="INITIALIZE" FontSize="24" FontFamily="Microsoft JhengHei" />
+        <TextBlock Grid.Row="1" Name="Status" VerticalAlignment="Center"  Text="INITIALIZE" FontSize="16" FontFamily="Microsoft JhengHei" />
     </Grid>
 </Window>

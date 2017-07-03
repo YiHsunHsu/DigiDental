@@ -15,6 +15,7 @@ namespace DigiDental.Views
     {
         public string HostName { get; set; }
 
+        private bool MessageBoxStatus = false;
         private string MessageBoxTips = string.Empty;
         private bool ReturnDialogResult = false;
         
@@ -124,18 +125,18 @@ namespace DigiDental.Views
                                 if (Agencys.Agency_TrialPeriod < DateTime.Now.Date)
                                 {
                                     MessageBoxTips = "試用期限已到，請聯絡資訊廠商";
-                                    MessageBox.Show(MessageBoxTips, "提示", MessageBoxButton.OK, MessageBoxImage.Stop);
                                 }
                                 else
                                 {
+                                    MessageBoxStatus = true;
                                     MessageBoxTips = "此為試用版本，試用日期至" + ((DateTime)Agencys.Agency_TrialPeriod).ToShortDateString();
-                                    MessageBox.Show(MessageBoxTips, "提示", MessageBoxButton.OK, MessageBoxImage.Information);
 
                                     Status.Text = "病患資訊確認中...";
                                     Status.Refresh();
 
                                     //判斷病患
                                     addNewPatient();
+
                                     ReturnDialogResult = true;
                                 }
                             }
@@ -146,40 +147,46 @@ namespace DigiDental.Views
 
                                 //判斷此病患
                                 addNewPatient();
+
                                 ReturnDialogResult = true;
                             }
                         }
                         else
                         {
                             MessageBoxTips = "此驗證碼已停用，如欲使用請聯絡資訊廠商";
-                            MessageBox.Show(MessageBoxTips, "提示", MessageBoxButton.OK, MessageBoxImage.Stop);
                         }
                     }
                     else
                     {
                         MessageBoxTips = "伺服器尚未建立認證";
-                        MessageBox.Show(MessageBoxTips, "提示", MessageBoxButton.OK, MessageBoxImage.Stop);
                     }
                     //寫入ConnectingLog資訊
                     addConnectingLog(HostName, LocalIP, MessageBoxTips, ReturnDialogResult);
                 }
                 else
                 {
-                    MessageBoxTips = "伺服器連接失敗";
-                    MessageBox.Show(MessageBoxTips, "提示", MessageBoxButton.OK, MessageBoxImage.Stop);
+                    MessageBoxTips = "伺服器連接失敗";                    
                     ConfigManage.AddUpdateAppCongig("Server", "");
                 }
 
+                //show MessageBox
                 if (ReturnDialogResult)
                 {
                     Status.Text = "成功登入，歡迎使用DigiDental...";
                     Status.Refresh();
+
+                    if (MessageBoxStatus)//還在試用期內可以使用
+                    {
+                        MessageBox.Show(MessageBoxTips, "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
                 }
                 else
                 {
                     Status.Text = "登入失敗，原因:" + MessageBoxTips;
                     Status.Refresh();
+                    MessageBox.Show(MessageBoxTips, "提示", MessageBoxButton.OK, MessageBoxImage.Stop);
                 }
+                Thread.Sleep(1000);
                 //回傳結果
                 DialogResult = ReturnDialogResult;
             }

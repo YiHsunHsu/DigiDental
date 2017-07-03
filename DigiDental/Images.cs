@@ -14,8 +14,18 @@ namespace DigiDental
     
     public partial class Images
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Images()
+        {
+            this.Image_IsEnable = true;
+        }
+    
         public int Image_ID { get; set; }
         public string Image_Path { get; set; }
+        public string Image_FileName { get; set; }
+        public string Image_Size { get; set; }
+        public string Image_Extension { get; set; }
+        public bool Image_IsEnable { get; set; }
         public int Registration_ID { get; set; }
     
         public virtual Registrations Registrations { get; set; }

@@ -5,10 +5,8 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="f2071f8bdaa94dac9262b2aede91b1dc" Name="Diagram1">
-        <EntityTypeShape EntityType="DigiDentalModel.Images" Width="1.5" PointX="5.25" PointY="1.375" IsExpanded="true" />
         <EntityTypeShape EntityType="DigiDentalModel.Registrations" Width="1.5" PointX="3" PointY="1.375" IsExpanded="true" />
         <EntityTypeShape EntityType="DigiDentalModel.sysdiagrams" Width="1.5" PointX="8.875" PointY="4.625" IsExpanded="true" />
-        <AssociationConnector Association="DigiDentalModel.FK_Images_Registrations" ManuallyRouted="false" />
         <EntityTypeShape EntityType="DigiDentalModel.Clients" Width="1.5" PointX="7.75" PointY="1.625" />
         <EntityTypeShape EntityType="DigiDentalModel.Connecting_Logs" Width="1.5" PointX="6.625" PointY="4.5" />
         <EntityTypeShape EntityType="DigiDentalModel.Patients" Width="1.5" PointX="0.75" PointY="0.875" />
@@ -16,6 +14,8 @@
         <EntityTypeShape EntityType="DigiDentalModel.Agencys" Width="1.5" PointX="3.75" PointY="4.125" />
         <EntityTypeShape EntityType="DigiDentalModel.Functions" Width="1.5" PointX="1" PointY="4.875" />
         <AssociationConnector Association="DigiDentalModel.FK_Agencys_Functions" />
+        <EntityTypeShape EntityType="DigiDentalModel.Images" Width="1.5" PointX="5.25" PointY="0.75" />
+        <AssociationConnector Association="DigiDentalModel.FK_Images_Registrations" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

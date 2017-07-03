@@ -57,7 +57,11 @@
             <PropertyRef Name="Image_ID" />
           </Key>
           <Property Name="Image_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Image_Path" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Image_Path" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="Image_FileName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Image_Size" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Image_Extension" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Image_IsEnable" Type="bit" Nullable="false" />
           <Property Name="Registration_ID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Patients">
@@ -154,15 +158,6 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DigiDentalModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Images">
-          <Key>
-            <PropertyRef Name="Image_ID" />
-          </Key>
-          <Property Name="Image_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Image_Path" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Registration_ID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Registrations" Relationship="Self.FK_Images_Registrations" FromRole="Images" ToRole="Registrations" />
-        </EntityType>
         <EntityType Name="Registrations">
           <Key>
             <PropertyRef Name="Registration_ID" />
@@ -170,8 +165,8 @@
           <Property Name="Registration_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Registration_Date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="Patient_ID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Images" Relationship="Self.FK_Images_Registrations" FromRole="Registrations" ToRole="Images" />
           <NavigationProperty Name="Patients" Relationship="DigiDentalModel.FK_Registrations_Patients" FromRole="Registrations" ToRole="Patients" />
+          <NavigationProperty Name="Images" Relationship="DigiDentalModel.FK_Images_Registrations" FromRole="Registrations" ToRole="Images" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -183,26 +178,9 @@
           <Property Name="version" Type="Int32" />
           <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
-        <Association Name="FK_Images_Registrations">
-          <End Role="Registrations" Type="Self.Registrations" Multiplicity="1" />
-          <End Role="Images" Type="Self.Images" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Registrations">
-              <PropertyRef Name="Registration_ID" />
-            </Principal>
-            <Dependent Role="Images">
-              <PropertyRef Name="Registration_ID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="DigiDentalEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Images" EntityType="Self.Images" />
           <EntitySet Name="Registrations" EntityType="Self.Registrations" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
-          <AssociationSet Name="FK_Images_Registrations" Association="Self.FK_Images_Registrations">
-            <End Role="Registrations" EntitySet="Registrations" />
-            <End Role="Images" EntitySet="Images" />
-          </AssociationSet>
           <EntitySet Name="Clients" EntityType="DigiDentalModel.Clients" />
           <EntitySet Name="Connecting_Logs" EntityType="DigiDentalModel.Connecting_Logs" />
           <EntitySet Name="Patients" EntityType="DigiDentalModel.Patients" />
@@ -215,6 +193,11 @@
           <AssociationSet Name="FK_Agencys_Functions" Association="DigiDentalModel.FK_Agencys_Functions">
             <End Role="Functions" EntitySet="Functions" />
             <End Role="Agencys" EntitySet="Agencys" />
+          </AssociationSet>
+          <EntitySet Name="Images" EntityType="DigiDentalModel.Images" />
+          <AssociationSet Name="FK_Images_Registrations" Association="DigiDentalModel.FK_Images_Registrations">
+            <End Role="Registrations" EntitySet="Registrations" />
+            <End Role="Images" EntitySet="Images" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Clients">
@@ -305,21 +288,37 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Images">
+          <Key>
+            <PropertyRef Name="Image_ID" />
+          </Key>
+          <Property Name="Image_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Image_Path" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="Image_FileName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Image_Size" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Image_Extension" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Image_IsEnable" Type="Boolean" Nullable="false" DefaultValue="true" />
+          <Property Name="Registration_ID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Registrations" Relationship="DigiDentalModel.FK_Images_Registrations" FromRole="Images" ToRole="Registrations" />
+        </EntityType>
+        <Association Name="FK_Images_Registrations">
+          <End Type="DigiDentalModel.Registrations" Role="Registrations" Multiplicity="1" />
+          <End Type="DigiDentalModel.Images" Role="Images" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Registrations">
+              <PropertyRef Name="Registration_ID" />
+            </Principal>
+            <Dependent Role="Images">
+              <PropertyRef Name="Registration_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="DigiDentalModelStoreContainer" CdmEntityContainer="DigiDentalEntities">
-          <EntitySetMapping Name="Images">
-            <EntityTypeMapping TypeName="DigiDentalModel.Images">
-              <MappingFragment StoreEntitySet="Images">
-                <ScalarProperty Name="Image_ID" ColumnName="Image_ID" />
-                <ScalarProperty Name="Image_Path" ColumnName="Image_Path" />
-                <ScalarProperty Name="Registration_ID" ColumnName="Registration_ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Registrations">
             <EntityTypeMapping TypeName="DigiDentalModel.Registrations">
               <MappingFragment StoreEntitySet="Registrations">
@@ -403,6 +402,19 @@
                 <ScalarProperty Name="Function_IsEnable" ColumnName="Function_IsEnable" />
                 <ScalarProperty Name="Function_Title" ColumnName="Function_Title" />
                 <ScalarProperty Name="Function_ID" ColumnName="Function_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Images">
+            <EntityTypeMapping TypeName="DigiDentalModel.Images">
+              <MappingFragment StoreEntitySet="Images">
+                <ScalarProperty Name="Registration_ID" ColumnName="Registration_ID" />
+                <ScalarProperty Name="Image_IsEnable" ColumnName="Image_IsEnable" />
+                <ScalarProperty Name="Image_Extension" ColumnName="Image_Extension" />
+                <ScalarProperty Name="Image_Size" ColumnName="Image_Size" />
+                <ScalarProperty Name="Image_FileName" ColumnName="Image_FileName" />
+                <ScalarProperty Name="Image_Path" ColumnName="Image_Path" />
+                <ScalarProperty Name="Image_ID" ColumnName="Image_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

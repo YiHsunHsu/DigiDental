@@ -21,7 +21,10 @@
                 <MenuItem Header="檔案">
                     <MenuItem Header="離開" Click="MenuItem_Exit_Click"></MenuItem>
                 </MenuItem>
-                <MenuItem Header="匯入" Click="MenuItem_Import_Click" IsEnabled="{Binding ShowImportFunction, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></MenuItem>
+                <MenuItem Header="匯入">
+                    <MenuItem Header="資料夾匯入" Click="MenuItem_Import_Click" IsEnabled="{Binding ShowImportFunction, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></MenuItem>
+                    <MenuItem Header="Wifi Card 匯入"></MenuItem>
+                </MenuItem>
                 <MenuItem Header="設定" Click="MenuItem_Setting_Click"></MenuItem>
                 <MenuItem Header="關於"></MenuItem>
             </Menu>

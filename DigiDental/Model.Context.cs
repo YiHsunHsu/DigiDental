@@ -9,7 +9,6 @@
 
 namespace DigiDental
 {
-    using DigiDental.DataAccess.DbObject;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
@@ -17,7 +16,7 @@ namespace DigiDental
     public partial class DigiDentalEntities : DbContext
     {
         public DigiDentalEntities()
-            : base(new ConnectionString().EFConnectionString())
+            : base(new DataAccess.DbObject.ConnectionString().EFConnectionString())
         {
         }
     
@@ -26,7 +25,6 @@ namespace DigiDental
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Images> Images { get; set; }
         public virtual DbSet<Registrations> Registrations { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<Clients> Clients { get; set; }
@@ -34,5 +32,6 @@ namespace DigiDental
         public virtual DbSet<Patients> Patients { get; set; }
         public virtual DbSet<Agencys> Agencys { get; set; }
         public virtual DbSet<Functions> Functions { get; set; }
+        public virtual DbSet<Images> Images { get; set; }
     }
 }
