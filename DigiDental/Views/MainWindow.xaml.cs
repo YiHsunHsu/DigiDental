@@ -1,7 +1,9 @@
 ﻿using DigiDental.Class;
 using DigiDental.ViewModels;
+using DigiDental.Views.UserControls;
 using Microsoft.Win32;
 using System;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -21,8 +23,12 @@ namespace DigiDental.Views
         private string HostName { get; set; }
         private Agencys Agencys { get; set; }
         private Patients Patients { get; set; }
+        public ObservableCollection<Registrations> RegistrationsCollection { get; set; }
+        public ObservableCollection<Images> ImagesCollection { get; set; }
 
         private MainWindowViewModel mwvm;
+        private ListFunction lf;
+        private TemplateFunction tf;
         public MainWindow()
         {
             InitializeComponent();
@@ -43,7 +49,13 @@ namespace DigiDental.Views
                         mwvm = new MainWindowViewModel(HostName, Agencys, Patients);
                     }
                     DataContext = mwvm;
-                    
+
+                    if(dde == null)
+                    {
+                        dde = new DigiDentalEntities();
+                    }
+
+                    LoadFunctions();
                 }
                 else
                 {
@@ -164,6 +176,13 @@ namespace DigiDental.Views
                     
                     Thread.Sleep(200);
                 }
+
+                //匯入之後重新載入  取掛號資訊清單 Registration
+                var queryRegistrations = from qr in dde.Registrations
+                                         where qr.Patient_ID == Patients.Patient_ID
+                                         orderby qr.Registration_Date descending
+                                         select qr;
+                lf.RegistrationsCollection = new ObservableCollection<Registrations>(queryRegistrations.ToList());
             }
         }
         private void MenuItem_Setting_Click(object sender, RoutedEventArgs e)
@@ -173,6 +192,58 @@ namespace DigiDental.Views
             {
                 Agencys = Settings.Agencys;
                 mwvm.Agencys = Agencys;
+            }
+        }
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// 載入Functions 建立Tab
+        /// </summary>
+        private void LoadFunctions()
+        {
+            var queryFunctions = from qf in dde.Functions
+                                 where qf.Function_IsEnable == true
+                                 select qf;
+            if (queryFunctions.Count() > 0)
+            {
+                //取掛號資訊清單 Registration
+                var queryRegistrations = from qr in dde.Registrations
+                                         where qr.Patient_ID == Patients.Patient_ID
+                                         orderby qr.Registration_Date descending
+                                         select qr;
+                RegistrationsCollection = new ObservableCollection<Registrations>(queryRegistrations.ToList());
+
+                //建立Tabcontrol Functions 功能頁面
+                foreach (var qf in queryFunctions)
+                {
+                    TabItem tiFunction = new TabItem();
+                    switch (qf.Function_ID)
+                    {
+                        case 1:
+
+                            tiFunction.Header = qf.Function_Title;
+                            if (lf == null)
+                            {
+                                lf = new ListFunction(Agencys, Patients, RegistrationsCollection);
+                            }
+                            tiFunction.Content = lf;
+                            break;
+                        case 2:
+                            tiFunction.Header = qf.Function_Title;
+                            if (tf == null)
+                            {
+                                tf = new TemplateFunction();
+                            }
+                            tiFunction.Content = tf;
+                            break;
+                    }
+                    if (qf.Function_ID == Agencys.Function_ID)
+                    {
+                        tiFunction.IsSelected = true;
+                    }
+                    FunctionsTab.Items.Add(tiFunction);
+                }
             }
         }
         #endregion

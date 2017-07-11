@@ -1,9 +1,9 @@
-﻿using DigiDental.Models;
-
-namespace DigiDental.ViewModels.UserControlViewModels
+﻿namespace DigiDental.ViewModels.UserControlViewModels
 {
-    public class TemplateFunctionViewModel : TabItemModel
+    public class TemplateFunctionViewModel
     {
-        public override string Header { get; set; }
+        public TemplateFunctionViewModel()
+        {
+        }
     }
 }

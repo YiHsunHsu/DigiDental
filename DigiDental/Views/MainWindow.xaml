@@ -67,17 +67,18 @@
                     </StackPanel>
                 </Grid>
                 <Button Grid.Column="1" Click="Button_Stretch_Panel" />
-                <TabControl Grid.Column="2" ItemsSource="{Binding Tabs}" SelectedItem="{Binding TabControlSelectedItem}" TabStripPlacement="Left">
+                <TabControl Grid.Column="2" Name="FunctionsTab"></TabControl>
+                <!--<TabControl Grid.Column="2" ItemsSource="{Binding Tabs}" SelectedItem="{Binding TabControlSelectedItem}" TabStripPlacement="Left">
                     <TabControl.Resources>
                         <DataTemplate DataType="{x:Type ucvm:ListFunctionViewModel}">
-                            <vuc:ListFunction/>
+                            <vuc:ListFunction x:Name="lfuc"/>
                         </DataTemplate>
                         <DataTemplate DataType="{x:Type ucvm:TemplateFunctionViewModel}">
                             <vuc:TemplateFunction />
                         </DataTemplate>
                     </TabControl.Resources>
                     <TabControl.ItemTemplate>
-                        <!-- this is the header template-->
+                         --><!--this is the header template--><!--
                         <DataTemplate>
                             <ContentPresenter Content="{Binding Header}"
                                               TextBlock.FontFamily="Microsoft JhengHei" TextBlock.FontSize="16">
@@ -87,7 +88,7 @@
                             </ContentPresenter>
                         </DataTemplate>
                     </TabControl.ItemTemplate>
-                </TabControl>
+                </TabControl>-->
             </Grid>
         </DockPanel>
     </Grid>

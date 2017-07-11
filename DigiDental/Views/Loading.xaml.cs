@@ -222,19 +222,6 @@ namespace DigiDental.Views
                     Patients = isExistPatient.First();
                 }
             }
-            else
-            {
-                //測試資料
-                Patients = new Patients()
-                {
-                    Patient_ID = "0001",
-                    Patient_Number = "E0001",
-                    Patient_Name = "Eason",
-                    Patient_Gender = true,
-                    Patient_Birth = DateTime.Parse("1986-08-11"),
-                    Patient_IDNumber = "W100399932"
-                };
-            }
         }
         /// <summary>
         /// 寫入連線資訊

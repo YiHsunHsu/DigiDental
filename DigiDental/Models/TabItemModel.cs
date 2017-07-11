@@ -6,5 +6,6 @@
         /// Tab Header
         /// </summary>
         public virtual string Header { get; set; }
+        public virtual Patients Patients { get; set; }
     }
 }

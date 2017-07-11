@@ -2,25 +2,63 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:local="clr-namespace:DigiDental.Views.UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+             d:DesignHeight="500" d:DesignWidth="600" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <ToolBarPanel Grid.Row="0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <Label Content="日期"/>
+                    <DatePicker SelectedDate="{Binding SelectedDate}" Width="200"/>
+                    <Button Content="匯入" Width="30" Click="Button_Import_Click"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Label Content="分類"></Label>
+                    <Label Content="已匯入日期"></Label>
+                    <ComboBox Width="100" ItemsSource="{Binding ComboBoxItems}" DisplayMemberPath="DisplayName" SelectedValue="{Binding SelectedValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    <Button Content="全部" Width="30" Click="Button_ListAll_Click"/>
+                    <!--<ComboBox Name="cbxRegistrations" Width="100" SelectionChanged="cbxRegistrations_SelectionChanged"/>-->
+                </StackPanel>
+                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <Button DockPanel.Dock="Left" Content="放大" Click="Button_ZoomIn_Click"/>
+                    <Slider DockPanel.Dock="Left" Width="100" Maximum="5" Minimum="1" Value="{Binding ColumnCount}" />
+                    <Button DockPanel.Dock="Left"  Content="縮小" Click="Button_ZoomOut_Click"/>
+                </StackPanel>
+            </Grid>
             <StackPanel Orientation="Horizontal">
-                <Button>放大</Button>
-                <Button>縮小</Button>
-                <Label Content="分類"></Label>
-                <ComboBox />
             </StackPanel>
         </ToolBarPanel>
-        <Grid Grid.Row="1">
-            <WrapPanel />
-        </Grid>
+        <ListBox Grid.Row="1"
+                 ItemsSource="{Binding ImagesCollection}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 SelectedItem="{Binding SelectedImage, Mode=TwoWay}"
+                 MouseDoubleClick="ListBox_PhotoEditor_MouseDoubleClick">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="{Binding ColumnCount}"></UniformGrid>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <Border BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" >
+                            <Image Margin="10" Source="{Binding Image_Path}" Stretch="Uniform" />
+                        </Border>
+                        <TextBlock Text="{Binding Image_FileName}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 </UserControl>

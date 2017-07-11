@@ -1,9 +1,4 @@
-﻿using DigiDental.Models;
-using DigiDental.ViewModels.UserControlViewModels;
-using System.Collections.ObjectModel;
-using System.Linq;
-
-namespace DigiDental.ViewModels
+﻿namespace DigiDental.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase.ViewModelBase
     {
@@ -39,82 +34,86 @@ namespace DigiDental.ViewModels
         }
 
         private Functions Functions { get; set; }
-        private DigiDentalEntities dde;
+        #region MVVM TabControl 建構子
+        //private DigiDentalEntities dde;
 
-        private ObservableCollection<TabItemModel> tabs;
-        public ObservableCollection<TabItemModel> Tabs
-        {
-            get
-            {
-                if (tabs == null)
-                {
-                    tabs = new ObservableCollection<TabItemModel>();
-                }
-                return tabs;
-            }
-        }
+        //private ObservableCollection<TabItemModel> tabs;
+        //public ObservableCollection<TabItemModel> Tabs
+        //{
+        //    get
+        //    {
+        //        if (tabs == null)
+        //        {
+        //            tabs = new ObservableCollection<TabItemModel>();
+        //        }
+        //        return tabs;
+        //    }
+        //}
         //SelectedItem Binding 
-        private object tabControlSelectedItem;
-        public object TabControlSelectedItem
-        {
-            get { return tabControlSelectedItem; }
-            set
-            {
-                if (tabControlSelectedItem != value)
-                {
-                    tabControlSelectedItem = value;
-                    //OnPropertyChanged("TabControlSelectedItem");
-                }
-            }
-        }
+        //private object tabControlSelectedItem;
+        //public object TabControlSelectedItem
+        //{
+        //    get { return tabControlSelectedItem; }
+        //    set
+        //    {
+        //        if (tabControlSelectedItem != value)
+        //        {
+        //            tabControlSelectedItem = value;
+        //            //OnPropertyChanged("TabControlSelectedItem");
+        //        }
+        //    }
+        //}
+        #endregion
         public MainWindowViewModel(string hostName, Agencys agencys, Patients patients)
         {
             HostName = hostName;
             Agencys = agencys;
             Patients = patients;
 
-            LoadFunctions();
+            //LoadFunctions();
         }
 
-        private ListFunctionViewModel lfvm;
-        private TemplateFunctionViewModel tfvm;
-        private void LoadFunctions()
-        {
-            if (dde == null)
-            {
-                dde = new DigiDentalEntities();
-            }
-            var funcs = from f in dde.Functions
-                        where f.Function_IsEnable == true
-                        select f;
-            foreach (var func in funcs)
-            {
-                switch (func.Function_ID)
-                {
-                    case 1:
-                        if (lfvm == null)
-                        {
-                            lfvm = new ListFunctionViewModel { Header = func.Function_Title };
-                            if (func.Function_ID.Equals(Agencys.Function_ID))
-                            {
-                                TabControlSelectedItem = lfvm;
-                            }
-                            Tabs.Add(lfvm);
-                        }
-                        break;
-                    case 2:
-                        if (tfvm == null)
-                        {
-                            tfvm = new TemplateFunctionViewModel { Header = func.Function_Title };
-                            if (func.Function_ID.Equals(Agencys.Function_ID))
-                            {
-                                TabControlSelectedItem = tfvm;
-                            }
-                            Tabs.Add(tfvm);
-                        }
-                        break;
-                }
-            }
-        }
+        #region MVVM TabControl
+        //private ListFunctionViewModel lfvm;
+        //private TemplateFunctionViewModel tfvm;
+        //private void LoadFunctions()
+        //{
+        //    if (dde == null)
+        //    {
+        //        dde = new DigiDentalEntities();
+        //    }
+        //    var funcs = from f in dde.Functions
+        //                where f.Function_IsEnable == true
+        //                select f;
+        //    foreach (var func in funcs)
+        //    {
+        //        switch (func.Function_ID)
+        //        {
+        //            case 1:
+        //                if (lfvm == null)
+        //                {
+        //                    lfvm = new ListFunctionViewModel(func.Function_Title, patients);
+        //                    if (func.Function_ID.Equals(Agencys.Function_ID))
+        //                    {
+        //                        TabControlSelectedItem = lfvm;
+        //                    }
+        //                    Tabs.Add(lfvm);
+        //                }
+        //                break;
+        //            case 2:
+        //                if (tfvm == null)
+        //                {
+        //                    tfvm = new TemplateFunctionViewModel { Header = func.Function_Title };
+        //                    if (func.Function_ID.Equals(Agencys.Function_ID))
+        //                    {
+        //                        TabControlSelectedItem = tfvm;
+        //                    }
+        //                    Tabs.Add(tfvm);
+        //                }
+        //                break;
+        //        }
+        //    }
+        //}
+        #endregion
     }
 }

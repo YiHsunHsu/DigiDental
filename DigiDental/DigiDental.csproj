@@ -93,10 +93,14 @@
     <Compile Include="sysdiagrams.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\PhotoEditorViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\UserControlViewModels\ListFunctionViewModel.cs" />
     <Compile Include="ViewModels\UserControlViewModels\TemplateFunctionViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase\RadioButtonConverter.cs" />
+    <Compile Include="Views\PhotoEditor.xaml.cs">
+      <DependentUpon>PhotoEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
@@ -159,6 +163,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\PhotoEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Settings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

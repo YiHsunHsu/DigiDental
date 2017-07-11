@@ -1,0 +1,47 @@
+﻿<Window x:Class="DigiDental.Views.PhotoEditor"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DigiDental.Views"
+        mc:Ignorable="d"
+        Title="PhotoEditor" Height="500" Width="600"
+        WindowState="Maximized">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <ToolBar Grid.Row="0">
+            <Button>儲存</Button>
+            <Button>另存新檔</Button>
+            <Button>放大</Button>
+            <Button>縮小</Button>
+            <Button Click="Button_RotateLeft_Click">左旋轉90</Button>
+            <Button Click="Button_RotateRight_Click">右旋轉90</Button>
+            <Button>上下鏡射</Button>
+            <Button>左右鏡射</Button>
+            <Button>裁切</Button>
+            <Button>調整角度</Button>
+        </ToolBar>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" VerticalAlignment="Center" Width="50" Height="50" Content="上一張" Click="Button_LastPhoto_Click" />
+
+            <Image Grid.Column="1" Name="ImageEdi" HorizontalAlignment="Stretch" Source="{Binding Images.Image_Path}" MouseMove="Image_MouseMove">
+                <Image.LayoutTransform>
+                    <RotateTransform Angle="{Binding RotateAngle}"></RotateTransform>
+                </Image.LayoutTransform>
+            </Image>
+            <Button Grid.Column="2" VerticalAlignment="Center" Width="50" Height="50" Content="下一張" Click="Button_NextPhoto_Click" />
+        </Grid>
+        <StatusBar Grid.Row="2" >
+            <Label Name="lbPosition"></Label>
+        </StatusBar>
+    </Grid>
+</Window>
