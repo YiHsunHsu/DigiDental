@@ -93,6 +93,7 @@
     <Compile Include="sysdiagrams.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\Class\ImageInfo.cs" />
     <Compile Include="ViewModels\PhotoEditorViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\UserControlViewModels\ListFunctionViewModel.cs" />

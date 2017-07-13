@@ -41,7 +41,7 @@
             </StackPanel>
         </ToolBarPanel>
         <ListBox Grid.Row="1"
-                 ItemsSource="{Binding ImagesCollection}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 ItemsSource="{Binding ShowImages}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"
                  SelectedItem="{Binding SelectedImage, Mode=TwoWay}"
                  MouseDoubleClick="ListBox_PhotoEditor_MouseDoubleClick">
             <ListBox.ItemsPanel>
@@ -51,12 +51,16 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel>
-                        <Border BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" >
-                            <Image Margin="10" Source="{Binding Image_Path}" Stretch="Uniform" />
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Border Grid.Row="0" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" >
+                            <Image Margin="10" MaxHeight="600" Source="{Binding BitmapImageSet}" Stretch="Uniform"/>
                         </Border>
-                        <TextBlock Text="{Binding Image_FileName}" />
-                    </StackPanel>
+                        <TextBlock Grid.Row="1" Text="{Binding ImagesCollection.Image_FileName}" />
+                    </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

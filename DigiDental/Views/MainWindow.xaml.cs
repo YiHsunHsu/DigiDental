@@ -192,6 +192,7 @@ namespace DigiDental.Views
             {
                 Agencys = Settings.Agencys;
                 mwvm.Agencys = Agencys;
+                lf.Agencys = Agencys;
             }
         }
         #endregion

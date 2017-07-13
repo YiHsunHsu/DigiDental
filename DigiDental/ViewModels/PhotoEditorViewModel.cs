@@ -1,40 +1,52 @@
-﻿using System.Collections.ObjectModel;
+﻿using DigiDental.ViewModels.Class;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Windows.Media.Imaging;
 
 namespace DigiDental.ViewModels
 {
     public class PhotoEditorViewModel : ViewModelBase.ViewModelBase
     {
-        private Images images;
-
-        public Images Images
+        private ImageInfo imageInfo;
+        public ImageInfo ImageInfo
         {
-            get { return images; }
+            get { return imageInfo; }
             set
             {
-                images = value;
-                OnPropertyChanged("Images");
+                imageInfo = value;
+                BitmapSource = SetNewBitmapImage(imageInfo.ImagesCollection.Image_Path);
+                OnPropertyChanged("ImageInfo");
             }
         }
 
-        private ObservableCollection<Images> imagesCollection;
+        private BitmapSource bitmapSource;
+        public BitmapSource BitmapSource
+        {
+            get { return bitmapSource; }
+            set
+            {
+                bitmapSource = value;
+                OnPropertyChanged("BitmapSource");
+            }
+        }
 
-        public ObservableCollection<Images> ImagesCollection
+        private ObservableCollection<ImageInfo> imagesCollection;
+        public ObservableCollection<ImageInfo> ImagesCollection
         {
             get { return imagesCollection; }
             set { imagesCollection = value; }
         }
 
-        private int rotateAngle;
-
-        public int RotateAngle
+        private BitmapImage SetNewBitmapImage(string fileName)
         {
-            get { return rotateAngle; }
-            set
-            {
-                rotateAngle = value;
-                OnPropertyChanged("RotateAngle");
-            }
+            FileStream fs = new FileStream(fileName, FileMode.Open);
+            BitmapImage bi = new BitmapImage();
+            bi.BeginInit();
+            bi.StreamSource = fs;
+            bi.CacheOption = BitmapCacheOption.OnLoad;
+            bi.EndInit();
+            fs.Close();
+            return bi;
         }
-
     }
 }

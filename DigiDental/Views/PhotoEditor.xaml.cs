@@ -1,6 +1,11 @@
-﻿using DigiDental.ViewModels;
+﻿using DigiDental.Class;
+using DigiDental.ViewModels;
+using DigiDental.ViewModels.Class;
+using System;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace DigiDental.Views
 {
@@ -9,24 +14,24 @@ namespace DigiDental.Views
     /// </summary>
     public partial class PhotoEditor : Window
     {
-        public Images Images
+        public ImageInfo ImageInfo
         {
-            get { return pevm.Images; }
-            set { pevm.Images = value; }
+            get { return pevm.ImageInfo; }
+            set { pevm.ImageInfo = value; }
         }
-        public ObservableCollection<Images> ImagesCollection
+        private BitmapSource BitmapSource
+        {
+            get { return pevm.BitmapSource; }
+            set { pevm.BitmapSource = value; }
+        }
+        public ObservableCollection<ImageInfo> ImagesCollection
         {
             get { return pevm.ImagesCollection; }
             set { pevm.ImagesCollection = value; }
         }
-
-        public int RotateAngle
-        {
-            get { return pevm.RotateAngle; }
-            set { pevm.RotateAngle = value; }
-        }
         private PhotoEditorViewModel pevm;
-        public PhotoEditor(ObservableCollection<Images> imagesCollection, int SelectedIndex)
+        TransformedBitmap tb;
+        public PhotoEditor(ObservableCollection<ImageInfo> imagesCollection, int SelectedIndex)
         {
             InitializeComponent();
 
@@ -36,23 +41,26 @@ namespace DigiDental.Views
             }
 
             ImagesCollection = imagesCollection;
-            Images = imagesCollection[SelectedIndex];
+
+            ImageInfo = imagesCollection[SelectedIndex];
 
             DataContext = pevm;
         }
-
+        #region EVENT
         private void Button_LastPhoto_Click(object sender, RoutedEventArgs e)
         {
-            if (ImagesCollection.IndexOf(Images) > 0)
+            if (ImagesCollection.IndexOf(ImageInfo) > 0)
             {
-                Images = ImagesCollection[ImagesCollection.IndexOf(Images) - 1];
+                ImageInfo = ImagesCollection[ImagesCollection.IndexOf(ImageInfo) - 1];
+                GC.Collect();
             }
         }
         private void Button_NextPhoto_Click(object sender, RoutedEventArgs e)
         {
-            if (ImagesCollection.IndexOf(Images) < ImagesCollection.Count - 1)
+            if (ImagesCollection.IndexOf(ImageInfo) < ImagesCollection.Count - 1)
             {
-                Images = ImagesCollection[ImagesCollection.IndexOf(Images) + 1];
+                ImageInfo = ImagesCollection[ImagesCollection.IndexOf(ImageInfo) + 1];
+                GC.Collect();
             }
         }
 
@@ -63,14 +71,53 @@ namespace DigiDental.Views
             xy = position;
             lbPosition.Content = xy.X + "," + xy.Y;
         }
-
+        
         private void Button_RotateLeft_Click(object sender, RoutedEventArgs e)
         {
-            RotateAngle -= 90;
+            tb = new TransformedBitmap(BitmapSource, new RotateTransform(-90));
+            BitmapSource = tb;
+            GC.Collect();
         }
         private void Button_RotateRight_Click(object sender, RoutedEventArgs e)
         {
-            RotateAngle += 90;
+            tb = new TransformedBitmap(BitmapSource, new RotateTransform(90));
+            BitmapSource = tb;
+            GC.Collect();
         }
+
+        private void Button_MirrorHorizontal_Click(object sender, RoutedEventArgs e)
+        {
+            tb = new TransformedBitmap(BitmapSource, new ScaleTransform(-1, 1));
+            BitmapSource = tb;
+            GC.Collect();
+        }
+
+        private void Button_MirrorVertical_Click(object sender, RoutedEventArgs e)
+        {
+            tb = new TransformedBitmap(BitmapSource, new ScaleTransform(1, -1));
+            BitmapSource = tb;
+            GC.Collect();
+        }
+
+        private void Button_Save_Click(object sender, RoutedEventArgs e)
+        {
+            switch (ImageInfo.ImagesCollection.Image_Extension.ToUpper())
+            {
+                case ".JPG":
+                case ".JPEG":
+                    JpegBitmapEncoder jbe = new JpegBitmapEncoder();
+                    ImageProcess.SaveUsingEncoder(BitmapSource, ImageInfo.ImagesCollection.Image_Path, jbe);
+                    break;
+                case ".PNG":
+                    PngBitmapEncoder pbe = new PngBitmapEncoder();
+                    ImageProcess.SaveUsingEncoder(BitmapSource, ImageInfo.ImagesCollection.Image_Path, pbe);
+                    break;
+                case ".GIF":
+                    GifBitmapEncoder gbe = new GifBitmapEncoder();
+                    ImageProcess.SaveUsingEncoder(BitmapSource, ImageInfo.ImagesCollection.Image_Path, gbe);
+                    break;
+            }
+        }
+        #endregion
     }
 }

@@ -14,14 +14,14 @@
             <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
         <ToolBar Grid.Row="0">
-            <Button>儲存</Button>
+            <Button Click="Button_Save_Click">儲存</Button>
             <Button>另存新檔</Button>
             <Button>放大</Button>
             <Button>縮小</Button>
             <Button Click="Button_RotateLeft_Click">左旋轉90</Button>
             <Button Click="Button_RotateRight_Click">右旋轉90</Button>
-            <Button>上下鏡射</Button>
-            <Button>左右鏡射</Button>
+            <Button Click="Button_MirrorVertical_Click">上下鏡射</Button>
+            <Button Click="Button_MirrorHorizontal_Click">左右鏡射</Button>
             <Button>裁切</Button>
             <Button>調整角度</Button>
         </ToolBar>
@@ -33,15 +33,12 @@
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0" VerticalAlignment="Center" Width="50" Height="50" Content="上一張" Click="Button_LastPhoto_Click" />
 
-            <Image Grid.Column="1" Name="ImageEdi" HorizontalAlignment="Stretch" Source="{Binding Images.Image_Path}" MouseMove="Image_MouseMove">
-                <Image.LayoutTransform>
-                    <RotateTransform Angle="{Binding RotateAngle}"></RotateTransform>
-                </Image.LayoutTransform>
+            <Image Grid.Column="1" Name="ImageEdi" MouseMove="Image_MouseMove" Source="{Binding BitmapSource}">
             </Image>
             <Button Grid.Column="2" VerticalAlignment="Center" Width="50" Height="50" Content="下一張" Click="Button_NextPhoto_Click" />
         </Grid>
         <StatusBar Grid.Row="2" >
-            <Label Name="lbPosition"></Label>
+            <Label Name="lbPosition" Content="0,0"></Label>
         </StatusBar>
     </Grid>
 </Window>

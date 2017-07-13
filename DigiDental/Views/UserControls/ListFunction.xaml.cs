@@ -22,7 +22,7 @@ namespace DigiDental.Views.UserControls
             get { return lfvm.RegistrationsCollection; }
             set { lfvm.RegistrationsCollection = value; }
         }
-        private Agencys Agencys
+        public Agencys Agencys
         {
             get { return lfvm.Agencys; }
             set { lfvm.Agencys = value; }
@@ -180,8 +180,11 @@ namespace DigiDental.Views.UserControls
 
         private void ListBox_PhotoEditor_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            PhotoEditor pe = new PhotoEditor(lfvm.ImagesCollection, lfvm.ImagesCollection.IndexOf(lfvm.SelectedImage));
-            pe.Show();
+            if (lfvm.ShowImages.IndexOf(lfvm.SelectedImage) != -1)
+            {
+                PhotoEditor pe = new PhotoEditor(lfvm.ShowImages, lfvm.ShowImages.IndexOf(lfvm.SelectedImage));
+                pe.Show();
+            }
         }
     }
 }

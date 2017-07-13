@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
+using System.Windows.Media.Imaging;
 
 namespace DigiDental.Class
 {
@@ -13,7 +14,7 @@ namespace DigiDental.Class
         /// <param name="image">System.Drawing.Image 的物件</param>
         /// <param name="maxPx">寬或高超過多少像素就要縮圖</param>
         /// <returns>回傳int陣列，索引0為縮圖後的寬度、索引1為縮圖後的高度</returns>
-        public static int[] GetThumbPic_WidthAndHeight(System.Drawing.Image image, int maxPx)
+        public static int[] GetThumbPic_WidthAndHeight(Image image, int maxPx)
         {
             int fixWidth = 0;
             int fixHeight = 0;
@@ -78,6 +79,21 @@ namespace DigiDental.Class
                         bmp.Save(saveThumbFilePath);
                     }
                 }
+            }
+        }
+        /// <summary>
+        /// 儲存 BitmapIimage 影像
+        /// </summary>
+        /// <param name="bitmapSource">BitmapSource資料來源</param>
+        /// <param name="fileName">儲存路徑</param>
+        /// <param name="encoder">編碼</param>
+        public static void SaveUsingEncoder(BitmapSource bitmapSource, string fileName, BitmapEncoder encoder)
+        {
+            encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
+
+            using (var stream = File.Create(fileName))
+            {
+                encoder.Save(stream);
             }
         }
     }

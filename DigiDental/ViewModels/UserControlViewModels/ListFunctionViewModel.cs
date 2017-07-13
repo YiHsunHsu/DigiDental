@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using DigiDental.ViewModels.Class;
+using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace DigiDental.ViewModels.UserControlViewModels
@@ -56,11 +55,47 @@ namespace DigiDental.ViewModels.UserControlViewModels
             {
                 imagesCollection = value;
                 OnPropertyChanged("ImagesCollection");
+
+                GC.Collect();
+
+                if (imagesCollection.Count > 0)
+                {
+                    ShowImages = new ObservableCollection<ImageInfo>();
+
+                    foreach (Images imgs in imagesCollection)
+                    {
+                        FileStream fs = new FileStream(imgs.Image_Path, FileMode.Open);
+                        BitmapImage bi = new BitmapImage();
+                        bi.BeginInit();
+                        bi.StreamSource = fs;
+                        bi.DecodePixelWidth = 800;
+                        bi.CacheOption = BitmapCacheOption.OnLoad;
+                        bi.EndInit();
+                        fs.Close();
+
+                        ShowImages.Add(new ImageInfo() { ImagesCollection = imgs, BitmapImageSet = bi });
+                    }
+                }
             }
         }
-        private Images selectedImage;
-
-        public Images SelectedImage
+        /// <summary>
+        /// 用來Binding Image
+        /// </summary>
+        private ObservableCollection<ImageInfo> showImages;
+        public ObservableCollection<ImageInfo> ShowImages
+        {
+            get { return showImages; }
+            set
+            {
+                showImages = value;
+                OnPropertyChanged("ShowImages");
+            }
+        }
+        /// <summary>
+        /// 用來Binding List SelectedImage
+        /// </summary>
+        private ImageInfo selectedImage;
+        public ImageInfo SelectedImage
         {
             get { return selectedImage; }
             set
@@ -177,7 +212,7 @@ namespace DigiDental.ViewModels.UserControlViewModels
         {
         }
         #endregion
-        public class ComboBoxItem : ViewModelBase.ViewModelBase
+        public class ComboBoxItem
         {
             public string DisplayName { get; set; }
             public int SelectedValue { get; set; }
