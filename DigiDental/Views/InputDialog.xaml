@@ -9,6 +9,6 @@
     <StackPanel >
         <Label Margin="5" Height="25" HorizontalAlignment="Left" Content="Label" Name="Question" />
         <TextBox Margin="5" Height="30" Name="txtAnswer" Text="{Binding Answer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <Button Margin="5" Height="25" Width="75" Content="確定" HorizontalAlignment="Right" Click="Button_Click" IsEnabled="{Binding IsValid}"/>
+        <Button Margin="5" Height="25" Width="75" Content="確定" HorizontalAlignment="Right" Click="Button_Click" IsEnabled="{Binding IsValid}" IsDefault="True"/>
     </StackPanel>
 </Window>

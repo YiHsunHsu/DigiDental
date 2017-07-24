@@ -10,7 +10,6 @@ namespace DigiDental.ViewModels.UserControlViewModels
     public class ListFunctionViewModel : ViewModelBase.ViewModelBase
     {
         private Agencys agencys;
-
         public Agencys Agencys
         {
             get { return agencys; }
@@ -30,22 +29,19 @@ namespace DigiDental.ViewModels.UserControlViewModels
 
                 if (registrationsCollection.Count() > 0)
                 {
-                    ////載圖
-                    //SetImagesCollectionByDate(SelectedDate);
                     //建立ComboBox選項
                     //RegistrationsCollection 項目變動時 更動
                     ComboBoxItems = new ObservableCollection<ComboBoxItem>();
-                    foreach (Registrations r in RegistrationsCollection)
+                    foreach (Registrations r in registrationsCollection)
                     {
                         ComboBoxItems.Add(new ComboBoxItem(r.Registration_Date.ToString("yyyy-MM-dd"), r.Registration_ID));
                     }
-
-                    SelectedDate = DateTime.Now.Date;
                 }
             }
         }
+
         /// <summary>
-        /// 載入所有影像 (只有大圖 List 不用載小圖)
+        /// 載入所有影像
         /// </summary>
         private ObservableCollection<Images> imagesCollection;
         public ObservableCollection<Images> ImagesCollection
@@ -56,28 +52,31 @@ namespace DigiDental.ViewModels.UserControlViewModels
                 imagesCollection = value;
                 OnPropertyChanged("ImagesCollection");
 
-                GC.Collect();
+                CountImages = imagesCollection.Count;
+                ShowImages = new ObservableCollection<ImageInfo>();
 
                 if (imagesCollection.Count > 0)
                 {
-                    ShowImages = new ObservableCollection<ImageInfo>();
-
                     foreach (Images imgs in imagesCollection)
                     {
-                        FileStream fs = new FileStream(imgs.Image_Path, FileMode.Open);
                         BitmapImage bi = new BitmapImage();
-                        bi.BeginInit();
-                        bi.StreamSource = fs;
-                        bi.DecodePixelWidth = 800;
-                        bi.CacheOption = BitmapCacheOption.OnLoad;
-                        bi.EndInit();
-                        fs.Close();
-
+                        if (File.Exists(imgs.Image_Path))
+                        {
+                            FileStream fs = new FileStream(imgs.Image_Path, FileMode.Open);
+                            bi.BeginInit();
+                            bi.StreamSource = fs;
+                            bi.DecodePixelWidth = 800;
+                            bi.CacheOption = BitmapCacheOption.OnLoad;
+                            bi.EndInit();
+                            fs.Close();
+                        }
                         ShowImages.Add(new ImageInfo() { ImagesCollection = imgs, BitmapImageSet = bi });
                     }
+                    GC.Collect();
                 }
             }
         }
+
         /// <summary>
         /// 用來Binding Image
         /// </summary>
@@ -91,6 +90,21 @@ namespace DigiDental.ViewModels.UserControlViewModels
                 OnPropertyChanged("ShowImages");
             }
         }
+
+        /// <summary>
+        /// 用來Binding Image Count
+        /// </summary>
+        private int countImages;
+        public int CountImages
+        {
+            get { return countImages; }
+            set
+            {
+                countImages = value;
+                OnPropertyChanged("CountImages");
+            }
+        }
+
         /// <summary>
         /// 用來Binding List SelectedImage
         /// </summary>
@@ -131,13 +145,17 @@ namespace DigiDental.ViewModels.UserControlViewModels
                 {
                     selectedValue = value;
                     OnPropertyChanged("SelectedValue");
-                    if(!string.IsNullOrEmpty(selectedValue.DisplayName))
+                    if (selectedValue != null)
                     {
-                        SelectedDate = DateTime.Parse(selectedValue.DisplayName);
+                        if (!string.IsNullOrEmpty(selectedValue.DisplayName))
+                        {
+                            SetImagesCollectionByDate(DateTime.Parse(selectedValue.DisplayName));
+                        }
                     }
                 }
             }
         }
+
         private DateTime selectedDate;
 
         public DateTime SelectedDate
@@ -147,19 +165,7 @@ namespace DigiDental.ViewModels.UserControlViewModels
             {
                 selectedDate = value;
                 OnPropertyChanged("SelectedDate");
-                var queryComboBoxItems = from qcbi in ComboBoxItems
-                                         where qcbi.DisplayName == selectedDate.ToString("yyyy-MM-dd")
-                                         select qcbi;
-                if (queryComboBoxItems.Count() > 0)
-                {
-                    SelectedValue = queryComboBoxItems.First();
-                }
-                else
-                {
-                    SelectedValue = new ComboBoxItem();
-                }
                 SetImagesCollectionByDate(selectedDate);
-
             }
         }
 
@@ -176,7 +182,9 @@ namespace DigiDental.ViewModels.UserControlViewModels
                 OnPropertyChanged("ColumnCount");
             }
         }
+
         private DigiDentalEntities dde;
+
         public ListFunctionViewModel()
         {
             if (dde == null)
@@ -184,12 +192,13 @@ namespace DigiDental.ViewModels.UserControlViewModels
                 dde = new DigiDentalEntities();
             }
         }
+
         #region METHOD
         private void SetImagesCollectionByDate(DateTime date)
         {
             //載入Images
             //取圖片清單 Images
-            var queryImages = from r in registrationsCollection
+            var queryImages = from r in RegistrationsCollection
                               where r.Registration_Date.Date == date.Date
                               join i in dde.Images
                               on r.Registration_ID equals i.Registration_ID into ri
@@ -207,9 +216,6 @@ namespace DigiDental.ViewModels.UserControlViewModels
                                   Registration_ID = qri.Registration_ID
                               };
             ImagesCollection = new ObservableCollection<Images>(queryImages);
-        }
-        private void SetImagesCollectionAll()
-        {
         }
         #endregion
         public class ComboBoxItem

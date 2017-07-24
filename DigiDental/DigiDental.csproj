@@ -96,6 +96,8 @@
     <Compile Include="ViewModels\Class\ImageInfo.cs" />
     <Compile Include="ViewModels\PhotoEditorViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
+    <Compile Include="ViewModels\UserControlViewModels\AdvancedAdjustViewModel.cs" />
+    <Compile Include="ViewModels\UserControlViewModels\BaseAdjustViewModel.cs" />
     <Compile Include="ViewModels\UserControlViewModels\ListFunctionViewModel.cs" />
     <Compile Include="ViewModels\UserControlViewModels\TemplateFunctionViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase\RadioButtonConverter.cs" />
@@ -104,6 +106,12 @@
     </Compile>
     <Compile Include="Views\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\AdvancedAdjust.xaml.cs">
+      <DependentUpon>AdvancedAdjust.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\BaseAdjust.xaml.cs">
+      <DependentUpon>BaseAdjust.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\ListFunction.xaml.cs">
       <DependentUpon>ListFunction.xaml</DependentUpon>
@@ -169,6 +177,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Settings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\AdvancedAdjust.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\BaseAdjust.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

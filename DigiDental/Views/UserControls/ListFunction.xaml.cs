@@ -16,44 +16,59 @@ namespace DigiDental.Views.UserControls
     /// </summary>
     public partial class ListFunction : UserControl
     {
-        private DigiDentalEntities dde;
-        public ObservableCollection<Registrations> RegistrationsCollection
-        {
-            get { return lfvm.RegistrationsCollection; }
-            set { lfvm.RegistrationsCollection = value; }
-        }
         public Agencys Agencys
         {
             get { return lfvm.Agencys; }
             set { lfvm.Agencys = value; }
         }
         private Patients Patients { get; set; }
+
+        private DigiDentalEntities dde;
+
         private ListFunctionViewModel lfvm;
-        public ListFunction(Agencys agencys, Patients patients, ObservableCollection<Registrations> registrationsCollection)
+
+        private Agencys tmpA;
+        private Patients tmpP;
+
+        public ListFunction(Agencys agencys, Patients patients)
         {
             InitializeComponent();
+            tmpA = agencys;
+            tmpP = patients;
+        }
 
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
             if (lfvm == null)
             {
                 lfvm = new ListFunctionViewModel();
             }
+
             if (dde == null)
             {
                 dde = new DigiDentalEntities();
             }
-            Agencys = agencys;
-            Patients = patients;
-            RegistrationsCollection = registrationsCollection;
+
+            Agencys = tmpA;
+            Patients = tmpP;
+
+            //取掛號資訊清單 Registration
+            var queryRegistrations = from qr in dde.Registrations
+                                     where qr.Patient_ID == Patients.Patient_ID
+                                     orderby qr.Registration_Date descending
+                                     select qr;
+            lfvm.RegistrationsCollection = new ObservableCollection<Registrations>(queryRegistrations.ToList());
+            lfvm.SelectedDate = DateTime.Now.Date;
 
             DataContext = lfvm;
         }
-        
 
         private void Button_ZoomIn_Click(object sender, RoutedEventArgs e)
         {
             if (lfvm.ColumnCount > 1)
                 lfvm.ColumnCount--;
         }
+
         private void Button_ZoomOut_Click(object sender, RoutedEventArgs e)
         {
             if (lfvm.ColumnCount < 5)
@@ -64,7 +79,7 @@ namespace DigiDental.Views.UserControls
         {
             //載入Images
             //取圖片清單 Images
-            var queryImages = from r in RegistrationsCollection
+            var queryImages = from r in lfvm.RegistrationsCollection
                               join i in dde.Images
                               on r.Registration_ID equals i.Registration_ID into ri
                               from qri in ri.DefaultIfEmpty()
@@ -81,10 +96,15 @@ namespace DigiDental.Views.UserControls
                                   Registration_ID = qri.Registration_ID
                               };
             lfvm.ImagesCollection = new ObservableCollection<Images>(queryImages);
+            lfvm.SelectedValue = new ListFunctionViewModel.ComboBoxItem();
         }
 
         private void Button_Import_Click(object sender, RoutedEventArgs e)
         {
+            Button btnImport = (Button)sender;
+            btnImport.IsEnabled = false;
+            btnImport.Refresh();
+
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Multiselect = true;
             ofd.DefaultExt = ".png";
@@ -92,90 +112,103 @@ namespace DigiDental.Views.UserControls
             bool? ofdResult = ofd.ShowDialog();
             if (ofdResult.HasValue && ofdResult.Value)//OpenFileDialog 選確定
             {
-                //讀寫Registrations
-                //確認掛號資料
-                int Registration_ID;
-                DateTime RegistrationDate = lfvm.SelectedDate;
-                var queryRegistration = from qr in dde.Registrations
-                                        where qr.Patient_ID == Patients.Patient_ID && qr.Registration_Date == RegistrationDate
-                                        select qr;
-                if (queryRegistration.Count() == 0)
+                if (Directory.Exists(Agencys.Agency_ImagePath))
                 {
-                    var newRegistration = new Registrations
+                    //讀寫Registrations
+                    //確認掛號資料
+                    int Registration_ID;
+                    DateTime RegistrationDate = lfvm.SelectedDate;
+                    var queryRegistration = from qr in dde.Registrations
+                                            where qr.Patient_ID == Patients.Patient_ID && qr.Registration_Date == RegistrationDate
+                                            select qr;
+                    if (queryRegistration.Count() == 0)
                     {
-                        Patient_ID = Patients.Patient_ID,
-                        Registration_Date = RegistrationDate
-                    };
-                    dde.Registrations.Add(newRegistration);
-                    dde.SaveChanges();
-                    Registration_ID = newRegistration.Registration_ID;
+                        var newRegistration = new Registrations
+                        {
+                            Patient_ID = Patients.Patient_ID,
+                            Registration_Date = RegistrationDate
+                        };
+                        dde.Registrations.Add(newRegistration);
+                        dde.SaveChanges();
+                        Registration_ID = newRegistration.Registration_ID;
+                    }
+                    else
+                    {
+                        Registration_ID = queryRegistration.First().Registration_ID;
+                    }
+
+                    //..\病患資料夾\掛號日期
+                    string PatientFolderPath = Patients.Patient_ID + @"\" + RegistrationDate.ToString("yyyyMMdd");
+                    //..\病患資料夾\掛號日期\Original
+                    string PatientFolderPathOriginal = PatientFolderPath + @"\Original";
+                    //..\病患資料夾\掛號日期\Small
+                    string PatientFolderPathSmall = PatientFolderPath + @"\Small";
+                    //Agencys_ImagePath\病患資料夾\掛號日期
+                    string PatientFullFolderPath = Agencys.Agency_ImagePath + @"\" + PatientFolderPath;
+                    //Agencys_ImagePath\病患資料夾\掛號日期\Original
+                    string PatientFullFolderPathOriginal = PatientFullFolderPath + @"\Original";
+                    //Agencys_ImagePath\病患資料夾\掛號日期\Small
+                    string PatientFullFolderPathSmall = PatientFullFolderPath + @"\Small";
+
+                    if (!Directory.Exists(PatientFullFolderPath))
+                    {
+                        Directory.CreateDirectory(PatientFullFolderPathOriginal);
+                        Directory.CreateDirectory(PatientFullFolderPathSmall);
+                    }
+
+                    foreach (string fileName in ofd.FileNames)
+                    {
+                        string extension = Path.GetExtension(fileName).ToUpper();
+                        string newFileName = DateTime.Now.ToString("yyyyMMddHHmmssffff");
+                        //複製原圖到目的Original
+                        File.Copy(fileName, PatientFullFolderPathOriginal + @"\" + newFileName + @"ori" + extension);
+
+                        //寫資料庫                    
+                        dde.Images.Add(new Images
+                        {
+                            Image_Path = @"\" + PatientFolderPathOriginal + @"\" + newFileName + @"ori" + extension,
+                            Image_FileName = newFileName + @"ori" + extension,
+                            Image_Size = "Original",
+                            Image_Extension = extension,
+                            Registration_ID = Registration_ID
+                        });
+                        dde.SaveChanges();
+
+                        #region 產生小圖(未使用)
+                        //產生縮圖到Small
+                        //ImageProcess.SaveThumbPic(fileName, 300, PatientFullFolderPathSmall + @"\" + newFileName + @"sml" + extension);
+
+                        //寫資料庫
+                        //dde.Images.Add(new Images
+                        //{
+                        //    Image_Path = @"\" + PatientFolderPathSmall + @"\" + newFileName + @"sml" + extension,
+                        //    Image_FileName = newFileName + @"sml" + extension,
+                        //    Image_Size = "Small",
+                        //    Image_Extension = extension,
+                        //    Registration_ID = Registration_ID
+                        //});
+                        //dde.SaveChanges();
+                        #endregion
+
+                        Thread.Sleep(200);
+                    }
+
+                    //匯入之後重新載入  取掛號資訊清單 Registration
+                    var queryRegistrations = from qr in dde.Registrations
+                                             where qr.Patient_ID == Patients.Patient_ID
+                                             orderby qr.Registration_Date descending
+                                             select qr;
+                    lfvm.RegistrationsCollection = new ObservableCollection<Registrations>(queryRegistrations.ToList());
+                    lfvm.SelectedDate = lfvm.SelectedDate;
                 }
                 else
                 {
-                    Registration_ID = queryRegistration.First().Registration_ID;
+                    MessageBox.Show("影像資料夾有問題，請檢查設定是否有誤", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
-
-                //..\病患資料夾\掛號日期
-                string PatientFolderPath = Patients.Patient_ID + @"\" + RegistrationDate.ToString("yyyyMMdd");
-                //..\病患資料夾\掛號日期\Original
-                string PatientFolderPathOriginal = PatientFolderPath + @"\Original";
-                //..\病患資料夾\掛號日期\Small
-                string PatientFolderPathSmall = PatientFolderPath + @"\Small";
-                //Agencys_ImagePath\病患資料夾\掛號日期
-                string PatientFullFolderPath = Agencys.Agency_ImagePath + @"\" + PatientFolderPath;
-                //Agencys_ImagePath\病患資料夾\掛號日期\Original
-                string PatientFullFolderPathOriginal = PatientFullFolderPath + @"\Original";
-                //Agencys_ImagePath\病患資料夾\掛號日期\Small
-                string PatientFullFolderPathSmall = PatientFullFolderPath + @"\Small";
-
-                if (!Directory.Exists(PatientFullFolderPath))
-                {
-                    Directory.CreateDirectory(PatientFullFolderPathOriginal);
-                    Directory.CreateDirectory(PatientFullFolderPathSmall);
-                }
-
-                foreach (string fileName in ofd.FileNames)
-                {
-                    string extension = Path.GetExtension(fileName).ToUpper();
-                    string newFileName = DateTime.Now.ToString("yyyyMMddHHmmssffff");
-                    //複製原圖到目的Original
-                    File.Copy(fileName, PatientFullFolderPathOriginal + @"\" + newFileName + @"ori" + extension);
-
-                    //寫資料庫                    
-                    dde.Images.Add(new Images
-                    {
-                        Image_Path = @"\" + PatientFolderPathOriginal + @"\" + newFileName + @"ori" + extension,
-                        Image_FileName = newFileName + @"ori" + extension,
-                        Image_Size = "Original",
-                        Image_Extension = extension,
-                        Registration_ID = Registration_ID
-                    });
-                    dde.SaveChanges();
-
-                    //產生縮圖到Small
-                    ImageProcess.SaveThumbPic(fileName, 300, PatientFullFolderPathSmall + @"\" + newFileName + @"sml" + extension);
-
-                    //寫資料庫
-                    dde.Images.Add(new Images
-                    {
-                        Image_Path = @"\" + PatientFolderPathSmall + @"\" + newFileName + @"sml" + extension,
-                        Image_FileName = newFileName + @"sml" + extension,
-                        Image_Size = "Small",
-                        Image_Extension = extension,
-                        Registration_ID = Registration_ID
-                    });
-                    dde.SaveChanges();
-
-                    Thread.Sleep(200);
-                }
-
-                //匯入之後重新載入  取掛號資訊清單 Registration
-                var queryRegistrations = from qr in dde.Registrations
-                                         where qr.Patient_ID == Patients.Patient_ID
-                                         orderby qr.Registration_Date descending
-                                         select qr;
-                lfvm.RegistrationsCollection = new ObservableCollection<Registrations>(queryRegistrations.ToList());
             }
+            
+            btnImport.IsEnabled = true;
+            btnImport.Refresh();
         }
 
         private void ListBox_PhotoEditor_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)

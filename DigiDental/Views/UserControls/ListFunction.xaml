@@ -1,16 +1,15 @@
 ﻿<UserControl x:Class="DigiDental.Views.UserControls.ListFunction"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             xmlns:local="clr-namespace:DigiDental.Views.UserControls"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" 
-             d:DesignHeight="500" d:DesignWidth="600" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+             d:DesignHeight="500" d:DesignWidth="600" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Loaded="UserControl_Loaded">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
         <ToolBarPanel Grid.Row="0">
             <Grid>
@@ -28,7 +27,7 @@
                     <Label Content="分類"></Label>
                     <Label Content="已匯入日期"></Label>
                     <ComboBox Width="100" ItemsSource="{Binding ComboBoxItems}" DisplayMemberPath="DisplayName" SelectedValue="{Binding SelectedValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                    <Button Content="全部" Width="30" Click="Button_ListAll_Click"/>
+                    <Button x:Name="btnListAll" Content="全部" Width="30" Click="Button_ListAll_Click"/>
                     <!--<ComboBox Name="cbxRegistrations" Width="100" SelectionChanged="cbxRegistrations_SelectionChanged"/>-->
                 </StackPanel>
                 <StackPanel Grid.Column="2" Orientation="Horizontal">
@@ -42,11 +41,12 @@
         </ToolBarPanel>
         <ListBox Grid.Row="1"
                  ItemsSource="{Binding ShowImages}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"
-                 SelectedItem="{Binding SelectedImage, Mode=TwoWay}"
+                 SelectedItem="{Binding SelectedImage}"
+                 SelectionMode="Extended"
                  MouseDoubleClick="ListBox_PhotoEditor_MouseDoubleClick">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <UniformGrid Columns="{Binding ColumnCount}"></UniformGrid>
+                    <UniformGrid Columns="{Binding ColumnCount}"/>
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
@@ -56,7 +56,7 @@
                             <RowDefinition></RowDefinition>
                             <RowDefinition></RowDefinition>
                         </Grid.RowDefinitions>
-                        <Border Grid.Row="0" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" >
+                        <Border Grid.Row="0" BorderThickness="1" BorderBrush="Black" Background="{Binding BackgroundColor}" HorizontalAlignment="Stretch" >
                             <Image Margin="10" MaxHeight="600" Source="{Binding BitmapImageSet}" Stretch="Uniform"/>
                         </Border>
                         <TextBlock Grid.Row="1" Text="{Binding ImagesCollection.Image_FileName}" />
@@ -64,5 +64,12 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <StatusBar  Grid.Row="2">
+            <DockPanel>
+                <!--<TextBlock DockPanel.Dock="Left" x:Name="tbLoadInfo" Text="{Binding LoadImageInfo, UpdateSourceTrigger=PropertyChanged}"></TextBlock>-->
+                <TextBlock DockPanel.Dock="Right" Text="{Binding CountImages, StringFormat={}共:{0}張}"></TextBlock>
+                <!--<ProgressBar DockPanel.Dock="Left" Width="300" Minimum="0" Maximum="{Binding CountImages}" Value="{Binding LoadedImages, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}" />-->
+            </DockPanel>
+        </StatusBar>
     </Grid>
 </UserControl>
