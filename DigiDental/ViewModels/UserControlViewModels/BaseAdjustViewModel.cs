@@ -13,7 +13,7 @@ namespace DigiDental.ViewModels.UserControlViewModels
             set
             {
                 imageInfo = value;
-                BitmapSource = SetNewBitmapImage(imageInfo.ImagesCollection.Image_Path);
+                BitmapSource = SetNewBitmapImage(imageInfo.Image_Path);
                 OnPropertyChanged("ImageInfo");
             }
         }

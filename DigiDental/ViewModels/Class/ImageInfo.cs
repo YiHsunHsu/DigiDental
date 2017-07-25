@@ -1,28 +1,18 @@
-﻿using System.IO;
+﻿using System;
 using System.Windows.Media.Imaging;
 
 namespace DigiDental.ViewModels.Class
 {
     public class ImageInfo
     {
-        private Images imagesCollection;
-        public Images ImagesCollection
-        {
-            get { return imagesCollection; }
-            set
-            {
-                imagesCollection = value;
-            }
-        }
-        private BitmapImage bitmapImageSet;
-        public BitmapImage BitmapImageSet
-        {
-            get { return bitmapImageSet; }
-            set
-            {
-                bitmapImageSet = value;
-            }
-        }
+        public DateTime Registration_Date { get; set; }
+        public int Image_ID { get; set; }
+        public string Image_Path { get; set; }
+        public string Image_FileName { get; set; }
+        public string Image_Extension { get; set; }
+        public int Registration_ID { get; set; }
+        public DateTime CreateDate { get; set; }
+        public BitmapImage BitmapImageSet { get; set; }
 
         public ImageInfo() { }
     }

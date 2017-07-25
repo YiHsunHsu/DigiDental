@@ -1,8 +1,10 @@
 ﻿using DigiDental.ViewModels.Class;
+using DigiDental.ViewModels.ViewModelBase;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
 namespace DigiDental.ViewModels.UserControlViewModels
@@ -43,51 +45,98 @@ namespace DigiDental.ViewModels.UserControlViewModels
         /// <summary>
         /// 載入所有影像
         /// </summary>
-        private ObservableCollection<Images> imagesCollection;
-        public ObservableCollection<Images> ImagesCollection
+        private ObservableCollection<ImageInfo> imagesInfo;
+        public ObservableCollection<ImageInfo> ImagesInfo
         {
-            get { return imagesCollection; }
+            get { return imagesInfo; }
             set
             {
-                imagesCollection = value;
-                OnPropertyChanged("ImagesCollection");
+                imagesInfo = value;
+                CountImages = imagesInfo.Count;
+                ShowImages = new MTObservableCollection<ImageInfo>();
+                LoadedImages = 0;
 
-                CountImages = imagesCollection.Count;
-                ShowImages = new ObservableCollection<ImageInfo>();
-
-                if (imagesCollection.Count > 0)
+                if (imagesInfo.Count > 0)
                 {
-                    foreach (Images imgs in imagesCollection)
+                    //multi-thread
+                    Task.Factory.StartNew(() =>
                     {
-                        BitmapImage bi = new BitmapImage();
-                        if (File.Exists(imgs.Image_Path))
+                        Parallel.ForEach(imagesInfo, imgs =>
                         {
-                            FileStream fs = new FileStream(imgs.Image_Path, FileMode.Open);
-                            bi.BeginInit();
-                            bi.StreamSource = fs;
-                            bi.DecodePixelWidth = 800;
-                            bi.CacheOption = BitmapCacheOption.OnLoad;
-                            bi.EndInit();
-                            fs.Close();
-                        }
-                        ShowImages.Add(new ImageInfo() { ImagesCollection = imgs, BitmapImageSet = bi });
-                    }
-                    GC.Collect();
+                            BitmapImage bi = new BitmapImage();
+                            if (File.Exists(imgs.Image_Path))
+                            {
+                                FileStream fs = new FileStream(imgs.Image_Path, FileMode.Open);
+                                bi.BeginInit();
+                                bi.StreamSource = fs;
+                                bi.DecodePixelWidth = 800;
+                                bi.CacheOption = BitmapCacheOption.OnLoad;
+                                bi.EndInit();
+                                bi.Freeze();
+                                fs.Close();
+                            }
+                            ShowImages.Add(new ImageInfo() {
+                                Registration_Date = imgs.Registration_Date,
+                                Image_ID = imgs.Image_ID,
+                                Image_Path = imgs.Image_Path,
+                                Image_FileName = imgs.Image_FileName,
+                                Image_Extension = imgs.Image_Extension,
+                                Registration_ID = imgs.Registration_ID,
+                                CreateDate = imgs.CreateDate,
+                                BitmapImageSet = bi
+                            });
+
+                            LoadedImages++;
+                            LoadImagesInfo = "圖片載入中" + LoadedImages + " / " + CountImages;
+                        });
+                    }).ContinueWith(t =>
+                    {
+                        LoadImagesInfo = "載入完成";
+                        GC.Collect();
+                    });
                 }
             }
         }
-
         /// <summary>
         /// 用來Binding Image
         /// </summary>
-        private ObservableCollection<ImageInfo> showImages;
-        public ObservableCollection<ImageInfo> ShowImages
+        private MTObservableCollection<ImageInfo> showImages;
+        public MTObservableCollection<ImageInfo> ShowImages
         {
             get { return showImages; }
             set
             {
                 showImages = value;
                 OnPropertyChanged("ShowImages");
+            }
+        }
+
+        /// <summary>
+        /// Progressing Bar
+        /// </summary>
+        private int loadedImages;
+        public int LoadedImages
+        {
+            get { return loadedImages; }
+            set
+            {
+                loadedImages = value;
+                OnPropertyChanged("LoadedImages");
+            }
+        }
+
+        /// <summary>
+        /// 載入文字訊息
+        /// </summary>
+        private string loadImagesInfo;
+
+        public string LoadImagesInfo
+        {
+            get { return loadImagesInfo; }
+            set
+            {
+                loadImagesInfo = value;
+                OnPropertyChanged("LoadImagesInfo");
             }
         }
 
@@ -205,17 +254,17 @@ namespace DigiDental.ViewModels.UserControlViewModels
                               from qri in ri.DefaultIfEmpty()
                               where qri.Image_Size.Equals("Original")
                                     && qri.Image_IsEnable == true
-                              select new Images()
+                              select new ImageInfo()
                               {
+                                  Registration_Date = qri.Registrations.Registration_Date,
                                   Image_ID = qri.Image_ID,
                                   Image_Path = Agencys.Agency_ImagePath + qri.Image_Path,
                                   Image_FileName = qri.Image_FileName,
-                                  Image_Size = qri.Image_Size,
                                   Image_Extension = qri.Image_Extension,
-                                  Image_IsEnable = qri.Image_IsEnable,
-                                  Registration_ID = qri.Registration_ID
+                                  Registration_ID = qri.Registration_ID,
+                                  CreateDate = qri.CreateDate
                               };
-            ImagesCollection = new ObservableCollection<Images>(queryImages);
+            ImagesInfo = new ObservableCollection<ImageInfo>(queryImages);
         }
         #endregion
         public class ComboBoxItem

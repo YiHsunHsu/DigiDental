@@ -1,4 +1,5 @@
 ﻿using DigiDental.Class;
+using DigiDental.ViewModels.Class;
 using DigiDental.ViewModels.UserControlViewModels;
 using Microsoft.Win32;
 using System;
@@ -85,17 +86,17 @@ namespace DigiDental.Views.UserControls
                               from qri in ri.DefaultIfEmpty()
                               where qri.Image_Size.Equals("Original")
                                     && qri.Image_IsEnable == true
-                              select new Images()
+                              select new ImageInfo()
                               {
+                                  Registration_Date = qri.Registrations.Registration_Date,
                                   Image_ID = qri.Image_ID,
                                   Image_Path = Agencys.Agency_ImagePath + qri.Image_Path,
                                   Image_FileName = qri.Image_FileName,
-                                  Image_Size = qri.Image_Size,
                                   Image_Extension = qri.Image_Extension,
-                                  Image_IsEnable = qri.Image_IsEnable,
-                                  Registration_ID = qri.Registration_ID
+                                  Registration_ID = qri.Registration_ID,
+                                  CreateDate = qri.CreateDate
                               };
-            lfvm.ImagesCollection = new ObservableCollection<Images>(queryImages);
+            lfvm.ImagesInfo = new ObservableCollection<ImageInfo>(queryImages);
             lfvm.SelectedValue = new ListFunctionViewModel.ComboBoxItem();
         }
 

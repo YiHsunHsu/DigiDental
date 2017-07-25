@@ -27,6 +27,7 @@ namespace DigiDental
         public string Image_Extension { get; set; }
         public bool Image_IsEnable { get; set; }
         public int Registration_ID { get; set; }
+        public System.DateTime CreateDate { get; set; }
     
         public virtual Registrations Registrations { get; set; }
     }

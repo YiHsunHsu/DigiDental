@@ -63,6 +63,7 @@
           <Property Name="Image_Extension" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Image_IsEnable" Type="bit" Nullable="false" />
           <Property Name="Registration_ID" Type="int" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="Patients">
           <Key>
@@ -299,6 +300,7 @@
           <Property Name="Image_Extension" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="Image_IsEnable" Type="Boolean" Nullable="false" DefaultValue="true" />
           <Property Name="Registration_ID" Type="Int32" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" annotation:StoreGeneratedPattern="Computed" />
           <NavigationProperty Name="Registrations" Relationship="DigiDentalModel.FK_Images_Registrations" FromRole="Images" ToRole="Registrations" />
         </EntityType>
         <Association Name="FK_Images_Registrations">
@@ -408,6 +410,7 @@
           <EntitySetMapping Name="Images">
             <EntityTypeMapping TypeName="DigiDentalModel.Images">
               <MappingFragment StoreEntitySet="Images">
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="Registration_ID" ColumnName="Registration_ID" />
                 <ScalarProperty Name="Image_IsEnable" ColumnName="Image_IsEnable" />
                 <ScalarProperty Name="Image_Extension" ColumnName="Image_Extension" />

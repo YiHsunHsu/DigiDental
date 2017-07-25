@@ -3,8 +3,17 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="600" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Loaded="UserControl_Loaded">
+    <UserControl.Resources>
+        <CollectionViewSource x:Key="SortedItems" Source="{Binding ShowImages}">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="Registration_Date" Direction="Descending"/>
+                <scm:SortDescription PropertyName="Image_ID" Direction="Ascending"/>
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
@@ -40,7 +49,7 @@
             </StackPanel>
         </ToolBarPanel>
         <ListBox Grid.Row="1"
-                 ItemsSource="{Binding ShowImages}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                 ItemsSource="{Binding Source={StaticResource SortedItems}}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"
                  SelectedItem="{Binding SelectedImage}"
                  SelectionMode="Extended"
                  MouseDoubleClick="ListBox_PhotoEditor_MouseDoubleClick">
@@ -56,19 +65,19 @@
                             <RowDefinition></RowDefinition>
                             <RowDefinition></RowDefinition>
                         </Grid.RowDefinitions>
-                        <Border Grid.Row="0" BorderThickness="1" BorderBrush="Black" Background="{Binding BackgroundColor}" HorizontalAlignment="Stretch" >
+                        <Border Grid.Row="0" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" >
                             <Image Margin="10" MaxHeight="600" Source="{Binding BitmapImageSet}" Stretch="Uniform"/>
                         </Border>
-                        <TextBlock Grid.Row="1" Text="{Binding ImagesCollection.Image_FileName}" />
+                        <TextBlock Grid.Row="1" Text="{Binding Image_FileName}" />
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
         <StatusBar  Grid.Row="2">
             <DockPanel>
-                <!--<TextBlock DockPanel.Dock="Left" x:Name="tbLoadInfo" Text="{Binding LoadImageInfo, UpdateSourceTrigger=PropertyChanged}"></TextBlock>-->
+                <ProgressBar DockPanel.Dock="Left" Width="300" Minimum="0" Maximum="{Binding CountImages}" Value="{Binding LoadedImages}" />
+                <TextBlock DockPanel.Dock="Left" x:Name="tbLoadInfo" Text="{Binding LoadImagesInfo}"></TextBlock>
                 <TextBlock DockPanel.Dock="Right" Text="{Binding CountImages, StringFormat={}共:{0}張}"></TextBlock>
-                <!--<ProgressBar DockPanel.Dock="Left" Width="300" Minimum="0" Maximum="{Binding CountImages}" Value="{Binding LoadedImages, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}" />-->
             </DockPanel>
         </StatusBar>
     </Grid>

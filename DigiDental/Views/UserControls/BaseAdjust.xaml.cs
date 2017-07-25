@@ -51,20 +51,20 @@ namespace DigiDental.Views.UserControls
         {
             try
             {
-                switch (ImageInfo.ImagesCollection.Image_Extension.ToUpper())
+                switch (ImageInfo.Image_Extension.ToUpper())
                 {
                     case ".JPG":
                     case ".JPEG":
                         JpegBitmapEncoder jbe = new JpegBitmapEncoder();
-                        ImageProcess.SaveUsingEncoder(BitmapSource, ImageInfo.ImagesCollection.Image_Path, jbe);
+                        ImageProcess.SaveUsingEncoder(BitmapSource, ImageInfo.Image_Path, jbe);
                         break;
                     case ".PNG":
                         PngBitmapEncoder pbe = new PngBitmapEncoder();
-                        ImageProcess.SaveUsingEncoder(BitmapSource, ImageInfo.ImagesCollection.Image_Path, pbe);
+                        ImageProcess.SaveUsingEncoder(BitmapSource, ImageInfo.Image_Path, pbe);
                         break;
                     case ".GIF":
                         GifBitmapEncoder gbe = new GifBitmapEncoder();
-                        ImageProcess.SaveUsingEncoder(BitmapSource, ImageInfo.ImagesCollection.Image_Path, gbe);
+                        ImageProcess.SaveUsingEncoder(BitmapSource, ImageInfo.Image_Path, gbe);
                         break;
                 }
                 MessageBox.Show("儲存成功", "提示", MessageBoxButton.OK);

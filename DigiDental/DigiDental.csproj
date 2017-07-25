@@ -100,6 +100,7 @@
     <Compile Include="ViewModels\UserControlViewModels\BaseAdjustViewModel.cs" />
     <Compile Include="ViewModels\UserControlViewModels\ListFunctionViewModel.cs" />
     <Compile Include="ViewModels\UserControlViewModels\TemplateFunctionViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelBase\MTObservableCollection.cs" />
     <Compile Include="ViewModels\ViewModelBase\RadioButtonConverter.cs" />
     <Compile Include="Views\PhotoEditor.xaml.cs">
       <DependentUpon>PhotoEditor.xaml</DependentUpon>
