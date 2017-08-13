@@ -1,11 +1,5 @@
 ﻿using DigiDental.ViewModels.Class;
 using DigiDental.ViewModels.ViewModelBase;
-using System;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
 
 namespace DigiDental.ViewModels.UserControlViewModels
 {
@@ -18,85 +12,88 @@ namespace DigiDental.ViewModels.UserControlViewModels
             set { agencys = value; }
         }
 
-        /// <summary>
-        /// 載入的所有掛號日
-        /// </summary>
-        private ObservableCollection<Registrations> registrationsCollection;
-        public ObservableCollection<Registrations> RegistrationsCollection
-        {
-            get { return registrationsCollection; }
-            set
-            {
-                registrationsCollection = value;
+        //改至MainWindowViewModel 載入
+        ///// <summary>
+        ///// 載入的所有掛號日
+        ///// </summary>
+        //private ObservableCollection<Registrations> registrationsCollection;
+        //public ObservableCollection<Registrations> RegistrationsCollection
+        //{
+        //    get { return registrationsCollection; }
+        //    set
+        //    {
+        //        registrationsCollection = value;
 
-                if (registrationsCollection.Count() > 0)
-                {
-                    //建立ComboBox選項
-                    //RegistrationsCollection 項目變動時 更動
-                    ComboBoxItems = new ObservableCollection<ComboBoxItem>();
-                    foreach (Registrations r in registrationsCollection)
-                    {
-                        ComboBoxItems.Add(new ComboBoxItem(r.Registration_Date.ToString("yyyy-MM-dd"), r.Registration_ID));
-                    }
-                }
-            }
-        }
+        //        if (registrationsCollection.Count() > 0)
+        //        {
+        //            //建立ComboBox選項
+        //            //RegistrationsCollection 項目變動時 更動
+        //            ComboBoxItems = new ObservableCollection<ComboBoxItem>();
+        //            foreach (Registrations r in registrationsCollection)
+        //            {
+        //                ComboBoxItems.Add(new ComboBoxItem(r.Registration_Date.ToString("yyyy-MM-dd"), r.Registration_ID));
+        //            }
+        //        }
+        //    }
+        //}
 
-        /// <summary>
-        /// 載入所有影像
-        /// </summary>
-        private ObservableCollection<ImageInfo> imagesInfo;
-        public ObservableCollection<ImageInfo> ImagesInfo
-        {
-            get { return imagesInfo; }
-            set
-            {
-                imagesInfo = value;
-                CountImages = imagesInfo.Count;
-                ShowImages = new MTObservableCollection<ImageInfo>();
-                LoadedImages = 0;
+        //改至MainWindowViewModel 載入
+        ///// <summary>
+        ///// 載入所有影像
+        ///// </summary>
+        //private ObservableCollection<ImageInfo> imagesInfo;
+        //public ObservableCollection<ImageInfo> ImagesInfo
+        //{
+        //    get { return imagesInfo; }
+        //    set
+        //    {
+        //        imagesInfo = value;
+        //        ShowImages = new MTObservableCollection<ImageInfo>();
+        //        LoadedImages = 0;
 
-                if (imagesInfo.Count > 0)
-                {
-                    //multi-thread
-                    Task.Factory.StartNew(() =>
-                    {
-                        Parallel.ForEach(imagesInfo, imgs =>
-                        {
-                            BitmapImage bi = new BitmapImage();
-                            if (File.Exists(imgs.Image_Path))
-                            {
-                                FileStream fs = new FileStream(imgs.Image_Path, FileMode.Open);
-                                bi.BeginInit();
-                                bi.StreamSource = fs;
-                                bi.DecodePixelWidth = 800;
-                                bi.CacheOption = BitmapCacheOption.OnLoad;
-                                bi.EndInit();
-                                bi.Freeze();
-                                fs.Close();
-                            }
-                            ShowImages.Add(new ImageInfo() {
-                                Registration_Date = imgs.Registration_Date,
-                                Image_ID = imgs.Image_ID,
-                                Image_Path = imgs.Image_Path,
-                                Image_FileName = imgs.Image_FileName,
-                                Image_Extension = imgs.Image_Extension,
-                                Registration_ID = imgs.Registration_ID,
-                                CreateDate = imgs.CreateDate,
-                                BitmapImageSet = bi
-                            });
+        //        if (imagesInfo != null)
+        //        {
+        //            CountImages = imagesInfo.Count;
+        //            //multi-thread
+        //            Task.Factory.StartNew(() =>
+        //            {
+        //                Parallel.ForEach(imagesInfo, imgs =>
+        //                {
+        //                    BitmapImage bi = new BitmapImage();
+        //                    if (File.Exists(imgs.Image_Path))
+        //                    {
+        //                        FileStream fs = new FileStream(imgs.Image_Path, FileMode.Open);
+        //                        bi.BeginInit();
+        //                        bi.StreamSource = fs;
+        //                        bi.DecodePixelWidth = 800;
+        //                        bi.CacheOption = BitmapCacheOption.OnLoad;
+        //                        bi.EndInit();
+        //                        bi.Freeze();
+        //                        fs.Close();
+        //                    }
+        //                    ShowImages.Add(new ImageInfo() {
+        //                        Registration_Date = imgs.Registration_Date,
+        //                        Image_ID = imgs.Image_ID,
+        //                        Image_Path = imgs.Image_Path,
+        //                        Image_FileName = imgs.Image_FileName,
+        //                        Image_Extension = imgs.Image_Extension,
+        //                        Registration_ID = imgs.Registration_ID,
+        //                        CreateDate = imgs.CreateDate,
+        //                        BitmapImageSet = bi
+        //                    });
 
-                            LoadedImages++;
-                            LoadImagesInfo = "圖片載入中" + LoadedImages + " / " + CountImages;
-                        });
-                    }).ContinueWith(t =>
-                    {
-                        LoadImagesInfo = "載入完成";
-                        GC.Collect();
-                    });
-                }
-            }
-        }
+        //                    LoadedImages++;
+        //                    LoadImagesInfo = "圖片載入中" + LoadedImages + " / " + CountImages;
+        //                });
+        //            }).ContinueWith(t =>
+        //            {
+        //                LoadImagesInfo = "載入完成";
+        //                GC.Collect();
+        //            });
+        //        }
+        //    }
+        //}
+
         /// <summary>
         /// 用來Binding Image
         /// </summary>
@@ -108,37 +105,11 @@ namespace DigiDental.ViewModels.UserControlViewModels
             {
                 showImages = value;
                 OnPropertyChanged("ShowImages");
+                if (showImages != null)
+                    CountImages = ShowImages.Count;
             }
         }
-
-        /// <summary>
-        /// Progressing Bar
-        /// </summary>
-        private int loadedImages;
-        public int LoadedImages
-        {
-            get { return loadedImages; }
-            set
-            {
-                loadedImages = value;
-                OnPropertyChanged("LoadedImages");
-            }
-        }
-
-        /// <summary>
-        /// 載入文字訊息
-        /// </summary>
-        private string loadImagesInfo;
-
-        public string LoadImagesInfo
-        {
-            get { return loadImagesInfo; }
-            set
-            {
-                loadImagesInfo = value;
-                OnPropertyChanged("LoadImagesInfo");
-            }
-        }
+        
 
         /// <summary>
         /// 用來Binding Image Count
@@ -168,55 +139,66 @@ namespace DigiDental.ViewModels.UserControlViewModels
             }
         }
 
-        /// <summary>
-        /// 用來Binding ComboBox 的ItemsSource
-        /// </summary>
-        private ObservableCollection<ComboBoxItem> comboBoxItems;
-        public ObservableCollection<ComboBoxItem> ComboBoxItems
+        public ListFunctionViewModel()
         {
-            get { return comboBoxItems; }
-            set
-            {
-                comboBoxItems = value;
-                OnPropertyChanged("ComboBoxItems");
-            }
-        }
-        /// <summary>
-        /// ComboBox 的SelectionChanged
-        /// </summary>
-        private ComboBoxItem selectedValue;
-        public ComboBoxItem SelectedValue
-        {
-            get { return selectedValue; }
-            set
-            {
-                if (selectedValue != value)
-                {
-                    selectedValue = value;
-                    OnPropertyChanged("SelectedValue");
-                    if (selectedValue != null)
-                    {
-                        if (!string.IsNullOrEmpty(selectedValue.DisplayName))
-                        {
-                            SetImagesCollectionByDate(DateTime.Parse(selectedValue.DisplayName));
-                        }
-                    }
-                }
-            }
         }
 
-        private DateTime selectedDate;
-
-        public DateTime SelectedDate
+        public ListFunctionViewModel(Agencys agencys, MTObservableCollection<ImageInfo> showImages)
         {
-            get { return selectedDate; }
-            set
-            {
-                selectedDate = value;
-                OnPropertyChanged("SelectedDate");
-                SetImagesCollectionByDate(selectedDate);
-            }
+            Agencys = agencys;
+            ShowImages = showImages;
         }
+
+        ///// <summary>
+        ///// 用來Binding ComboBox 的ItemsSource
+        ///// </summary>
+        //private ObservableCollection<ComboBoxItem> comboBoxItems;
+        //public ObservableCollection<ComboBoxItem> ComboBoxItems
+        //{
+        //    get { return comboBoxItems; }
+        //    set
+        //    {
+        //        comboBoxItems = value;
+        //        OnPropertyChanged("ComboBoxItems");
+        //    }
+        //}
+
+        ///// <summary>
+        ///// ComboBox 的SelectionChanged
+        ///// </summary>
+        //private ComboBoxItem selectedValue;
+        //public ComboBoxItem SelectedValue
+        //{
+        //    get { return selectedValue; }
+        //    set
+        //    {
+        //        if (selectedValue != value)
+        //        {
+        //            selectedValue = value;
+        //            OnPropertyChanged("SelectedValue");
+        //            if (selectedValue != null)
+        //            {
+        //                if (!string.IsNullOrEmpty(selectedValue.DisplayName))
+        //                {
+        //                    SetImagesCollectionByDate(DateTime.Parse(selectedValue.DisplayName));
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+
+        //private DateTime selectedDate;
+
+        //public DateTime SelectedDate
+        //{
+        //    get { return selectedDate; }
+        //    set
+        //    {
+        //        selectedDate = value;
+        //        OnPropertyChanged("SelectedDate");
+        //        SetImagesCollectionByDate(selectedDate);
+        //    }
+        //}
 
         /// <summary>
         /// 用來 Binding Slider 預設3
@@ -231,53 +213,43 @@ namespace DigiDental.ViewModels.UserControlViewModels
                 OnPropertyChanged("ColumnCount");
             }
         }
-
-        private DigiDentalEntities dde;
-
-        public ListFunctionViewModel()
-        {
-            if (dde == null)
-            {
-                dde = new DigiDentalEntities();
-            }
-        }
-
+        
         #region METHOD
-        private void SetImagesCollectionByDate(DateTime date)
-        {
-            //載入Images
-            //取圖片清單 Images
-            var queryImages = from r in RegistrationsCollection
-                              where r.Registration_Date.Date == date.Date
-                              join i in dde.Images
-                              on r.Registration_ID equals i.Registration_ID into ri
-                              from qri in ri.DefaultIfEmpty()
-                              where qri.Image_Size.Equals("Original")
-                                    && qri.Image_IsEnable == true
-                              select new ImageInfo()
-                              {
-                                  Registration_Date = qri.Registrations.Registration_Date,
-                                  Image_ID = qri.Image_ID,
-                                  Image_Path = Agencys.Agency_ImagePath + qri.Image_Path,
-                                  Image_FileName = qri.Image_FileName,
-                                  Image_Extension = qri.Image_Extension,
-                                  Registration_ID = qri.Registration_ID,
-                                  CreateDate = qri.CreateDate
-                              };
-            ImagesInfo = new ObservableCollection<ImageInfo>(queryImages);
-        }
+        //private void SetImagesCollectionByDate(DateTime date)
+        //{
+        //    //載入Images
+        //    //取圖片清單 Images
+        //    var queryImages = from r in RegistrationsCollection
+        //                      where r.Registration_Date.Date == date.Date
+        //                      join i in dde.Images
+        //                      on r.Registration_ID equals i.Registration_ID into ri
+        //                      from qri in ri.DefaultIfEmpty()
+        //                      where qri.Image_Size.Equals("Original")
+        //                            && qri.Image_IsEnable == true
+        //                      select new ImageInfo()
+        //                      {
+        //                          Registration_Date = qri.Registrations.Registration_Date,
+        //                          Image_ID = qri.Image_ID,
+        //                          Image_Path = Agencys.Agency_ImagePath + qri.Image_Path,
+        //                          Image_FileName = qri.Image_FileName,
+        //                          Image_Extension = qri.Image_Extension,
+        //                          Registration_ID = qri.Registration_ID,
+        //                          CreateDate = qri.CreateDate
+        //                      };
+        //    ImagesInfo = new ObservableCollection<ImageInfo>(queryImages);
+        //}
         #endregion
-        public class ComboBoxItem
-        {
-            public string DisplayName { get; set; }
-            public int SelectedValue { get; set; }
+        //public class ComboBoxItem
+        //{
+        //    public string DisplayName { get; set; }
+        //    public int SelectedValue { get; set; }
 
-            public ComboBoxItem() { }
-            public ComboBoxItem(string displayName, int selectedValue)
-            {
-                DisplayName = displayName;
-                SelectedValue = selectedValue;
-            }
-        }
+        //    public ComboBoxItem() { }
+        //    public ComboBoxItem(string displayName, int selectedValue)
+        //    {
+        //        DisplayName = displayName;
+        //        SelectedValue = selectedValue;
+        //    }
+        //}
     }
 }

@@ -6,61 +6,81 @@
         xmlns:vmb="clr-namespace:DigiDental.ViewModels.ViewModelBase"
         xmlns:s="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="DigiDental" Height="600" Width="800" WindowState="Maximized">
+        Title="DigiDental" Height="768" Width="1366" WindowState="Maximized">
     <Window.Resources>
         <vmb:RadioButtonConverter x:Key="radioButtonConverterKey"></vmb:RadioButtonConverter>
         <s:Boolean x:Key="true">true</s:Boolean>
         <s:Boolean x:Key="false">false</s:Boolean>
     </Window.Resources>
     <Grid>
-        <DockPanel>
-            <Menu DockPanel.Dock="Top">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0">
                 <MenuItem Header="檔案">
                     <MenuItem Header="離開" Click="MenuItem_Exit_Click"></MenuItem>
                 </MenuItem>
                 <MenuItem Header="設定" Click="MenuItem_Setting_Click"></MenuItem>
                 <MenuItem Header="關於"></MenuItem>
             </Menu>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="150" Name="GridLife"></ColumnDefinition>
-                    <ColumnDefinition Width="auto"></ColumnDefinition>
-                    <ColumnDefinition Width="0.8*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                        <RowDefinition Height="auto"></RowDefinition>
-                    </Grid.RowDefinitions>
-                    <Button Grid.Row="0" DockPanel.Dock="Top" Margin="5"  VerticalAlignment="Top" Content="病患搜尋" />
-                    <StackPanel Grid.Row="1" Margin="5" VerticalAlignment="Top">
-                        <Label DockPanel.Dock="Top" Margin="5,0,5,0" Content="病歷號碼"/>
-                        <TextBox DockPanel.Dock="Top" Margin="5,0,5,0" Text="{Binding Patients.Patient_Number, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-                        <Label DockPanel.Dock="Top" Margin="5,0,5,0" Content="姓名"/>
-                        <TextBox DockPanel.Dock="Top" Margin="5,0,5,0" Text="{Binding Patients.Patient_Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-                        <Label DockPanel.Dock="Top" Margin="5,0,5,0" Content="身分證號"/>
-                        <TextBox DockPanel.Dock="Top" Margin="5,0,5,0" Text="{Binding Patients.Patient_IDNumber, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-                        <Label DockPanel.Dock="Top" Content="性別" Margin="5,0,5,0"/>
-                        <StackPanel Orientation="Horizontal" Margin="5,0,5,0">
-                            <RadioButton GroupName="Gender" Content="男" Margin="10,0,10,0" IsChecked="{Binding Patients.Patient_Gender, Converter={StaticResource ResourceKey=radioButtonConverterKey}, ConverterParameter={StaticResource true}}" />
-                            <RadioButton GroupName="Gender" Content="女" Margin="10,0,10,0" IsChecked="{Binding Patients.Patient_Gender, Converter={StaticResource ResourceKey=radioButtonConverterKey}, ConverterParameter={StaticResource false}}" />
-                        </StackPanel>
-                        <Label DockPanel.Dock="Top" Content="生日" Margin="5,0,5,0"/>
-                        <DatePicker DockPanel.Dock="Top" Margin="5,0,5,0" SelectedDate="{Binding Patients.Patient_Birth, UpdateSourceTrigger=PropertyChanged}" />
-                        <Border DockPanel.Dock="Top" Margin="5" BorderBrush="Black" BorderThickness="1" Height="150" >
-                            <Image Stretch="Fill" />
-                        </Border>                        
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200" Name="GridLeft"></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="0.8*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="0.6*"></RowDefinition>
+                    <RowDefinition Height="0.3*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Button Grid.Row="0" Margin="5"  VerticalAlignment="Top" Content="病患搜尋" />
+                <StackPanel Grid.Row="1" Margin="5" VerticalAlignment="Stretch">
+                    <Label Margin="5,0,5,0" Content="病歷號碼"/>
+                    <TextBox Margin="5,0,5,0" Text="{Binding Patients.Patient_Number, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                    <Label  Margin="5,0,5,0" Content="姓名"/>
+                    <TextBox Margin="5,0,5,0" Text="{Binding Patients.Patient_Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                    <Label Margin="5,0,5,0" Content="身分證號"/>
+                    <TextBox Margin="5,0,5,0" Text="{Binding Patients.Patient_IDNumber, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                    <Label Content="性別" Margin="5,0,5,0"/>
+                    <StackPanel Orientation="Horizontal" Margin="5,0,5,0">
+                        <RadioButton GroupName="Gender" Content="男" Margin="10,0,10,0" IsChecked="{Binding Patients.Patient_Gender, Converter={StaticResource ResourceKey=radioButtonConverterKey}, ConverterParameter={StaticResource true}}" />
+                        <RadioButton GroupName="Gender" Content="女" Margin="10,0,10,0" IsChecked="{Binding Patients.Patient_Gender, Converter={StaticResource ResourceKey=radioButtonConverterKey}, ConverterParameter={StaticResource false}}" />
                     </StackPanel>
-                    <StackPanel Grid.Row="2" VerticalAlignment="Bottom" Orientation="Horizontal">
-                        <Button HorizontalAlignment="Right" Content="修改" />
-                        <Button HorizontalAlignment="Right" Content="儲存" />
-                        <Button HorizontalAlignment="Right" Content="取消" />
+                    <Label Content="生日" Margin="5,0,5,0"/>
+                    <DatePicker Margin="5,0,5,0" SelectedDate="{Binding Patients.Patient_Birth, UpdateSourceTrigger=PropertyChanged}" />
+                    <Border Margin="5" BorderBrush="Black" BorderThickness="1" Height="200" >
+                        <Image/>
+                    </Border>
+                </StackPanel>
+                <GroupBox Grid.Row="2" VerticalAlignment="Stretch" Header="病患圖片管理">
+                    <StackPanel>
+                        <DockPanel>
+                            <DatePicker SelectedDate="{Binding SelectedDate}" />
+                            <Button Content="匯入" IsEnabled="{Binding ShowImportFunction}"
+                                        Click="Button_Import_Click"/>
+                        </DockPanel>
+                        <Label Content="匯入圖片分類"/>
+                        <ComboBox ItemsSource="{Binding CusComboBoxItem}" DisplayMemberPath="DisplayName" SelectedValue="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                     </StackPanel>
-                </Grid>
-                <Button Grid.Column="1" Click="Button_Stretch_Panel" />
-                <TabControl Grid.Column="2" Name="FunctionsTab"></TabControl>
-                <!--<TabControl Grid.Column="2" ItemsSource="{Binding Tabs}" SelectedItem="{Binding TabControlSelectedItem}" TabStripPlacement="Left">
+                </GroupBox>
+            </Grid>
+            <!--使用GridSplitter延伸Grid-->
+            <!--<GridSplitter Grid.Column="1" ResizeDirection="Columns"
+                          HorizontalAlignment="Left" VerticalAlignment="Stretch" Background="PowderBlue" 
+                          Width="5"></GridSplitter>-->
+            <!--使用Button延伸Grid-->
+            <Button Grid.Column="1"
+                    x:Name="ButtonStretch" 
+                    Content="&lt;" 
+                    Background="PowderBlue"
+                    Width="15" Height="60"
+                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Click="Button_Stretch_Panel"/>
+            <TabControl Grid.Column="2" ItemsSource="{Binding FunctionsTab}" SelectedItem="{Binding FunctionsTabItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></TabControl>
+            <!--<TabControl Grid.Column="2" ItemsSource="{Binding Tabs}" SelectedItem="{Binding TabControlSelectedItem}" TabStripPlacement="Left">
                     <TabControl.Resources>
                         <DataTemplate DataType="{x:Type ucvm:ListFunctionViewModel}">
                             <vuc:ListFunction x:Name="lfuc"/>
@@ -70,7 +90,9 @@
                         </DataTemplate>
                     </TabControl.Resources>
                     <TabControl.ItemTemplate>
-                         --><!--this is the header template--><!--
+                         -->
+            <!--this is the header template-->
+            <!--
                         <DataTemplate>
                             <ContentPresenter Content="{Binding Header}"
                                               TextBlock.FontFamily="Microsoft JhengHei" TextBlock.FontSize="16">
@@ -81,8 +103,7 @@
                         </DataTemplate>
                     </TabControl.ItemTemplate>
                 </TabControl>-->
-            </Grid>
-        </DockPanel>
+        </Grid>
     </Grid>
 </Window>
 

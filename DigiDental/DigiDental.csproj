@@ -71,6 +71,7 @@
     </Compile>
     <Compile Include="Class\Error_Log.cs" />
     <Compile Include="Class\ImageProcess.cs" />
+    <Compile Include="Class\LoadBitmapImage.cs" />
     <Compile Include="Clients.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -93,8 +94,16 @@
     <Compile Include="sysdiagrams.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="TemplateImages.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Templates.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\Class\CusComboBoxItem.cs" />
     <Compile Include="ViewModels\Class\ImageInfo.cs" />
     <Compile Include="ViewModels\PhotoEditorViewModel.cs" />
+    <Compile Include="ViewModels\ProgressDialogViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\UserControlViewModels\AdvancedAdjustViewModel.cs" />
     <Compile Include="ViewModels\UserControlViewModels\BaseAdjustViewModel.cs" />
@@ -104,6 +113,9 @@
     <Compile Include="ViewModels\ViewModelBase\RadioButtonConverter.cs" />
     <Compile Include="Views\PhotoEditor.xaml.cs">
       <DependentUpon>PhotoEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ProgressDialog.xaml.cs">
+      <DependentUpon>ProgressDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
@@ -117,8 +129,14 @@
     <Compile Include="Views\UserControls\ListFunction.xaml.cs">
       <DependentUpon>ListFunction.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\UserControls\TBeforeAfter.xaml.cs">
+      <DependentUpon>TBeforeAfter.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\UserControls\TemplateFunction.xaml.cs">
       <DependentUpon>TemplateFunction.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\TIn6s.xaml.cs">
+      <DependentUpon>TIn6s.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\InputDialog.xaml">
       <SubType>Designer</SubType>
@@ -143,7 +161,6 @@
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Commands\RelayCommandO.cs" />
     <Compile Include="DataAccess\DbObject\ConnectionString.cs" />
-    <Compile Include="DataAccess\DbObject\DBEntities.cs" />
     <Compile Include="Model.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -177,6 +194,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\ProgressDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Settings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -193,7 +214,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\UserControls\TBeforeAfter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\UserControls\TemplateFunction.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\TIn6s.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

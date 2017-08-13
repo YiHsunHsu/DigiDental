@@ -9,14 +9,14 @@
 
 namespace DigiDental
 {
-    using System;
+    using DigiDental.DataAccess.DbObject;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-    
+
     public partial class DigiDentalEntities : DbContext
     {
         public DigiDentalEntities()
-            : base(new DataAccess.DbObject.ConnectionString().EFConnectionString())
+            : base(new ConnectionString().EFConnectionString())
         {
         }
     
@@ -33,5 +33,7 @@ namespace DigiDental
         public virtual DbSet<Agencys> Agencys { get; set; }
         public virtual DbSet<Functions> Functions { get; set; }
         public virtual DbSet<Images> Images { get; set; }
+        public virtual DbSet<TemplateImages> TemplateImages { get; set; }
+        public virtual DbSet<Templates> Templates { get; set; }
     }
 }

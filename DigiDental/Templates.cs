@@ -12,25 +12,21 @@ namespace DigiDental
     using System;
     using System.Collections.Generic;
     
-    public partial class Images
+    public partial class Templates
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Images()
+        public Templates()
         {
-            this.Image_IsEnable = true;
             this.TemplateImages = new HashSet<TemplateImages>();
         }
     
-        public int Image_ID { get; set; }
-        public string Image_Path { get; set; }
-        public string Image_FileName { get; set; }
-        public string Image_Size { get; set; }
-        public string Image_Extension { get; set; }
-        public bool Image_IsEnable { get; set; }
-        public int Registration_ID { get; set; }
-        public System.DateTime CreateDate { get; set; }
+        public int Template_ID { get; set; }
+        public string Template_Title { get; set; }
+        public string Template_UserControlName { get; set; }
+        public Nullable<int> Template_SeqNo { get; set; }
+        public Nullable<int> Template_ImageCount { get; set; }
+        public bool Template_IsEnable { get; set; }
     
-        public virtual Registrations Registrations { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TemplateImages> TemplateImages { get; set; }
     }

@@ -100,8 +100,7 @@ namespace DigiDental.Views
                                 Client_HostName = HostName,
                                 Client_IP = LocalIP,
                                 Agency_VerificationCode = VerificationCodeClient
-                            }
-                                            );
+                            });
                             dde.SaveChanges();
                         }
                     }

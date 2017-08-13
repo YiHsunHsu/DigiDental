@@ -4,9 +4,95 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DigiDental.Views.UserControls"
+             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300" 
+             Loaded="UserControl_Loaded">
+    <UserControl.Resources>
+        <CollectionViewSource x:Key="SortedItems" Source="{Binding ShowImages}">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="Registration_Date" Direction="Descending"/>
+                <scm:SortDescription PropertyName="Image_ID" Direction="Ascending"/>
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+    </UserControl.Resources>
     <Grid>
-        <Label Content="TemplateFunction" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <ToolBarPanel Grid.Row="0">
+            <StackPanel Orientation="Horizontal">
+                <Label Content="模板類型"/>
+                <ComboBox ItemsSource="{Binding Templates}" DisplayMemberPath="Template_Title" SelectedItem="{Binding TemplateItem}"></ComboBox>
+            </StackPanel>
+        </ToolBarPanel>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="{Binding StretchWidth}"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="{Binding StretchHeight}"></RowDefinition>
+            </Grid.RowDefinitions>
+            <!--<Frame x:Name="Main"
+                   Grid.Column="0" Grid.Row="0"
+                   Grid.ColumnSpan="{Binding ColumnSpan}" Grid.RowSpan="{Binding RowSpan}"/>-->
+            <ContentControl Grid.Column="0" Grid.Row="0"
+                            Grid.ColumnSpan="{Binding ColumnSpan}" Grid.RowSpan="{Binding RowSpan}"
+                            Content="{Binding TemplateContent}"/>
+
+            <!--<Image Grid.Column="0" Grid.Row="0"
+                   Grid.ColumnSpan="{Binding ColumnSpan, UpdateSourceTrigger=PropertyChanged}" Grid.RowSpan="{Binding RowSpan, UpdateSourceTrigger=PropertyChanged}"
+                   AllowDrop="True" Drop="Image_Drop"
+                   Source="C:\Users\Eason_Hsu\Desktop\icon\no.png"></Image>-->
+
+            <Button x:Name="ButtonStretch"
+                    Grid.Column="{Binding ButtonStretchColumn}" Grid.Row="{Binding ButtonStretchRow}"
+                    Grid.ColumnSpan="{Binding ColumnSpan}" Grid.RowSpan="{Binding RowSpan}"
+                    Content="{Binding ButtonStretchContent}"
+                    Width="{Binding ButtonStretchWidth}" Height="{Binding ButtonStretchHeight}"
+                    HorizontalAlignment="Center" VerticalAlignment="Center" Background="PowderBlue"
+                    Click="Button_Stretch_Click"/>
+            
+            <Border BorderBrush="Black" BorderThickness="1"
+                     Grid.Column="{Binding ListColumn}" Grid.Row="{Binding ListRow}"
+                     Grid.ColumnSpan="{Binding ColumnSpan}" Grid.RowSpan="{Binding RowSpan}">
+                <ListBox ItemsSource="{Binding Source={StaticResource SortedItems}}"
+                     ScrollViewer.HorizontalScrollBarVisibility="{Binding ListHSBV}"
+                     ScrollViewer.VerticalScrollBarVisibility="{Binding ListVSBV}"
+                     BorderBrush="Black" BorderThickness="0">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="{Binding WrapOrientation}"></WrapPanel>
+                            <!--<UniformGrid Columns="{Binding ListItemColumn}" Rows="{Binding ListItemRow}"/>-->
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <Image Grid.Row="0" Margin="5" MaxHeight="150" Source="{Binding BitmapImageSet}"
+                                       MouseLeftButtonDown="Image_MouseLeftButtonDown">
+                                </Image>
+                                <TextBlock Grid.Row="1" Text="{Binding Image_FileName}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Border>
+        </Grid>
+        <StatusBar Grid.Row="2">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Right" Text="{Binding CountImages, UpdateSourceTrigger=PropertyChanged, StringFormat={}清單總數共:{0}張}"></TextBlock>
+            </DockPanel>
+        </StatusBar>
     </Grid>
 </UserControl>

@@ -27,7 +27,7 @@
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <!--<StackPanel Grid.Column="0" Orientation="Horizontal">
                     <Label Content="日期"/>
                     <DatePicker SelectedDate="{Binding SelectedDate}" Width="200"/>
                     <Button Content="匯入" Width="30" Click="Button_Import_Click"/>
@@ -37,16 +37,14 @@
                     <Label Content="已匯入日期"></Label>
                     <ComboBox Width="100" ItemsSource="{Binding ComboBoxItems}" DisplayMemberPath="DisplayName" SelectedValue="{Binding SelectedValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <Button x:Name="btnListAll" Content="全部" Width="30" Click="Button_ListAll_Click"/>
-                    <!--<ComboBox Name="cbxRegistrations" Width="100" SelectionChanged="cbxRegistrations_SelectionChanged"/>-->
-                </StackPanel>
+                    --><!--<ComboBox Name="cbxRegistrations" Width="100" SelectionChanged="cbxRegistrations_SelectionChanged"/>--><!--
+                </StackPanel>-->
                 <StackPanel Grid.Column="2" Orientation="Horizontal">
                     <Button DockPanel.Dock="Left" Content="放大" Click="Button_ZoomIn_Click"/>
                     <Slider DockPanel.Dock="Left" Width="100" Maximum="5" Minimum="1" Value="{Binding ColumnCount}" />
                     <Button DockPanel.Dock="Left"  Content="縮小" Click="Button_ZoomOut_Click"/>
                 </StackPanel>
             </Grid>
-            <StackPanel Orientation="Horizontal">
-            </StackPanel>
         </ToolBarPanel>
         <ListBox Grid.Row="1"
                  ItemsSource="{Binding Source={StaticResource SortedItems}}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"
@@ -75,9 +73,10 @@
         </ListBox>
         <StatusBar  Grid.Row="2">
             <DockPanel>
-                <ProgressBar DockPanel.Dock="Left" Width="300" Minimum="0" Maximum="{Binding CountImages}" Value="{Binding LoadedImages}" />
-                <TextBlock DockPanel.Dock="Left" x:Name="tbLoadInfo" Text="{Binding LoadImagesInfo}"></TextBlock>
-                <TextBlock DockPanel.Dock="Right" Text="{Binding CountImages, StringFormat={}共:{0}張}"></TextBlock>
+                <!--取消進度條-->
+                <!--<ProgressBar DockPanel.Dock="Left" Width="300" Minimum="0" Maximum="{Binding CountImages}" Value="{Binding LoadedImages}" />
+                <TextBlock DockPanel.Dock="Left" x:Name="tbLoadInfo" Text="{Binding LoadImagesInfo}"></TextBlock>-->
+                <TextBlock DockPanel.Dock="Right" Text="{Binding CountImages, UpdateSourceTrigger=PropertyChanged, StringFormat={}共:{0}張}"></TextBlock>
             </DockPanel>
         </StatusBar>
     </Grid>
