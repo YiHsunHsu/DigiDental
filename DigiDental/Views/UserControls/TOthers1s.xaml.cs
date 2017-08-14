@@ -1,20 +1,15 @@
 ﻿using DigiDental.Class;
 using DigiDental.ViewModels.Class;
 using System;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Imaging;
 
 namespace DigiDental.Views.UserControls
 {
     /// <summary>
-    /// TIn6s.xaml 的互動邏輯
+    /// TOthers1s.xaml 的互動邏輯
     /// </summary>
-    public partial class TIn6s : UserControl
+    public partial class TOthers1s : UserControl
     {
         public Agencys Agencys { get; set; }
         public Patients Patients { get; set; }
@@ -22,8 +17,9 @@ namespace DigiDental.Views.UserControls
 
         private DBTemplateImages dbTI;
         //控制頁面載入所有圖的解析
-        private int TemplateImagePixelWidth = 800;
-        public TIn6s(Agencys agencys, Patients patients, Templates templates)
+        private int TemplateImagePixelWidth = 1024;
+
+        public TOthers1s(Agencys agencys, Patients patients, Templates templates)
         {
             InitializeComponent();
 

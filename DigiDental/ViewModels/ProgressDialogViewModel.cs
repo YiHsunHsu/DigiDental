@@ -24,7 +24,7 @@
             }
         }
 
-        private int pMinimum;
+        private int pMinimum = 0;
         public int PMinimum
         {
             get { return pMinimum; }

@@ -101,6 +101,7 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\Class\CusComboBoxItem.cs" />
+    <Compile Include="ViewModels\Class\DBTemplateImages.cs" />
     <Compile Include="ViewModels\Class\ImageInfo.cs" />
     <Compile Include="ViewModels\PhotoEditorViewModel.cs" />
     <Compile Include="ViewModels\ProgressDialogViewModel.cs" />
@@ -135,8 +136,32 @@
     <Compile Include="Views\UserControls\TemplateFunction.xaml.cs">
       <DependentUpon>TemplateFunction.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\UserControls\TFdi52s.xaml.cs">
+      <DependentUpon>TFdi52s.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\UserControls\TIn6s.xaml.cs">
       <DependentUpon>TIn6s.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\TInOut10s.xaml.cs">
+      <DependentUpon>TInOut10s.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\TInOut11s.xaml.cs">
+      <DependentUpon>TInOut11s.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\TInOut9s.xaml.cs">
+      <DependentUpon>TInOut9s.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\TOthers1s.xaml.cs">
+      <DependentUpon>TOthers1s.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\TPlasterModel5s.xaml.cs">
+      <DependentUpon>TPlasterModel5s.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\TXRay19s.xaml.cs">
+      <DependentUpon>TXRay19s.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\TXRay6s.xaml.cs">
+      <DependentUpon>TXRay6s.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\InputDialog.xaml">
       <SubType>Designer</SubType>
@@ -222,7 +247,39 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\UserControls\TFdi52s.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\UserControls\TIn6s.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\TInOut10s.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\TInOut11s.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\TInOut9s.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\TOthers1s.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\TPlasterModel5s.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\TXRay19s.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\TXRay6s.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

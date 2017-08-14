@@ -40,8 +40,12 @@ namespace DigiDental.Views
         public ProgressDialog()
         {
             InitializeComponent();
+        }
 
-            if(pdvm == null)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+
+            if (pdvm == null)
             {
                 pdvm = new ProgressDialogViewModel();
             }

@@ -16,7 +16,12 @@ namespace DigiDental.Views.UserControls
         public Agencys Agencys
         {
             get { return tfvm.Agencys; }
-            set { tfvm.Agencys = value; }
+            set
+            {
+                if (tfvm == null)
+                    tfvm = new TemplateFunctionViewModel(tmpA, tmpP, tmpI);
+                tfvm.Agencys = value;
+            }
         }
 
         public MTObservableCollection<ImageInfo> ShowImages

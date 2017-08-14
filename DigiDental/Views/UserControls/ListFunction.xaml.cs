@@ -10,7 +10,18 @@ namespace DigiDental.Views.UserControls
     /// ListFunction.xaml 的互動邏輯
     /// </summary>
     public partial class ListFunction : UserControl
-    {        
+    {
+        public Agencys Agencys
+        {
+            get { return lfvm.Agencys; }
+            set
+            {
+                if (lfvm == null)
+                    lfvm = new ListFunctionViewModel(tmpA, tmpI);
+                lfvm.Agencys = value;
+            }
+        }
+
         public MTObservableCollection<ImageInfo> ShowImages
         {
             get { return lfvm.ShowImages; }

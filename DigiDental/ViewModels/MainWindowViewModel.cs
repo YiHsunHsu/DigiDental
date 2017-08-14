@@ -30,6 +30,16 @@ namespace DigiDental.ViewModels
                     ShowImportFunction = true;
                 else
                     ShowImportFunction = false;
+
+                if (lf != null)
+                {
+                    lf.Agencys = agencys;
+                }
+
+                if (tf != null)
+                {
+                    tf.Agencys = agencys;
+                }
             }
         }
 
@@ -153,19 +163,16 @@ namespace DigiDental.ViewModels
                 imageInfo = value;
 
                 ShowImages = new MTObservableCollection<ImageInfo>();
-                if (imageInfo != null)
+                if (imageInfo.Count > 0)
                 {
                     try
                     {
                         ProgressDialog pd = new ProgressDialog();
-                        pd.Dispatcher.Invoke(() =>
-                        {
-                            pd.Show();
-                            pd.PText = "圖片載入中( 0 / " + imageInfo.Count + " )";
-                            pd.PMinimum = 0;
-                            pd.PValue = 0;
-                            pd.PMaximum = imageInfo.Count;
-                        });
+                        pd.Show();
+                        pd.PText = "圖片載入中( 0 / " + imageInfo.Count + " )";
+                        pd.PMinimum = 0;
+                        pd.PValue = 0;
+                        pd.PMaximum = imageInfo.Count;
                         //multi - thread
                         Task.Factory.StartNew(() =>
                         {
@@ -265,6 +272,7 @@ namespace DigiDental.ViewModels
                 UpdateImageInfo();
             }
         }
+
         #region MVVM TabControl 建構子
         //private DigiDentalEntities dde;
 
@@ -359,6 +367,7 @@ namespace DigiDental.ViewModels
                               };
             ImageInfo = new ObservableCollection<ImageInfo>(queryImages);
         }
+
         /// <summary>
         /// 載入影像 全部
         /// </summary>

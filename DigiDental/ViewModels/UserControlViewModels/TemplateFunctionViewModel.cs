@@ -1,6 +1,7 @@
 ﻿using DigiDental.ViewModels.Class;
 using DigiDental.ViewModels.ViewModelBase;
 using DigiDental.Views.UserControls;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Controls;
@@ -9,7 +10,17 @@ namespace DigiDental.ViewModels.UserControlViewModels
 {
     public class TemplateFunctionViewModel : ViewModelBase.ViewModelBase
     {
-        public Agencys Agencys { get; set; }
+        private Agencys agencys;
+        public Agencys Agencys
+        {
+            get { return agencys; }
+            set
+            {
+                agencys = value;
+                OnPropertyChanged("Agencys");
+                SetTemplateLayout();
+            }
+        }
 
         public Patients Patients { get; set; }
 
@@ -221,6 +232,14 @@ namespace DigiDental.ViewModels.UserControlViewModels
 
         private TBeforeAfter tBA;
         private TIn6s tI6;
+        private TInOut9s tIO9;
+        private TInOut10s tIO10;
+        private TInOut11s tIO11;
+        private TXRay6s tXR6;
+        private TXRay19s tXR19;
+        private TPlasterModel5s tPM15;
+        private TFdi52s tF52;
+        private TOthers1s tO1;
 
         private UserControl templateContent;
         public UserControl TemplateContent
@@ -332,7 +351,18 @@ namespace DigiDental.ViewModels.UserControlViewModels
             Agencys = agencys;
             Patients = patients;
             ShowImages = showImages;
-            //版面樣式初始化
+            if (dde == null)
+            {
+                dde = new DigiDentalEntities();
+            }
+
+            var temp = from t in dde.Templates
+                        select t;
+            Templates = new ObservableCollection<Templates>(temp);
+        }
+
+        private void SetTemplateLayout()
+        {
             //設定Grid 橫向或直向
             //0:橫幅 1:直幅
             switch (Agencys.Agency_ViewType)
@@ -368,14 +398,6 @@ namespace DigiDental.ViewModels.UserControlViewModels
                     WrapOrientation = Orientation.Horizontal;
                     break;
             }
-            if (dde == null)
-            {
-                dde = new DigiDentalEntities();
-            }
-
-            var temp = from t in dde.Templates
-                        select t;
-            Templates = new ObservableCollection<Templates>(temp);
         }
 
         private void SetTemplateContent(Templates templateItem)
@@ -392,9 +414,65 @@ namespace DigiDental.ViewModels.UserControlViewModels
                 case "TIn6s":
                     if (tI6 == null)
                     {
-                        tI6 = new TIn6s();
+                        tI6 = new TIn6s(Agencys, Patients, templateItem);
                     }
                     TemplateContent = tI6;
+                    break;
+                case "TInOut9s":
+                    if (tIO9 == null)
+                    {
+                        tIO9 = new TInOut9s(Agencys, Patients, templateItem);
+                    }
+                    TemplateContent = tIO9;
+                    break;
+                case "TInOut10s":
+                    if (tIO10 == null)
+                    {
+                        tIO10 = new TInOut10s(Agencys, Patients, templateItem);
+                    }
+                    TemplateContent = tIO10;
+                    break;
+                case "TInOut11s":
+                    if (tIO11 == null)
+                    {
+                        tIO11 = new TInOut11s(Agencys, Patients, templateItem);
+                    }
+                    TemplateContent = tIO11;
+                    break;
+                case "TXRay6s":
+                    if (tXR6 == null)
+                    {
+                        tXR6 = new TXRay6s(Agencys, Patients, templateItem);
+                    }
+                    TemplateContent = tXR6;
+                    break;
+                case "TXRay19s":
+                    if (tXR19 == null)
+                    {
+                        tXR19 = new TXRay19s(Agencys, Patients, templateItem);
+                    }
+                    TemplateContent = tXR19;
+                    break;
+                case "TPlasterModel5s":
+                    if (tPM15 == null)
+                    {
+                        tPM15 = new TPlasterModel5s(Agencys, Patients, templateItem);
+                    }
+                    TemplateContent = tPM15;
+                    break;
+                case "TFdi52s":
+                    if (tF52 == null)
+                    {
+                        tF52 = new TFdi52s(Agencys, Patients, templateItem);
+                    }
+                    TemplateContent = tF52;
+                    break;
+                case "TOthers1s":
+                    if (tO1 == null)
+                    {
+                        tO1 = new TOthers1s(Agencys, Patients, templateItem);
+                    }
+                    TemplateContent = tO1;
                     break;
             }
         }

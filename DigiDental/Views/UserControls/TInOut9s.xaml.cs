@@ -12,9 +12,9 @@ using System.Windows.Media.Imaging;
 namespace DigiDental.Views.UserControls
 {
     /// <summary>
-    /// TIn6s.xaml 的互動邏輯
+    /// TInOut9s.xaml 的互動邏輯
     /// </summary>
-    public partial class TIn6s : UserControl
+    public partial class TInOut9s : UserControl
     {
         public Agencys Agencys { get; set; }
         public Patients Patients { get; set; }
@@ -23,7 +23,7 @@ namespace DigiDental.Views.UserControls
         private DBTemplateImages dbTI;
         //控制頁面載入所有圖的解析
         private int TemplateImagePixelWidth = 800;
-        public TIn6s(Agencys agencys, Patients patients, Templates templates)
+        public TInOut9s(Agencys agencys, Patients patients, Templates templates)
         {
             InitializeComponent();
 
