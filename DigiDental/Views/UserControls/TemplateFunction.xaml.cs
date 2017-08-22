@@ -64,8 +64,6 @@ namespace DigiDental.Views.UserControls
             get { return tfvm.TemplateItem; }
         }
         
-        // EntitiesFramework
-        private DigiDentalEntities dde;
         // View Model
         private TemplateFunctionViewModel tfvm;
         // DB
@@ -139,6 +137,8 @@ namespace DigiDental.Views.UserControls
             //如果略過就塞回原圖 
             btnAutoImport.Dispatcher.Invoke(() =>
             {
+                bool isEverChanged = false;
+
                 btnAutoImport.IsEnabled = false;
 
                 pd = new ProcessingDialog();
@@ -188,12 +188,12 @@ namespace DigiDental.Views.UserControls
                     tICollection = dbti.GetTemplateImagesCollection(Agencys, Patients, TemplateItem);
 
                     //default Image[i] in UserControl Templates
-                    int imagei = 0;
+                    int Imagei = 0;
                     int ImageCount = (int)TemplateItem.Template_ImageCount;
-
-                    while (imagei < ImageCount)
+                    int DecodePixelWidth = (int)TemplateItem.Template_DecodePixelWidth;
+                    while (Imagei < ImageCount)
                     {
-                        pd.PText = "圖片 " + (imagei + 1) + " 偵測中";
+                        pd.PText = "圖片 " + (Imagei + 1) + " 偵測中";
 
                         //目前處理的Image[i]
                         Image iTarget;
@@ -201,8 +201,8 @@ namespace DigiDental.Views.UserControls
                         TemplateContent.Dispatcher.Invoke(() =>
                         {
                             iTarget = new Image();
-                            iTarget = (Image)TemplateContent.FindName("Image" + imagei);
-                            iTarget.Source = lbi.SettingBitmapImage(@"C:\Users\Eason_Hsu\Desktop\icon\yes.png", 1024);
+                            iTarget = (Image)TemplateContent.FindName("Image" + Imagei);
+                            iTarget.Source = lbi.SettingBitmapImage(@"C:\Users\Eason_Hsu\Desktop\icon\yes.png", DecodePixelWidth);
                         });
 
                         //set the paramater default
@@ -232,15 +232,15 @@ namespace DigiDental.Views.UserControls
                                 //寫資料庫
                                 //INSERT Images
                                 int imageID = dbi.InsertImage(imagePath, imageFileName, imageSize, imageExtension, Registration_ID);
-
+                                isEverChanged = true;
                                 TemplateContent.Dispatcher.Invoke(() =>
                                 {
                                     iTarget = new Image();
-                                    iTarget = (Image)TemplateContent.FindName("Image" + imagei);
+                                    iTarget = (Image)TemplateContent.FindName("Image" + Imagei);
 
                                     //INSERT TemplateImages
                                     dbti.InsertOrUpdateImage(Patients, TemplateItem, imageID, imagePath, iTarget.Uid);
-                                    iTarget.Source = lbi.SettingBitmapImage(pf.PatientFullFolderPathOriginal + @"\" + newFileName + @"ori" + extension, 1024);
+                                    iTarget.Source = lbi.SettingBitmapImage(pf.PatientFullFolderPathOriginal + @"\" + newFileName + @"ori" + extension, DecodePixelWidth);
                                     isChanged = true;
                                 });
 
@@ -254,17 +254,17 @@ namespace DigiDental.Views.UserControls
                                 TemplateContent.Dispatcher.Invoke(() =>
                                 {
                                     iTarget = new Image();
-                                    iTarget = (Image)TemplateContent.FindName("Image" + imagei);
+                                    iTarget = (Image)TemplateContent.FindName("Image" + Imagei);
                                     var findOriImage = from tc in tICollection
-                                                       where tc.TemplateImage_Number == imagei.ToString()
+                                                       where tc.TemplateImage_Number == Imagei.ToString()
                                                        select tc;
                                     if (findOriImage.Count() > 0)
                                     {
-                                        iTarget.Source = lbi.SettingBitmapImage(findOriImage.First().Image_Path, 1024);
+                                        iTarget.Source = lbi.SettingBitmapImage(findOriImage.First().Image_Path, DecodePixelWidth);
                                     }
                                     else
                                     {
-                                        iTarget.Source = lbi.SettingBitmapImage(@"C:\Users\Eason_Hsu\Desktop\icon\key.ico", 1024);
+                                        iTarget.Source = lbi.SettingBitmapImage(@"C:\Users\Eason_Hsu\Desktop\icon\key.ico", DecodePixelWidth);
                                     }
                                 });
                                 return;
@@ -279,21 +279,21 @@ namespace DigiDental.Views.UserControls
                                         TemplateContent.Dispatcher.Invoke(() =>
                                         {
                                             iTarget = new Image();
-                                            iTarget = (Image)TemplateContent.FindName("Image" + imagei);
+                                            iTarget = (Image)TemplateContent.FindName("Image" + Imagei);
                                             var findOriImage = from tc in tICollection
-                                                               where tc.TemplateImage_Number == imagei.ToString()
+                                                               where tc.TemplateImage_Number == Imagei.ToString()
                                                                select tc;
                                             if (findOriImage.Count() > 0)
                                             {
-                                                iTarget.Source = lbi.SettingBitmapImage(findOriImage.First().Image_Path, 1024);
+                                                iTarget.Source = lbi.SettingBitmapImage(findOriImage.First().Image_Path, DecodePixelWidth);
                                             }
                                             else
                                             {
-                                                iTarget.Source = lbi.SettingBitmapImage(@"C:\Users\Eason_Hsu\Desktop\icon\key.ico", 1024);
+                                                iTarget.Source = lbi.SettingBitmapImage(@"C:\Users\Eason_Hsu\Desktop\icon\key.ico", DecodePixelWidth);
                                             }
                                         });
                                     }
-                                    imagei++;
+                                    Imagei++;
                                     isSkip = true;
                                     break;
                                 }
@@ -302,13 +302,16 @@ namespace DigiDental.Views.UserControls
                     }
                 }).ContinueWith(cw =>
                 {
-                    //委派回傳MainWindow
-                    //刷新Registrations 資料
-                    //刷新Images 資料
-                    ReturnValueCallback(Registration_ID, Registration_Date);
                     //結束
                     pd.PText = "處理完畢";
                     pd.Close();
+                    //委派回傳MainWindow
+                    //刷新Registrations 資料
+                    //刷新Images 資料
+                    if (isEverChanged)
+                    {
+                        ReturnValueCallback(Registration_ID, Registration_Date);
+                    }
                     GC.Collect();
 
                     btnAutoImport.IsEnabled = true;
@@ -373,7 +376,9 @@ namespace DigiDental.Views.UserControls
                 encoder.Frames.Add(BitmapFrame.Create(bmp));
 
                 using (Stream stm = File.Create(sfd.FileName))
+                {
                     encoder.Save(stm);
+                }
 
                 MessageBox.Show("檔案建立成功，存放位置於" + sfd.FileName, "提示", MessageBoxButton.OK);
             }

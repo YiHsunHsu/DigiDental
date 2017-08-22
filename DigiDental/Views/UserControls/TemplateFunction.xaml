@@ -34,8 +34,9 @@
             </StackPanel>
             <ToolBarPanel>
             </ToolBarPanel>
-            <StackPanel Grid.Column="1">
-                <Button Content="精靈拍攝" Width="80" HorizontalAlignment="Left" Click="Button_AutoImport_Click"></Button>
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <Button Content="精靈拍攝" Width="80" HorizontalAlignment="Left" IsEnabled="{Binding AutoImportEnable}"
+                        Click="Button_AutoImport_Click"></Button>
             </StackPanel>
             <StackPanel Grid.Column="2" Orientation="Horizontal">
                 <Label Content="匯出功能"/>
@@ -58,7 +59,7 @@
             <!--<Frame x:Name="Main"
                    Grid.Column="0" Grid.Row="0"
                    Grid.ColumnSpan="{Binding ColumnSpan}" Grid.RowSpan="{Binding RowSpan}"/>-->
-            <ContentControl Grid.Column="0" Grid.Row="0"
+            <ContentControl Margin="5" Grid.Column="0" Grid.Row="0"
                             Grid.ColumnSpan="{Binding ColumnSpan}" Grid.RowSpan="{Binding RowSpan}"
                             Content="{Binding TemplateContent}"/>
 
@@ -75,7 +76,7 @@
                     HorizontalAlignment="Center" VerticalAlignment="Center" Background="PowderBlue"
                     Click="Button_Stretch_Click"/>
             
-            <Border BorderBrush="Black" BorderThickness="1"
+            <Border BorderBrush="Black" BorderThickness="1" Margin="0,5,0,0"
                      Grid.Column="{Binding ListColumn}" Grid.Row="{Binding ListRow}"
                      Grid.ColumnSpan="{Binding ColumnSpan}" Grid.RowSpan="{Binding RowSpan}">
                 <ListBox ItemsSource="{Binding Source={StaticResource SortedItems}}"

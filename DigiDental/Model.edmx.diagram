@@ -17,9 +17,9 @@
         <EntityTypeShape EntityType="DigiDentalModel.Images" Width="1.5" PointX="5.25" PointY="1" />
         <AssociationConnector Association="DigiDentalModel.FK_Images_Registrations" />
         <EntityTypeShape EntityType="DigiDentalModel.TemplateImages" Width="1.5" PointX="10.5" PointY="1.125" />
-        <EntityTypeShape EntityType="DigiDentalModel.Templates" Width="1.5" PointX="8.25" PointY="7.375" />
         <AssociationConnector Association="DigiDentalModel.FK_TemplateImages_Images" />
         <AssociationConnector Association="DigiDentalModel.FK_TemplateImages_Patients" />
+        <EntityTypeShape EntityType="DigiDentalModel.Templates" Width="1.5" PointX="5.375" PointY="8" />
         <AssociationConnector Association="DigiDentalModel.FK_TemplateImages_Templates" />
         </Diagram>
     </edmx:Diagrams>

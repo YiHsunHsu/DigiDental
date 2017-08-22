@@ -203,7 +203,6 @@ namespace DigiDental.ViewModels.UserControlViewModels
         }
 
         private ObservableCollection<Templates> templates;
-
         public ObservableCollection<Templates> Templates
         {
             get { return templates; }
@@ -214,8 +213,8 @@ namespace DigiDental.ViewModels.UserControlViewModels
 
             }
         }
-        private Templates templateItem;
 
+        private Templates templateItem;
         public Templates TemplateItem
         {
             get { return templateItem; }
@@ -226,7 +225,26 @@ namespace DigiDental.ViewModels.UserControlViewModels
                     templateItem = value;
                     OnPropertyChanged("TemplateItem");
                     SetTemplateContent(templateItem);
+                    if (templateItem != null)
+                    {
+                        AutoImportEnable = true;
+                    }
+                    else
+                    {
+                        AutoImportEnable = false;
+                    }
                 }
+            }
+        }
+
+        private bool autoImportEnable = false;
+        public bool AutoImportEnable
+        {
+            get { return autoImportEnable; }
+            set
+            {
+                autoImportEnable = value;
+                OnPropertyChanged("AutoImportEnable");
             }
         }
 

@@ -25,6 +25,7 @@ namespace DigiDental
         public string Template_UserControlName { get; set; }
         public Nullable<int> Template_SeqNo { get; set; }
         public Nullable<int> Template_ImageCount { get; set; }
+        public Nullable<int> Template_DecodePixelWidth { get; set; }
         public bool Template_IsEnable { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

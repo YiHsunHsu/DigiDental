@@ -1,13 +1,8 @@
 ﻿using DigiDental.Class;
 using DigiDental.ViewModels.Class;
 using System;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Imaging;
 
 namespace DigiDental.Views.UserControls
 {
@@ -22,7 +17,7 @@ namespace DigiDental.Views.UserControls
 
         private DBTemplateImages dbTI;
         //控制頁面載入所有圖的解析
-        private int TemplateImagePixelWidth = 800;
+        private int TemplateImagePixelWidth;
         public TInOut9s(Agencys agencys, Patients patients, Templates templates)
         {
             InitializeComponent();
@@ -32,6 +27,8 @@ namespace DigiDental.Views.UserControls
             Patients = patients;
 
             Templates = templates;
+
+            TemplateImagePixelWidth = (int)Templates.Template_DecodePixelWidth;
 
             if (dbTI == null)
             {

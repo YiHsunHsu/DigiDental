@@ -117,6 +117,7 @@
           <Property Name="Template_UserControlName" Type="nvarchar" MaxLength="30" Nullable="false" />
           <Property Name="Template_SeqNo" Type="int" />
           <Property Name="Template_ImageCount" Type="int" />
+          <Property Name="Template_DecodePixelWidth" Type="int" />
           <Property Name="Template_IsEnable" Type="bit" Nullable="false" />
         </EntityType>
         <Association Name="FK_Agencys_Functions">
@@ -273,7 +274,6 @@
             <End Role="Images" EntitySet="Images" />
           </AssociationSet>
           <EntitySet Name="TemplateImages" EntityType="DigiDentalModel.TemplateImages" />
-          <EntitySet Name="Templates" EntityType="DigiDentalModel.Templates" />
           <AssociationSet Name="FK_TemplateImages_Images" Association="DigiDentalModel.FK_TemplateImages_Images">
             <End Role="Images" EntitySet="Images" />
             <End Role="TemplateImages" EntitySet="TemplateImages" />
@@ -282,6 +282,7 @@
             <End Role="Patients" EntitySet="Patients" />
             <End Role="TemplateImages" EntitySet="TemplateImages" />
           </AssociationSet>
+          <EntitySet Name="Templates" EntityType="DigiDentalModel.Templates" />
           <AssociationSet Name="FK_TemplateImages_Templates" Association="DigiDentalModel.FK_TemplateImages_Templates">
             <End Role="Templates" EntitySet="Templates" />
             <End Role="TemplateImages" EntitySet="TemplateImages" />
@@ -417,18 +418,6 @@
           <NavigationProperty Name="Patients" Relationship="DigiDentalModel.FK_TemplateImages_Patients" FromRole="TemplateImages" ToRole="Patients" />
           <NavigationProperty Name="Templates" Relationship="DigiDentalModel.FK_TemplateImages_Templates" FromRole="TemplateImages" ToRole="Templates" />
         </EntityType>
-        <EntityType Name="Templates">
-          <Key>
-            <PropertyRef Name="Template_ID" />
-          </Key>
-          <Property Name="Template_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Template_Title" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Template_UserControlName" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="Template_SeqNo" Type="Int32" />
-          <Property Name="Template_ImageCount" Type="Int32" />
-          <Property Name="Template_IsEnable" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="TemplateImages" Relationship="DigiDentalModel.FK_TemplateImages_Templates" FromRole="Templates" ToRole="TemplateImages" />
-        </EntityType>
         <Association Name="FK_TemplateImages_Images">
           <End Type="DigiDentalModel.Images" Role="Images" Multiplicity="0..1" />
           <End Type="DigiDentalModel.TemplateImages" Role="TemplateImages" Multiplicity="*" />
@@ -453,6 +442,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Templates">
+          <Key>
+            <PropertyRef Name="Template_ID" />
+          </Key>
+          <Property Name="Template_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Template_Title" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Template_UserControlName" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Template_SeqNo" Type="Int32" />
+          <Property Name="Template_ImageCount" Type="Int32" />
+          <Property Name="Template_DecodePixelWidth" Type="Int32" />
+          <Property Name="Template_IsEnable" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="TemplateImages" Relationship="DigiDentalModel.FK_TemplateImages_Templates" FromRole="Templates" ToRole="TemplateImages" />
+        </EntityType>
         <Association Name="FK_TemplateImages_Templates">
           <End Type="DigiDentalModel.Templates" Role="Templates" Multiplicity="1" />
           <End Type="DigiDentalModel.TemplateImages" Role="TemplateImages" Multiplicity="*" />
@@ -587,6 +589,7 @@
             <EntityTypeMapping TypeName="DigiDentalModel.Templates">
               <MappingFragment StoreEntitySet="Templates">
                 <ScalarProperty Name="Template_IsEnable" ColumnName="Template_IsEnable" />
+                <ScalarProperty Name="Template_DecodePixelWidth" ColumnName="Template_DecodePixelWidth" />
                 <ScalarProperty Name="Template_ImageCount" ColumnName="Template_ImageCount" />
                 <ScalarProperty Name="Template_SeqNo" ColumnName="Template_SeqNo" />
                 <ScalarProperty Name="Template_UserControlName" ColumnName="Template_UserControlName" />
