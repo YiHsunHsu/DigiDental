@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:DigiDental.Views.UserControls"
              xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" 
+             d:DesignHeight="500" d:DesignWidth="500" 
              Loaded="UserControl_Loaded">
     <UserControl.Resources>
         <CollectionViewSource x:Key="SortedItems" Source="{Binding ShowImages}">
@@ -22,12 +22,28 @@
             <RowDefinition></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <ToolBarPanel Grid.Row="0">
-            <StackPanel Orientation="Horizontal">
-                <Label Content="模板類型"/>
-                <ComboBox ItemsSource="{Binding Templates}" DisplayMemberPath="Template_Title" SelectedItem="{Binding TemplateItem}"></ComboBox>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <Label Content="選擇模板類型"/>
+                <ComboBox x:Name="ComboBoxItem" Width="200" ItemsSource="{Binding Templates}" DisplayMemberPath="Template_Title" SelectedItem="{Binding TemplateItem}"/>
             </StackPanel>
-        </ToolBarPanel>
+            <ToolBarPanel>
+            </ToolBarPanel>
+            <StackPanel Grid.Column="1">
+                <Button Content="精靈拍攝" Width="80" HorizontalAlignment="Left" Click="Button_AutoImport_Click"></Button>
+            </StackPanel>
+            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                <Label Content="匯出功能"/>
+                <Button Content="匯出模板圖片" 
+                        Click="Button_TemplateExport_Click" />
+                <Button Content="匯出模板PPT"/>
+            </StackPanel>
+        </Grid>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
@@ -79,7 +95,7 @@
                                     <RowDefinition></RowDefinition>
                                     <RowDefinition></RowDefinition>
                                 </Grid.RowDefinitions>
-                                <Image Grid.Row="0" Margin="5" MaxHeight="150" Source="{Binding BitmapImageSet}"
+                                <Image Grid.Row="0" Margin="5" MaxWidth="220" MaxHeight="150" Source="{Binding BitmapImageSet}"
                                        MouseLeftButtonDown="Image_MouseLeftButtonDown">
                                 </Image>
                                 <TextBlock Grid.Row="1" Text="{Binding Image_FileName}"/>

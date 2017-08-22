@@ -54,7 +54,7 @@ namespace DigiDental.Views.UserControls
                 img.Source = lbi.SettingBitmapImage(dragImage.Image_FullPath, TemplateImagePixelWidth);
 
                 //BEFORE TemplateImage_Number = 0
-                dbTI.InsertOrUpdateImage(Patients, Templates, dragImage, img.Uid);
+                dbTI.InsertOrUpdateImage(Patients, Templates, dragImage.Image_ID, dragImage.Image_Path, img.Uid);
             }
             catch (Exception ex)
             {

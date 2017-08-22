@@ -101,9 +101,13 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\Class\CusComboBoxItem.cs" />
+    <Compile Include="ViewModels\Class\DBImages.cs" />
+    <Compile Include="ViewModels\Class\DBRegistrations.cs" />
     <Compile Include="ViewModels\Class\DBTemplateImages.cs" />
     <Compile Include="ViewModels\Class\ImageInfo.cs" />
+    <Compile Include="ViewModels\Class\PatientsFolder.cs" />
     <Compile Include="ViewModels\PhotoEditorViewModel.cs" />
+    <Compile Include="ViewModels\ProcessingDialogViewModel.cs" />
     <Compile Include="ViewModels\ProgressDialogViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\UserControlViewModels\AdvancedAdjustViewModel.cs" />
@@ -112,8 +116,14 @@
     <Compile Include="ViewModels\UserControlViewModels\TemplateFunctionViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase\MTObservableCollection.cs" />
     <Compile Include="ViewModels\ViewModelBase\RadioButtonConverter.cs" />
+    <Compile Include="Views\About.xaml.cs">
+      <DependentUpon>About.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\PhotoEditor.xaml.cs">
       <DependentUpon>PhotoEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ProcessingDialog.xaml.cs">
+      <DependentUpon>ProcessingDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ProgressDialog.xaml.cs">
       <DependentUpon>ProgressDialog.xaml</DependentUpon>
@@ -163,6 +173,10 @@
     <Compile Include="Views\UserControls\TXRay6s.xaml.cs">
       <DependentUpon>TXRay6s.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\About.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\InputDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -216,6 +230,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\PhotoEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ProcessingDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

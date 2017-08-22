@@ -1,6 +1,6 @@
 ﻿namespace DigiDental.ViewModels
 {
-    public class ProgressDialogViewModel : ViewModelBase.ViewModelBase
+    public class ProcessingDialogViewModel : ViewModelBase.ViewModelBase
     {
         private string dTitle;
         public string DTitle
@@ -65,6 +65,17 @@
             {
                 pValue = value;
                 OnPropertyChanged("PValue");
+            }
+        }
+
+        private string buttonContent;
+        public string ButtonContent
+        {
+            get { return buttonContent; }
+            set
+            {
+                buttonContent = value;
+                OnPropertyChanged("ButtonContent");
             }
         }
     }

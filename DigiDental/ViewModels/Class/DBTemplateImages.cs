@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-using System.Windows.Media.Imaging;
 
 namespace DigiDental.ViewModels.Class
 {
@@ -55,12 +54,14 @@ namespace DigiDental.ViewModels.Class
                     lbi = new LoadBitmapImage();
 
                     ProgressDialog pd = new ProgressDialog();
-                    pd.Show();
-                    pd.PText = "圖片載入中( 0 / " + tICollection.Count + " )";
-                    pd.PMinimum = 0;
-                    pd.PValue = 0;
-                    pd.PMaximum = tICollection.Count;
-
+                    pd.Dispatcher.Invoke(() =>
+                    {
+                        pd.PText = "圖片載入中( 0 / " + tICollection.Count + " )";
+                        pd.PMinimum = 0;
+                        pd.PValue = 0;
+                        pd.PMaximum = tICollection.Count;
+                        pd.Show();
+                    });
                     //multi - thread
                     Task.Factory.StartNew(() =>
                     {
@@ -74,9 +75,13 @@ namespace DigiDental.ViewModels.Class
                                 });
 
                             }
-                            pd.PValue++;
-                            pd.PText = "圖片載入中( " + pd.PValue + " / " + tICollection.Count + " )";
+                            pd.Dispatcher.Invoke(()=>
+                            {
+                                pd.PValue++;
+                                pd.PText = "圖片載入中( " + pd.PValue + " / " + tICollection.Count + " )";
+                            });
                         }
+
                     }).ContinueWith(t =>
                     {
                         pd.Dispatcher.Invoke(() =>
@@ -94,7 +99,8 @@ namespace DigiDental.ViewModels.Class
                 Error_Log.ErrorMessageOutput(ex.ToString());
             }
         }
-        public void InsertOrUpdateImage(Patients patients, Templates templates, ImageInfo imageInfo, string tiNumber)
+
+        public void InsertOrUpdateImage(Patients patients, Templates templates, int imageID, string imagePath, string tiNumber)
         {
             var IsImageExist = from iie in dde.TemplateImages
                                where iie.Template_ID == templates.Template_ID &&
@@ -105,8 +111,8 @@ namespace DigiDental.ViewModels.Class
             {
                 tI = new TemplateImages();
                 tI = IsImageExist.First();
-                tI.Image_ID = imageInfo.Image_ID;
-                tI.Image_Path = imageInfo.Image_Path;
+                tI.Image_ID = imageID;
+                tI.Image_Path = imagePath;
                 dde.SaveChanges();
             }
             else
@@ -115,12 +121,38 @@ namespace DigiDental.ViewModels.Class
                 {
                     TemplateImage_Number = tiNumber,
                     Template_ID = templates.Template_ID,
-                    Image_ID = imageInfo.Image_ID,
-                    Image_Path = imageInfo.Image_Path,
+                    Image_ID = imageID,
+                    Image_Path = imagePath,
                     Patient_ID = patients.Patient_ID
                 });
                 dde.SaveChanges();
             }
+        }
+
+        public ObservableCollection<TemplateImages> GetTemplateImagesCollection(Agencys agencys, Patients patients, Templates templates)
+        {
+            var IsImageExist = (from iie in dde.TemplateImages
+                                where iie.Template_ID == templates.Template_ID &&
+                                iie.Patient_ID == patients.Patient_ID
+                                select new
+                                {
+                                    TemplateImage_ID = iie.TemplateImage_ID,
+                                    TemplateImage_Number = iie.TemplateImage_Number,
+                                    Template_ID = iie.Template_ID,
+                                    Image_ID = iie.Image_ID,
+                                    Image_Path = agencys.Agency_ImagePath + iie.Image_Path,
+                                    Patient_ID = iie.Patient_ID
+                                }).ToList().Select(s => new TemplateImages
+                                {
+                                    TemplateImage_ID = s.TemplateImage_ID,
+                                    TemplateImage_Number = s.TemplateImage_Number,
+                                    Template_ID = s.Template_ID,
+                                    Image_ID = s.Image_ID,
+                                    Image_Path = s.Image_Path,
+                                    Patient_ID = s.Patient_ID
+                                });
+            tICollection = new ObservableCollection<TemplateImages>(IsImageExist);
+            return tICollection;
         }
     }
 }

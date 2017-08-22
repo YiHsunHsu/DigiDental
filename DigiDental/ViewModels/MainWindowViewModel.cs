@@ -7,6 +7,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
@@ -70,7 +71,7 @@ namespace DigiDental.ViewModels
         /// <summary>
         /// 選擇匯入的日期(改變的話重新載入圖片)
         /// </summary>
-        private DateTime selectedDate = DateTime.Now;
+        private DateTime selectedDate;
         public DateTime SelectedDate
         {
             get { return selectedDate; }
@@ -99,7 +100,7 @@ namespace DigiDental.ViewModels
                 {
                     //建立ComboBox選項
                     //RegistrationsCollection 項目變動時 更動
-                    CusComboBoxItem = new ObservableCollection<CusComboBoxItem>();
+                    CusComboBoxItem = new MTObservableCollection<CusComboBoxItem>();
                     CusComboBoxItem.Add(new CusComboBoxItem("全部", -1));
                     foreach (Registrations r in registrationsCollection)
                     {
@@ -112,8 +113,8 @@ namespace DigiDental.ViewModels
         /// <summary>
         /// 用來Binding ComboBox 的ItemsSource
         /// </summary>
-        private ObservableCollection<CusComboBoxItem> cusComboBoxItem;
-        public ObservableCollection<CusComboBoxItem> CusComboBoxItem
+        private MTObservableCollection<CusComboBoxItem> cusComboBoxItem;
+        public MTObservableCollection<CusComboBoxItem> CusComboBoxItem
         {
             get { return cusComboBoxItem; }
             set
@@ -162,68 +163,76 @@ namespace DigiDental.ViewModels
             {
                 imageInfo = value;
 
-                ShowImages = new MTObservableCollection<ImageInfo>();
-                if (imageInfo.Count > 0)
+                try
                 {
-                    try
+                    ShowImages = new MTObservableCollection<ImageInfo>();
+
+                    pd = new ProgressDialog();
+
+                    pd.Dispatcher.Invoke(() =>
                     {
-                        ProgressDialog pd = new ProgressDialog();
-                        pd.Show();
                         pd.PText = "圖片載入中( 0 / " + imageInfo.Count + " )";
                         pd.PMinimum = 0;
                         pd.PValue = 0;
                         pd.PMaximum = imageInfo.Count;
-                        //multi - thread
-                        Task.Factory.StartNew(() =>
+                        pd.Show();
+                    });
+
+                    //multi - thread
+                    Task t = Task.Factory.StartNew(() =>
+                    {
+                        Parallel.ForEach(imageInfo, imgs =>
                         {
-                            Parallel.ForEach(imageInfo, imgs =>
+                            BitmapImage bi = new BitmapImage();
+
+                            if (File.Exists(imgs.Image_FullPath))
                             {
-                                BitmapImage bi = new BitmapImage();
-                                if (File.Exists(imgs.Image_FullPath))
-                                {
-                                    FileStream fs = new FileStream(imgs.Image_FullPath, FileMode.Open);
-                                    bi.BeginInit();
-                                    bi.StreamSource = fs;
-                                    bi.DecodePixelWidth = 800;
-                                    bi.CacheOption = BitmapCacheOption.OnLoad;
-                                    bi.EndInit();
-                                    bi.Freeze();
-                                    fs.Close();
-                                }
-                                ShowImages.Add(new ImageInfo()
-                                {
-                                    Registration_Date = imgs.Registration_Date,
-                                    Image_ID = imgs.Image_ID,
-                                    Image_Path = imgs.Image_Path,
-                                    Image_FullPath = imgs.Image_FullPath,
-                                    Image_FileName = imgs.Image_FileName,
-                                    Image_Extension = imgs.Image_Extension,
-                                    Registration_ID = imgs.Registration_ID,
-                                    CreateDate = imgs.CreateDate,
-                                    BitmapImageSet = bi
-                                });
+                                FileStream fs = new FileStream(imgs.Image_FullPath, FileMode.Open);
+                                bi.BeginInit();
+                                bi.StreamSource = fs;
+                                bi.DecodePixelWidth = 800;
+                                bi.CacheOption = BitmapCacheOption.OnLoad;
+                                bi.EndInit();
+                                bi.Freeze();
+                                fs.Close();
+                            }
+                            ShowImages.Add(new ImageInfo()
+                            {
+                                Registration_Date = imgs.Registration_Date,
+                                Image_ID = imgs.Image_ID,
+                                Image_Path = imgs.Image_Path,
+                                Image_FullPath = imgs.Image_FullPath,
+                                Image_FileName = imgs.Image_FileName,
+                                Image_Extension = imgs.Image_Extension,
+                                Registration_ID = imgs.Registration_ID,
+                                CreateDate = imgs.CreateDate,
+                                BitmapImageSet = bi
+                            });
+
+                            pd.Dispatcher.Invoke(() =>
+                            {
                                 pd.PValue++;
                                 pd.PText = "圖片載入中( " + pd.PValue + " / " + imageInfo.Count + " )";
                             });
-                        }).ContinueWith(t =>
-                        {
-                            pd.Dispatcher.Invoke(() =>
-                            {
-                                pd.PText = "載入完成";
-                                pd.Close();
-                            });
-
-                            ////更新TabControl 分頁   的ImageInfo 來源
-                            ////TabSelectedChanged 重新刷新TAB頁面內的來源
-                            UpdateImageInfo();
-
-                            GC.Collect();
                         });
-                    }
-                    catch (Exception ex)
+                    }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).ContinueWith(cw =>
                     {
-                        Error_Log.ErrorMessageOutput(ex.ToString());
-                    }
+                        pd.Dispatcher.Invoke(() =>
+                        {
+                            pd.PText = "載入完成";
+                            pd.Close();
+                        });
+
+                        ////更新TabControl 分頁   的ImageInfo 來源
+                        ////TabSelectedChanged 重新刷新TAB頁面內的來源
+                        UpdateImageInfo();
+
+                        GC.Collect();
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Error_Log.ErrorMessageOutput(ex.ToString());
                 }
             }
         }
@@ -235,11 +244,7 @@ namespace DigiDental.ViewModels
         public MTObservableCollection<ImageInfo> ShowImages
         {
             get { return showImages; }
-            set
-            {
-                showImages = value;
-                OnPropertyChanged("ShowImages");
-            }
+            set { showImages = value; }
         }
 
         /// <summary>
@@ -315,17 +320,21 @@ namespace DigiDental.ViewModels
         /// UserControl (Tab頁面)
         /// </summary>
         private TemplateFunction tf;
-
-        public MainWindowViewModel(string hostName, Agencys agencys, Patients patients)
+        /// <summary>
+        /// ProgressDialog(進度條)
+        /// </summary>
+        private ProgressDialog pd;
+        public MainWindowViewModel(string hostName, Agencys agencys, Patients patients, DateTime selectedDate)
         {
-            HostName = hostName;
-            Agencys = agencys;
-            Patients = patients;
-
             if (dde == null)
             {
                 dde = new DigiDentalEntities();
             }
+
+            HostName = hostName;
+            Agencys = agencys;
+            Patients = patients;
+
             
             //取掛號資訊清單 Registration
             var queryRegistrations = from qr in dde.Registrations
@@ -334,8 +343,9 @@ namespace DigiDental.ViewModels
                                      select qr;
             RegistrationsCollection = new ObservableCollection<Registrations>(queryRegistrations.ToList());
 
-            LoadFunctions();
-            
+            SelectedDate = selectedDate;
+
+            LoadFunctions();            
         }
 
         #region METHOD
@@ -449,6 +459,7 @@ namespace DigiDental.ViewModels
                             if (tf == null)
                             {
                                 tf = new TemplateFunction(Agencys, Patients, ShowImages);
+                                tf.ReturnValueCallback += new TemplateFunction.ReturnValueDelegate(RenewUsercontrol);
                             }
                             break;
                     }
@@ -466,6 +477,21 @@ namespace DigiDental.ViewModels
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="registrationID"></param>
+        /// <param name="registrationDate"></param>
+        public void RenewUsercontrol(int registrationID, DateTime registrationDate)
+        {
+            //wifi auto 載入  取掛號資訊清單 Registration
+            var queryRegistrations = from qr in dde.Registrations
+                                     where qr.Patient_ID == Patients.Patient_ID
+                                     orderby qr.Registration_Date descending
+                                     select qr;
+            RegistrationsCollection = new ObservableCollection<Registrations>(queryRegistrations.ToList());
+            SelectedItem = new CusComboBoxItem(registrationDate.ToString("yyyy-MM-dd"), registrationID);
+        }
         #endregion
 
         #region MVVM TabControl

@@ -17,13 +17,13 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Column="0" Grid.Row="0" Text="矯正前"></TextBlock>
+        <TextBlock Grid.Column="0" Grid.Row="0" Text="矯正前" Foreground="DeepSkyBlue" ></TextBlock>
         <Border Grid.Column="0" Grid.Row="1" BorderBrush="DeepSkyBlue" BorderThickness="1">
             <Image x:Name="Image0" Uid="0"
                    Source="C:\Users\Eason_Hsu\Desktop\icon\no.png" 
                    AllowDrop="True" Drop="Image_Drop"></Image>
         </Border>
-        <TextBlock Grid.Column="1" Grid.Row="0" Text="矯正後"></TextBlock>
+        <TextBlock Grid.Column="1" Grid.Row="0" Text="矯正後" Foreground="SkyBlue"></TextBlock>
         <Border Grid.Column="1" Grid.Row="1" BorderBrush="SkyBlue" BorderThickness="1">
             <Image x:Name="Image1" Uid="1"
                    Source="C:\Users\Eason_Hsu\Desktop\icon\no.png" 

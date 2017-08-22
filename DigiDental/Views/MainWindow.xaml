@@ -57,11 +57,20 @@
                 </StackPanel>
                 <GroupBox Grid.Row="2" VerticalAlignment="Stretch" Header="病患圖片管理">
                     <StackPanel>
-                        <DockPanel>
-                            <DatePicker SelectedDate="{Binding SelectedDate}" />
-                            <Button Content="匯入" IsEnabled="{Binding ShowImportFunction}"
-                                        Click="Button_Import_Click"/>
-                        </DockPanel>
+                        <DatePicker SelectedDate="{Binding SelectedDate}"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" Content="手動匯入" Margin="5,5,5,0"
+                                    IsEnabled="{Binding ShowImportFunction}"
+                                    HorizontalAlignment="Stretch"
+                                    Click="Button_Import_Click"/>
+                            <Button Grid.Column="1" Content="Wifi 匯入" Margin="5,5,5,0"
+                                          HorizontalAlignment="Stretch"
+                                          Click="Button_WifiImport_Click"/>
+                        </Grid>
                         <Label Content="匯入圖片分類"/>
                         <ComboBox ItemsSource="{Binding CusComboBoxItem}" DisplayMemberPath="DisplayName" SelectedValue="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                     </StackPanel>
