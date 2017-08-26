@@ -15,6 +15,19 @@ namespace DigiDental.ViewModels.Class
         public DateTime CreateDate { get; set; }
         public BitmapImage BitmapImageSet { get; set; }
 
+        private bool isSelected = false;
+        public bool IsSelected
+        {
+            get { return isSelected; }
+            set
+            {
+                if (value != isSelected)
+                {
+                    isSelected = value;
+                }
+            }
+        }
+
         public ImageInfo() { }
     }
 }

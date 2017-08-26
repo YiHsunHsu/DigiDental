@@ -1,7 +1,6 @@
 ﻿using DigiDental.ViewModels;
 using DigiDental.ViewModels.Class;
 using DigiDental.Views.UserControls;
-using System;
 using System.Collections.ObjectModel;
 using System.Windows;
 
@@ -18,7 +17,7 @@ namespace DigiDental.Views
         private PhotoEditorViewModel pevm;
         private BaseAdjust ba;
 
-        public PhotoEditor(ObservableCollection<ImageInfo> imagesCollection, int SelectedIndex)
+        public PhotoEditor(ObservableCollection<ImageInfo> imagesCollection)
         {
             InitializeComponent();
 
@@ -29,7 +28,7 @@ namespace DigiDental.Views
 
             ImagesCollection = imagesCollection;
 
-            ImageInfo = imagesCollection[SelectedIndex];
+            ImageInfo = imagesCollection[imagesCollection.Count - 1];
             
             DataContext = pevm;
 
@@ -37,6 +36,7 @@ namespace DigiDental.Views
             {
                 ba = new BaseAdjust(ImagesCollection, ImageInfo);
             }
+
             fAdjust.NavigationService.Navigate(ba);
         }
     }

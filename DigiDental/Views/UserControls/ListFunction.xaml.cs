@@ -1,6 +1,8 @@
 ﻿using DigiDental.ViewModels.Class;
 using DigiDental.ViewModels.UserControlViewModels;
 using DigiDental.ViewModels.ViewModelBase;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -206,11 +208,24 @@ namespace DigiDental.Views.UserControls
         //    btnImport.Refresh();
         //}
 
-        private void ListBox_PhotoEditor_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (lfvm.ShowImages.IndexOf(lfvm.SelectedImage) != -1)
+            foreach (ImageInfo item in e.RemovedItems)
             {
-                PhotoEditor pe = new PhotoEditor(lfvm.ShowImages, lfvm.ShowImages.IndexOf(lfvm.SelectedImage));
+                item.IsSelected = false;
+            }
+            foreach (ImageInfo item in e.AddedItems)
+            {
+                item.IsSelected = true;
+            }
+            lfvm.ImageSelectedCount = lfvm.ShowImages.Where(i => i.IsSelected).Count();
+        }
+
+        private void Button_PhotoEditor_Click(object sender, RoutedEventArgs e)
+        {
+            if (lfvm.ShowImages.Where(i => i.IsSelected).Count() > 0)
+            {
+                PhotoEditor pe = new PhotoEditor(new ObservableCollection<ImageInfo>(lfvm.ShowImages.Where(i => i.IsSelected)));
                 pe.Show();
             }
         }

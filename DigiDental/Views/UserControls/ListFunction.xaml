@@ -31,26 +31,27 @@
                     <Label Content="日期"/>
                     <DatePicker SelectedDate="{Binding SelectedDate}" Width="200"/>
                     <Button Content="匯入" Width="30" Click="Button_Import_Click"/>
-                </StackPanel>
-                <StackPanel Grid.Column="1" Orientation="Horizontal">
-                    <Label Content="分類"></Label>
-                    <Label Content="已匯入日期"></Label>
-                    <ComboBox Width="100" ItemsSource="{Binding ComboBoxItems}" DisplayMemberPath="DisplayName" SelectedValue="{Binding SelectedValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                    <Button x:Name="btnListAll" Content="全部" Width="30" Click="Button_ListAll_Click"/>
-                    --><!--<ComboBox Name="cbxRegistrations" Width="100" SelectionChanged="cbxRegistrations_SelectionChanged"/>--><!--
                 </StackPanel>-->
-                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button Content="編輯模式" Click="Button_PhotoEditor_Click"/>
+                </StackPanel>
+                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button DockPanel.Dock="Left" Content="放大" Click="Button_ZoomIn_Click"/>
                     <Slider DockPanel.Dock="Left" Width="100" Maximum="5" Minimum="1" Value="{Binding ColumnCount}" />
                     <Button DockPanel.Dock="Left"  Content="縮小" Click="Button_ZoomOut_Click"/>
                 </StackPanel>
             </Grid>
         </ToolBarPanel>
-        <ListBox Grid.Row="1"
-                 ItemsSource="{Binding Source={StaticResource SortedItems}}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"
-                 SelectedItem="{Binding SelectedImage}"
+        <ListBox Grid.Row="1" Margin="5"
+                 ItemsSource="{Binding Source={StaticResource SortedItems}}" 
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"
                  SelectionMode="Extended"
-                 MouseDoubleClick="ListBox_PhotoEditor_MouseDoubleClick">
+                 SelectionChanged="ListBox_SelectionChanged">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="IsSelected" Value="{Binding Mode=TwoWay, Path=IsSelected}"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <UniformGrid Columns="{Binding ColumnCount}"/>
@@ -72,12 +73,7 @@
             </ListBox.ItemTemplate>
         </ListBox>
         <StatusBar  Grid.Row="2">
-            <DockPanel>
-                <!--取消進度條-->
-                <!--<ProgressBar DockPanel.Dock="Left" Width="300" Minimum="0" Maximum="{Binding CountImages}" Value="{Binding LoadedImages}" />
-                <TextBlock DockPanel.Dock="Left" x:Name="tbLoadInfo" Text="{Binding LoadImagesInfo}"></TextBlock>-->
-                <TextBlock DockPanel.Dock="Right" Text="{Binding CountImages, UpdateSourceTrigger=PropertyChanged, StringFormat={}共:{0}張}"></TextBlock>
-            </DockPanel>
+            <TextBlock Text="{Binding TextBlockTips, UpdateSourceTrigger=PropertyChanged}"/>
         </StatusBar>
     </Grid>
 </UserControl>

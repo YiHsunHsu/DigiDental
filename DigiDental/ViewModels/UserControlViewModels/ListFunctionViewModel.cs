@@ -1,5 +1,6 @@
 ﻿using DigiDental.ViewModels.Class;
 using DigiDental.ViewModels.ViewModelBase;
+using System.Linq;
 
 namespace DigiDental.ViewModels.UserControlViewModels
 {
@@ -105,23 +106,7 @@ namespace DigiDental.ViewModels.UserControlViewModels
             {
                 showImages = value;
                 OnPropertyChanged("ShowImages");
-                if (showImages != null)
-                    CountImages = ShowImages.Count;
-            }
-        }
-        
-
-        /// <summary>
-        /// 用來Binding Image Count
-        /// </summary>
-        private int countImages;
-        public int CountImages
-        {
-            get { return countImages; }
-            set
-            {
-                countImages = value;
-                OnPropertyChanged("CountImages");
+                CountImages = ShowImages.Count();
             }
         }
 
@@ -137,6 +122,33 @@ namespace DigiDental.ViewModels.UserControlViewModels
                 selectedImage = value;
                 OnPropertyChanged("SelectedImage");
             }
+        }
+
+        private int imageSelectedCount = 0;
+        public int ImageSelectedCount
+        {
+            get { return imageSelectedCount; }
+            set
+            {
+                imageSelectedCount = value;
+                OnPropertyChanged("TextBlockTips");
+            }
+        }
+
+        private int countImages = 0;
+        public int CountImages
+        {
+            get { return countImages; }
+            set
+            {
+                countImages = value;
+                OnPropertyChanged("TextBlockTips");
+            }
+        }
+        
+        public string TextBlockTips
+        {
+            get { return "以選取圖片 " + ImageSelectedCount + " 張，共 " + CountImages + " 張"; }
         }
 
         public ListFunctionViewModel()
@@ -213,7 +225,7 @@ namespace DigiDental.ViewModels.UserControlViewModels
                 OnPropertyChanged("ColumnCount");
             }
         }
-        
+
         #region METHOD
         //private void SetImagesCollectionByDate(DateTime date)
         //{
@@ -239,17 +251,5 @@ namespace DigiDental.ViewModels.UserControlViewModels
         //    ImagesInfo = new ObservableCollection<ImageInfo>(queryImages);
         //}
         #endregion
-        //public class ComboBoxItem
-        //{
-        //    public string DisplayName { get; set; }
-        //    public int SelectedValue { get; set; }
-
-        //    public ComboBoxItem() { }
-        //    public ComboBoxItem(string displayName, int selectedValue)
-        //    {
-        //        DisplayName = displayName;
-        //        SelectedValue = selectedValue;
-        //    }
-        //}
     }
 }
