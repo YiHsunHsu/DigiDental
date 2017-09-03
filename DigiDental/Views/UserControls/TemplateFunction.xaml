@@ -42,7 +42,7 @@
                 <Label Content="匯出功能"/>
                 <Button Content="匯出模板圖片" 
                         Click="Button_TemplateExport_Click" />
-                <Button Content="匯出模板PPT"/>
+                <Button Content="匯出模板PPT" Click="Button_PPTExport_Click"/>
             </StackPanel>
         </Grid>
         <Grid Grid.Row="1">

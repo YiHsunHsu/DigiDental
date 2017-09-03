@@ -2,8 +2,11 @@
 using DigiDental.ViewModels.Class;
 using DigiDental.ViewModels.UserControlViewModels;
 using DigiDental.ViewModels.ViewModelBase;
+using Microsoft.Office.Core;
+using Microsoft.Office.Interop.PowerPoint;
 using Microsoft.Win32;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -13,6 +16,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using PowerPoint = Microsoft.Office.Interop.PowerPoint;
 
 namespace DigiDental.Views.UserControls
 {
@@ -70,6 +74,8 @@ namespace DigiDental.Views.UserControls
         private DBRegistrations dbr;
         private DBTemplateImages dbti;
         private DBImages dbi;
+        //EntityFramwork
+        private DigiDentalEntities dde;
         // Class
         private PatientsFolder pf;
         private LoadBitmapImage lbi;
@@ -77,7 +83,6 @@ namespace DigiDental.Views.UserControls
         private ProcessingDialog pd;
         // Paramater
         private ObservableCollection<TemplateImages> tICollection;
-        private ObservableCollection<ImageInfo> ImageInfo;
 
         private Agencys tmpA;
         private Patients tmpP;
@@ -383,6 +388,19 @@ namespace DigiDental.Views.UserControls
                 MessageBox.Show("檔案建立成功，存放位置於" + sfd.FileName, "提示", MessageBoxButton.OK);
             }
         }
+        private void Button_PPTExport_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.FileName = Patients.Patient_ID + "-" + Patients.Patient_Name + "-" + TemplateItem.Template_Title;
+            sfd.DefaultExt = ".pptx";
+            sfd.Filter = "PowerPoint 簡報 (*.pptx)|*.pptx";
+            if (sfd.ShowDialog() == true)
+            {
+                ShowPresentation(sfd.FileName);
+                MessageBox.Show("檔案建立成功，存放位置於" + sfd.FileName, "提示", MessageBoxButton.OK);
+            }
+            GC.Collect();
+        }
 
         #region METHOD
         private void SetReturnValueCallbackFun(bool isDetecting)
@@ -394,6 +412,55 @@ namespace DigiDental.Views.UserControls
             else
             {
                 isSkip = isDetecting;
+            }
+        }
+
+        private void ShowPresentation(string fileName)
+        {
+            if (dde == null)
+            {
+                dde = new DigiDentalEntities();
+            }
+
+            List<TemplateImages> liTI = new List<TemplateImages>();
+            var templateImages = from ti in dde.TemplateImages
+                                 where ti.Patient_ID == Patients.Patient_ID
+                                 && ti.Template_ID == TemplateItem.Template_ID
+                                 select ti;
+            liTI = templateImages.ToList();
+
+            if (liTI.Count > 0)
+            {
+                PowerPoint.Application pptApplication = new PowerPoint.Application();
+
+                Slides slides;
+                _Slide slide;
+                TextRange objText;
+
+                // Create the Presentation File
+                Presentation pptPresentation = pptApplication.Presentations.Add(MsoTriState.msoTrue);
+
+                CustomLayout customLayout = pptPresentation.SlideMaster.CustomLayouts[PpSlideLayout.ppLayoutText];
+
+                for (int i = 0; i < liTI.Count; i++)
+                {
+                    // Create new Slide
+                    slides = pptPresentation.Slides;
+                    slide = slides.AddSlide(i + 1, customLayout);
+
+                    // Add title
+                    objText = slide.Shapes[1].TextFrame.TextRange;
+                    objText.Text = TemplateItem.Template_Title;
+                    objText.Font.Name = "Arial";
+                    objText.Font.Size = 32;
+                    
+                    PowerPoint.Shape shape = slide.Shapes[2];
+                    slide.Shapes.AddPicture(Agencys.Agency_ImagePath + liTI[i].Image_Path, MsoTriState.msoFalse, MsoTriState.msoTrue, shape.Left, shape.Top, shape.Width, shape.Height);
+
+                    slide.NotesPage.Shapes[2].TextFrame.TextRange.Text = "This document is created by DigiDental.";
+                }
+                pptPresentation.SaveAs(fileName, PpSaveAsFileType.ppSaveAsDefault, MsoTriState.msoTrue);
+                //pptApplication.Quit();
             }
         }
         #endregion
