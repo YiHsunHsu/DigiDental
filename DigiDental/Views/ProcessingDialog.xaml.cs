@@ -46,6 +46,11 @@ namespace DigiDental.Views
             get { return pdvm.ButtonContent; }
             set { pdvm.ButtonContent = value; }
         }
+        public Visibility ButtonContentVisibility
+        {
+            get { return pdvm.ButtonContentVisibility; }
+            set { pdvm.ButtonContentVisibility = value; }
+        }
 
         /// <summary>
         /// 委派回傳ProcessingDialog 

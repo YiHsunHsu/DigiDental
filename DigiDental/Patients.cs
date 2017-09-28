@@ -30,10 +30,12 @@ namespace DigiDental
         public string Patient_Photo { get; set; }
         public System.DateTime UpdateDate { get; set; }
         public System.DateTime CreateDate { get; set; }
+        public Nullable<int> PatientCategory_ID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Registrations> Registrations { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TemplateImages> TemplateImages { get; set; }
+        public virtual PatientCategories PatientCategories { get; set; }
     }
 }

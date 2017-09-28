@@ -18,10 +18,14 @@
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <Menu Grid.Row="0">
-                <MenuItem Header="檔案">
-                    <MenuItem Header="離開" Click="MenuItem_Exit_Click"></MenuItem>
-                </MenuItem>
-                <MenuItem Header="設定" Click="MenuItem_Setting_Click"></MenuItem>
+            <MenuItem Header="檔案">
+                <MenuItem Header="離開" Click="MenuItem_Exit_Click"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="病患管理">
+                <MenuItem Header="新增病患"></MenuItem>
+                <MenuItem Header="病患搜尋"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="設定" Click="MenuItem_Setting_Click"></MenuItem>
                 <MenuItem Header="關於"></MenuItem>
             </Menu>
         <Grid Grid.Row="1">
@@ -32,14 +36,15 @@
             </Grid.ColumnDefinitions>
             <Grid Grid.Row="0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"></RowDefinition>
-                    <RowDefinition Height="0.6*"></RowDefinition>
+                    <RowDefinition Height="0.7*"></RowDefinition>
                     <RowDefinition Height="0.3*"></RowDefinition>
                 </Grid.RowDefinitions>
-                <Button Grid.Row="0" Margin="5"  VerticalAlignment="Top" Content="病患搜尋" />
-                <StackPanel Grid.Row="1" Margin="5" VerticalAlignment="Stretch">
+                <StackPanel Grid.Row="0" Margin="5" VerticalAlignment="Stretch">
                     <Label Margin="5,0,5,0" Content="病歷號碼"/>
                     <TextBox Margin="5,0,5,0" Text="{Binding Patients.Patient_Number, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                    <Border Margin="5" BorderBrush="Black" BorderThickness="1" Height="180" >
+                        <Image Source="{Binding PatientPhoto}" AllowDrop="True" Drop="Image_Drop"/>
+                    </Border>
                     <Label  Margin="5,0,5,0" Content="姓名"/>
                     <TextBox Margin="5,0,5,0" Text="{Binding Patients.Patient_Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                     <Label Margin="5,0,5,0" Content="身分證號"/>
@@ -51,11 +56,17 @@
                     </StackPanel>
                     <Label Content="生日" Margin="5,0,5,0"/>
                     <DatePicker Margin="5,0,5,0" SelectedDate="{Binding Patients.Patient_Birth, UpdateSourceTrigger=PropertyChanged}" />
-                    <Border Margin="5" BorderBrush="Black" BorderThickness="1" Height="200" >
-                        <Image/>
-                    </Border>
+                    <Grid Margin="5,0,5,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Content="病患類別"/>
+                        <Button Grid.Column="1" Content="新增類別" Click="Button_PatientCategory_Click"></Button>
+                    </Grid>
+                    <ComboBox Margin="5,0,5,0"/>
                 </StackPanel>
-                <GroupBox Grid.Row="2" VerticalAlignment="Stretch" Header="病患圖片管理">
+                <GroupBox Grid.Row="1" Header="病患圖片管理">
                     <StackPanel>
                         <DatePicker SelectedDate="{Binding SelectedDate}"/>
                         <Grid>
@@ -67,9 +78,9 @@
                                     IsEnabled="{Binding ShowImportFunction}"
                                     HorizontalAlignment="Stretch"
                                     Click="Button_Import_Click"/>
-                            <Button Grid.Column="1" Content="Wifi 匯入" Margin="5,5,5,0"
+                            <ToggleButton Grid.Column="1" Content="Wifi 匯入" Margin="5,5,5,0"
                                           HorizontalAlignment="Stretch"
-                                          Click="Button_WifiImport_Click"/>
+                                          Click="ToggleButton_WifiImport_Click"/>
                         </Grid>
                         <Label Content="匯入圖片分類"/>
                         <ComboBox ItemsSource="{Binding CusComboBoxItem}" DisplayMemberPath="DisplayName" SelectedValue="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />

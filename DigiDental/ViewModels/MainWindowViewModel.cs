@@ -68,6 +68,19 @@ namespace DigiDental.ViewModels
             set { patients = value; }
         }
 
+        private BitmapImage patientPhoto = new BitmapImage(new Uri(@"C:\Users\Eason_Hsu\Desktop\icon\user.png"));
+
+        public BitmapImage PatientPhoto
+        {
+            get { return patientPhoto; }
+            set
+            {
+                patientPhoto = value;
+                OnPropertyChanged("PatientPhoto");
+            }
+        }
+
+
         /// <summary>
         /// 選擇匯入的日期(改變的話重新載入圖片)
         /// </summary>
@@ -244,7 +257,11 @@ namespace DigiDental.ViewModels
         public MTObservableCollection<ImageInfo> ShowImages
         {
             get { return showImages; }
-            set { showImages = value; }
+            set
+            {
+                showImages = value;
+                OnPropertyChanged("ShowImages");
+            }
         }
 
         /// <summary>
@@ -334,8 +351,12 @@ namespace DigiDental.ViewModels
             HostName = hostName;
             Agencys = agencys;
             Patients = patients;
+            //設定病患大頭貼
+            if (!string.IsNullOrEmpty(Patients.Patient_Photo))
+            {
+                patientPhoto = new LoadBitmapImage().SettingBitmapImage(Agencys.Agency_ImagePath + @"\" + Patients.Patient_Photo, 400);
+            }
 
-            
             //取掛號資訊清單 Registration
             var queryRegistrations = from qr in dde.Registrations
                                      where qr.Patient_ID == Patients.Patient_ID
@@ -444,9 +465,11 @@ namespace DigiDental.ViewModels
             {
                 foreach (var qf in queryFunctions)
                 {
-                    TabItem fTabItem = new TabItem();
-                    fTabItem.Header = qf.Function_Title;
-                    fTabItem.Uid = qf.Function_ID.ToString();
+                    TabItem fTabItem = new TabItem
+                    {
+                        Header = qf.Function_Title,
+                        Uid = qf.Function_ID.ToString()
+                    };
                     switch (fTabItem.Uid)
                     {
                         case "1":

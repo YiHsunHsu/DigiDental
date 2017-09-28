@@ -29,7 +29,7 @@
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Content="{Binding ButtonContent}" 
+                <Button Grid.Column="0" Content="{Binding ButtonContent}" Visibility="{Binding ButtonContentVisibility}"
                         Click="Button_Click"/>
                 <Button Grid.Column="1" Content="停止" Click="Button_Stop_Click"></Button>
             </Grid>

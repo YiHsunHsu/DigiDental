@@ -365,9 +365,11 @@ namespace DigiDental.Views.UserControls
 
         private void Button_TemplateExport_Click(object sender, RoutedEventArgs e)
         {
-            SaveFileDialog sfd = new SaveFileDialog();
-            sfd.DefaultExt = ".png";
-            sfd.Filter = "JPEG Files (*.jpeg)|*.jpeg|PNG Files (*.png)|*.png|JPG Files (*.jpg)|*.jpg|GIF Files (*.gif)|*.gif";
+            SaveFileDialog sfd = new SaveFileDialog()
+            {
+                DefaultExt = ".png",
+                Filter = "JPEG Files (*.jpeg)|*.jpeg|PNG Files (*.png)|*.png|JPG Files (*.jpg)|*.jpg|GIF Files (*.gif)|*.gif"
+            };
             if (sfd.ShowDialog() == true)
             {
                 UserControl control = TemplateContent;
@@ -390,10 +392,12 @@ namespace DigiDental.Views.UserControls
         }
         private void Button_PPTExport_Click(object sender, RoutedEventArgs e)
         {
-            SaveFileDialog sfd = new SaveFileDialog();
-            sfd.FileName = Patients.Patient_ID + "-" + Patients.Patient_Name + "-" + TemplateItem.Template_Title;
-            sfd.DefaultExt = ".pptx";
-            sfd.Filter = "PowerPoint 簡報 (*.pptx)|*.pptx";
+            SaveFileDialog sfd = new SaveFileDialog()
+            {
+                FileName = Patients.Patient_ID + "-" + Patients.Patient_Name + "-" + TemplateItem.Template_Title,
+                DefaultExt = ".pptx",
+                Filter = "PowerPoint 簡報 (*.pptx)|*.pptx"
+            };
             if (sfd.ShowDialog() == true)
             {
                 ShowPresentation(sfd.FileName);

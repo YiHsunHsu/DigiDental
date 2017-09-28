@@ -34,6 +34,8 @@
                 </StackPanel>-->
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
                     <Button Content="編輯模式" Click="Button_PhotoEditor_Click"/>
+                    <Button Content="匯出"/>
+                    <Button Content="刪除"/>
                 </StackPanel>
                 <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button DockPanel.Dock="Left" Content="放大" Click="Button_ZoomIn_Click"/>
@@ -45,13 +47,13 @@
         <ListBox Grid.Row="1" Margin="5"
                  ItemsSource="{Binding Source={StaticResource SortedItems}}" 
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"
-                 SelectionMode="Extended"
+                 SelectionMode="Multiple"
                  SelectionChanged="ListBox_SelectionChanged">
-            <ListBox.ItemContainerStyle>
+            <!--<ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
                     <Setter Property="IsSelected" Value="{Binding Mode=TwoWay, Path=IsSelected}"/>
                 </Style>
-            </ListBox.ItemContainerStyle>
+            </ListBox.ItemContainerStyle>-->
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <UniformGrid Columns="{Binding ColumnCount}"/>
@@ -64,7 +66,7 @@
                             <RowDefinition></RowDefinition>
                             <RowDefinition></RowDefinition>
                         </Grid.RowDefinitions>
-                        <Border Grid.Row="0" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" >
+                        <Border Grid.Row="0" BorderThickness="1" BorderBrush="Black">
                             <Image Margin="10" MaxHeight="600" Source="{Binding BitmapImageSet}" Stretch="Uniform"/>
                         </Border>
                         <TextBlock Grid.Row="1" Text="{Binding Image_FileName}" />

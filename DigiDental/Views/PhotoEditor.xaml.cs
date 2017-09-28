@@ -37,7 +37,7 @@ namespace DigiDental.Views
                 ba = new BaseAdjust(ImagesCollection, ImageInfo);
             }
 
-            fAdjust.NavigationService.Navigate(ba);
+            EditorContent.Content = ba;
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace DigiDental.ViewModels
+﻿using System.Windows;
+
+namespace DigiDental.ViewModels
 {
     public class ProcessingDialogViewModel : ViewModelBase.ViewModelBase
     {
@@ -78,5 +80,18 @@
                 OnPropertyChanged("ButtonContent");
             }
         }
+
+        private Visibility buttonContentVisibility = Visibility.Visible;
+
+        public Visibility ButtonContentVisibility
+        {
+            get { return buttonContentVisibility; }
+            set
+            {
+                buttonContentVisibility = value;
+                OnPropertyChanged("ButtonContentVisibility");
+            }
+        }
+
     }
 }

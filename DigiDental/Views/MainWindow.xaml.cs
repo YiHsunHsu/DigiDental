@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 
 namespace DigiDental.Views
 {
@@ -24,8 +25,6 @@ namespace DigiDental.Views
         private string HostName { get; set; }
         private Agencys Agencys { get; set; }
         private Patients Patients { get; set; }
-        public ObservableCollection<Registrations> RegistrationsCollection { get; set; }
-        public ObservableCollection<Images> ImagesCollection { get; set; }
 
         //view model
         private MainWindowViewModel mwvm;
@@ -38,6 +37,7 @@ namespace DigiDental.Views
         private PatientsFolder pf;
         //dialog view
         private ProgressDialog pd;
+        private ProcessingDialog processingDialog;
 
         public MainWindow()
         {
@@ -76,9 +76,6 @@ namespace DigiDental.Views
                     {
                         dbi = new DBImages();
                     }
-
-                    //載入 TabControl 改放到 mwvm
-                    //LoadFunctions();
                 }
                 else
                 {
@@ -97,10 +94,13 @@ namespace DigiDental.Views
             btnImport.IsEnabled = false;
             btnImport.Refresh();
 
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Multiselect = true;
-            ofd.DefaultExt = ".png";
-            ofd.Filter = "JPEG Files (*.jpeg)|*.jpeg|PNG Files (*.png)|*.png|JPG Files (*.jpg)|*.jpg|GIF Files (*.gif)|*.gif";
+            OpenFileDialog ofd = new OpenFileDialog()
+            {
+                Multiselect = true,
+                DefaultExt = ".png",
+                Filter = "JPEG Files (*.jpeg)|*.jpeg|PNG Files (*.png)|*.png|JPG Files (*.jpg)|*.jpg|GIF Files (*.gif)|*.gif"
+            };
+
             bool? ofdResult = ofd.ShowDialog();
             if (ofdResult.HasValue && ofdResult.Value)//OpenFileDialog 選確定
             {
@@ -151,8 +151,10 @@ namespace DigiDental.Views
                             string imageExtension = extension;
 
                             //寫資料庫
-                            dbi.InsertImage(imagePath, imageFileName, imageSize, imageExtension, Registration_ID);
+                            ImageInfo importImage = dbi.InsertImageReturnImageInfo(imagePath, imageFileName, imageSize, imageExtension, Registration_ID, RegistrationDate, Agencys.Agency_ImagePath, 800);
 
+                            //加入showImage清單
+                            mwvm.ShowImages.Add(importImage);
                             #region 產生小圖(未使用)
                             //產生縮圖到Small
                             //ImageProcess.SaveThumbPic(fileName, 300, PatientFullFolderPathSmall + @"\" + newFileName + @"sml" + extension);
@@ -169,7 +171,6 @@ namespace DigiDental.Views
                             //dde.SaveChanges();
                             #endregion
 
-
                             pd.Dispatcher.Invoke(() =>
                             {
                                 pd.PValue++;
@@ -185,7 +186,9 @@ namespace DigiDental.Views
                             pd.PText = "匯入完成";
                             pd.Close();
                         });
+
                         ReloadRegistration(Registration_ID, RegistrationDate);
+
                         GC.Collect();
                     }, CancellationToken.None,TaskContinuationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
                 }
@@ -215,95 +218,212 @@ namespace DigiDental.Views
             }
         }
 
-        private void Button_WifiImport_Click(object sender, RoutedEventArgs e)
+        bool isStop = false; //接ProcessingDialog 回傳值 停止
+        private void ToggleButton_WifiImport_Click(object sender, RoutedEventArgs e)
         {
-            Button btnWifiImport = (Button)sender;
-
-            btnWifiImport.Dispatcher.Invoke(() =>
+            ToggleButton toggleButton = (ToggleButton)sender;
+            if (toggleButton.IsChecked == true)
             {
-                btnWifiImport.IsEnabled = false;
-            });
-
-            if (!string.IsNullOrEmpty(Agencys.Agency_WifiCardPath))
-            {
-                if (Directory.Exists(Agencys.Agency_WifiCardPath))
+                if (!string.IsNullOrEmpty(Agencys.Agency_WifiCardPath))
                 {
-                    //讀寫Registrations
-                    //確認掛號資料
-                    DateTime RegistrationDate = mwvm.SelectedDate;
-                    int Registration_ID = dbr.CreateRegistrationsAndGetID(Patients, RegistrationDate);
-
-                    pf = new PatientsFolder(Agencys, Patients, RegistrationDate);
-
-                    if (!Directory.Exists(pf.PatientFullFolderPath))
+                    if (Directory.Exists(Agencys.Agency_WifiCardPath))
                     {
-                        Directory.CreateDirectory(pf.PatientFullFolderPathOriginal);
-                    }
+                        //讀寫Registrations
+                        //確認掛號資料
+                        DateTime RegistrationDate = mwvm.SelectedDate;
+                        int Registration_ID = dbr.CreateRegistrationsAndGetID(Patients, RegistrationDate);
 
-                    pd = new ProgressDialog();
-
-                    pd.Dispatcher.Invoke(() =>
-                    {
-                        pd.PMinimum = 0;
-                        pd.PValue = 0;
-                        pd.PMaximum = Directory.GetFiles(Agencys.Agency_WifiCardPath).Count();
-                        pd.PText = "圖片匯入中，請稍後( 0" + " / " + pd.PMaximum + " )";
-                        pd.Show();
-                    });
-
-                    Task t = Task.Factory.StartNew(() =>
-                    {
-                        foreach (string f in Directory.GetFiles(Agencys.Agency_WifiCardPath))
+                        processingDialog = new ProcessingDialog();
+                        Task task = Task.Factory.StartNew(() =>
                         {
-                            string extension = Path.GetExtension(f).ToUpper();
-                            string newFileName = DateTime.Now.ToString("yyyyMMddHHmmssffff");
-
-                            File.Copy(f, pf.PatientFullFolderPathOriginal + @"\" + newFileName + @"ori" + extension);
-
-                            string imagePath = @"\" + pf.PatientFolderPathOriginal + @"\" + newFileName + @"ori" + extension;
-                            string imageFileName = newFileName + @"ori" + extension;
-                            string imageSize = "Original";
-                            string imageExtension = extension;
-                            //寫資料庫
-                            dbi.InsertImage(imagePath, imageFileName, imageSize, imageExtension, Registration_ID);
-
-                            File.Delete(f);
-
-                            pd.Dispatcher.Invoke(() =>
+                            processingDialog.Dispatcher.Invoke(() =>
                             {
-                                pd.PValue++;
-                                pd.PText = "圖片匯入中，請稍後( " + pd.PValue + " / " + pd.PMaximum + " )";
+                                processingDialog.PText = "圖片偵測中";
+                                processingDialog.PIsIndeterminate = true;
+                                processingDialog.ButtonContentVisibility = Visibility.Hidden;
+                                processingDialog.ReturnValueCallback += new ProcessingDialog.ReturnValueDelegate(this.SetReturnValueCallbackFun);
+
+                                processingDialog.Show();
                             });
+                            int imageCount = 0;
+                            while (true)
+                            {
+                                //偵測資料夾
+                                foreach (string f in Directory.GetFiles(Agencys.Agency_WifiCardPath))
+                                {
+                                    Thread.Sleep(500);
 
-                            Thread.Sleep(200);
-                        }
-                    }).ContinueWith(cw =>
-                    {
-                        pd.Dispatcher.Invoke(() =>
+
+                                    pf = new PatientsFolder(Agencys, Patients, RegistrationDate);
+
+                                    if (!Directory.Exists(pf.PatientFullFolderPath))
+                                    {
+                                        Directory.CreateDirectory(pf.PatientFullFolderPathOriginal);
+                                    }
+
+                                    string extension = Path.GetExtension(f).ToUpper();
+                                    string newFileName = DateTime.Now.ToString("yyyyMMddHHmmssffff");
+
+                                    File.Copy(f, pf.PatientFullFolderPathOriginal + @"\" + newFileName + @"ori" + extension);
+
+                                    string imagePath = @"\" + pf.PatientFolderPathOriginal + @"\" + newFileName + @"ori" + extension;
+                                    string imageFileName = newFileName + @"ori" + extension;
+                                    string imageSize = "Original";
+                                    string imageExtension = extension;
+
+                                    //寫資料庫
+                                    ImageInfo importImage = dbi.InsertImageReturnImageInfo(imagePath, imageFileName, imageSize, imageExtension, Registration_ID, RegistrationDate, Agencys.Agency_ImagePath, 800);
+
+                                    File.Delete(f);
+
+                                    //加入showImage清單
+                                    mwvm.ShowImages.Add(importImage);
+
+                                    //已匯入
+                                    imageCount++;
+                                    processingDialog.Dispatcher.Invoke(() =>
+                                    {
+                                        processingDialog.PText = "圖片匯入中，已匯入" + imageCount + "張";
+                                    });
+                                }
+                                //按停止
+                                if (isStop)
+                                {
+                                    isStop = false;
+                                    return;
+                                }
+                            }
+                        }).ContinueWith(cw =>
                         {
-                            pd.PText = "匯入完成";
-                            pd.Close();
-                        });
+                            //結束
+                            processingDialog.PText = "處理完畢";
+                            processingDialog.Close();
 
-                        ReloadRegistration(Registration_ID, RegistrationDate);
-                        GC.Collect();
-                    }, CancellationToken.None, TaskContinuationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
-                    
+                            toggleButton.IsChecked = false;
+
+                            ReloadRegistration(Registration_ID, RegistrationDate);
+
+                            GC.Collect();
+                        }, TaskScheduler.FromCurrentSynchronizationContext());
+                    }
+                    else
+                    {
+                        MessageBox.Show("Wifi Card實體資料夾位置尚未建立", "提示", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("Wifi Card實體資料夾位置尚未建立", "提示", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("尚未設置Wifi Card資料夾位置", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
-            else
-            {
-                MessageBox.Show("尚未設置Wifi Card資料夾位置", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-            btnWifiImport.Dispatcher.Invoke(() =>
-            {
-                btnWifiImport.IsEnabled = true;
-            });
         }
+
+        private void SetReturnValueCallbackFun(bool isDetecting)
+        {
+            if (isDetecting)
+            {
+                isStop = isDetecting;
+            }
+        }
+
+        //wifi 匯入(舊)
+        //private void Button_WifiImport_Click(object sender, RoutedEventArgs e)
+        //{
+        //    Button btnWifiImport = (Button)sender;
+
+        //    btnWifiImport.Dispatcher.Invoke(() =>
+        //    {
+        //        btnWifiImport.IsEnabled = false;
+        //    });
+
+        //    if (!string.IsNullOrEmpty(Agencys.Agency_WifiCardPath))
+        //    {
+        //        if (Directory.Exists(Agencys.Agency_WifiCardPath))
+        //        {
+        //            if (Directory.GetFiles(Agencys.Agency_WifiCardPath).Length > 0)
+        //            {
+        //                //讀寫Registrations
+        //                //確認掛號資料
+        //                DateTime RegistrationDate = mwvm.SelectedDate;
+        //                int Registration_ID = dbr.CreateRegistrationsAndGetID(Patients, RegistrationDate);
+
+        //                pf = new PatientsFolder(Agencys, Patients, RegistrationDate);
+
+        //                if (!Directory.Exists(pf.PatientFullFolderPath))
+        //                {
+        //                    Directory.CreateDirectory(pf.PatientFullFolderPathOriginal);
+        //                }
+
+        //                pd = new ProgressDialog();
+
+        //                pd.Dispatcher.Invoke(() =>
+        //                {
+        //                    pd.PMinimum = 0;
+        //                    pd.PValue = 0;
+        //                    pd.PMaximum = Directory.GetFiles(Agencys.Agency_WifiCardPath).Count();
+        //                    pd.PText = "圖片匯入中，請稍後( 0" + " / " + pd.PMaximum + " )";
+        //                    pd.Show();
+        //                });
+
+        //                Task t = Task.Factory.StartNew(() =>
+        //                {
+        //                    foreach (string f in Directory.GetFiles(Agencys.Agency_WifiCardPath))
+        //                    {
+        //                        string extension = Path.GetExtension(f).ToUpper();
+        //                        string newFileName = DateTime.Now.ToString("yyyyMMddHHmmssffff");
+
+        //                        File.Copy(f, pf.PatientFullFolderPathOriginal + @"\" + newFileName + @"ori" + extension);
+
+        //                        string imagePath = @"\" + pf.PatientFolderPathOriginal + @"\" + newFileName + @"ori" + extension;
+        //                        string imageFileName = newFileName + @"ori" + extension;
+        //                        string imageSize = "Original";
+        //                        string imageExtension = extension;
+        //                        //寫資料庫
+        //                        dbi.InsertImage(imagePath, imageFileName, imageSize, imageExtension, Registration_ID);
+
+        //                        File.Delete(f);
+
+        //                        pd.Dispatcher.Invoke(() =>
+        //                        {
+        //                            pd.PValue++;
+        //                            pd.PText = "圖片匯入中，請稍後( " + pd.PValue + " / " + pd.PMaximum + " )";
+        //                        });
+
+        //                        Thread.Sleep(200);
+        //                    }
+        //                }).ContinueWith(cw =>
+        //                {
+        //                    pd.Dispatcher.Invoke(() =>
+        //                    {
+        //                        pd.PText = "匯入完成";
+        //                        pd.Close();
+        //                    });
+
+        //                    ReloadRegistration(Registration_ID, RegistrationDate);
+        //                    GC.Collect();
+        //                }, CancellationToken.None, TaskContinuationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
+        //            }
+        //            else
+        //            {
+        //                MessageBox.Show("資料夾尚未有圖片", "提示", MessageBoxButton.OK, MessageBoxImage.Error);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            MessageBox.Show("Wifi Card實體資料夾位置尚未建立", "提示", MessageBoxButton.OK, MessageBoxImage.Error);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        MessageBox.Show("尚未設置Wifi Card資料夾位置", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
+        //    }
+        //    btnWifiImport.Dispatcher.Invoke(() =>
+        //    {
+        //        btnWifiImport.IsEnabled = true;
+        //    });
+        //}
+
+
         #region MenuItem Functions
 
         private void MenuItem_Exit_Click(object sender, RoutedEventArgs e)
@@ -338,53 +458,62 @@ namespace DigiDental.Views
                                      orderby qr.Registration_Date descending
                                      select qr;
             mwvm.RegistrationsCollection = new ObservableCollection<Registrations>(queryRegistrations.ToList());
-            mwvm.SelectedItem = new CusComboBoxItem(registrationDate.ToString("yyyy-MM-dd"), registrationID);
+            //選擇日期(會重載)
+            //mwvm.SelectedItem = new CusComboBoxItem(registrationDate.ToString("yyyy-MM-dd"), registrationID);
         }
 
-        ///// <summary>
-        ///// 載入Functions 建立Tab
-        ///// </summary>
-        //private void LoadFunctions()
-        //{
-        //    var queryFunctions = from qf in dde.Functions
-        //                         where qf.Function_IsEnable == true
-        //                         select qf;
-        //    if (queryFunctions.Count() > 0)
-        //    {
-        //        //建立Tabcontrol Functions 功能頁面
-        //        foreach (var qf in queryFunctions)
-        //        {
-        //            TabItem tiFunction = new TabItem();
-        //            switch (qf.Function_ID)
-        //            {
-        //                case 1:
-        //                    tiFunction.Header = qf.Function_Title;
-        //                    if (lf == null)
-        //                    {
-        //                        lf = new ListFunction(Agencys, Patients);
-        //                    }
-        //                    tiFunction.Content = lf;
-        //                    break;
-        //                case 2:
-        //                    tiFunction.Header = qf.Function_Title;
-        //                    if (tf == null)
-        //                    {
-        //                        tf = new TemplateFunction();
-        //                    }
-        //                    tiFunction.Content = tf;
-        //                    break;
-        //            }
-        //            if (qf.Function_ID == Agencys.Function_ID)
-        //            {
-        //                tiFunction.IsSelected = true;
-        //            }
-        //            FunctionsTab.Items.Add(tiFunction);
-        //        }
-        //    }
-        //}
 
         #endregion
 
+        private void Image_Drop(object sender, DragEventArgs e)
+        {
+            try
+            {
+                Image img = e.Source as Image;
 
+                ImageInfo dragImage = new ImageInfo();
+                dragImage = ((ImageInfo)e.Data.GetData(DataFormats.Text));
+
+                LoadBitmapImage lbi = new LoadBitmapImage();
+                img.Source = lbi.SettingBitmapImage(dragImage.Image_FullPath, 400);
+
+                //update database Patients Patient_Photo
+                Patients p = (from q in dde.Patients
+                             where q.Patient_ID == Patients.Patient_ID
+                             select q).First();
+                p.Patient_Photo = dragImage.Image_Path;
+                p.UpdateDate = DateTime.Now;
+                dde.SaveChanges();
+
+            }
+            catch (Exception ex)
+            {
+                Error_Log.ErrorMessageOutput(ex.ToString());
+                MessageBox.Show("移動圖片發生錯誤，聯絡資訊人員", "提示", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+        }
+
+        private void Button_PatientAdd_Click(object sender, RoutedEventArgs e)
+        {
+            Patients = new Patients()
+            {
+                Patient_ID = "0005",
+                Patient_Number = "0005J",
+                Patient_Name = "JOE",
+                Patient_Gender = false,
+                Patient_Birth = DateTime.Parse("1984-11-27"),
+                Patient_IDNumber = "W100339105"
+            };
+            mwvm = new MainWindowViewModel(HostName, Agencys, Patients, DateTime.Now);
+            DataContext = mwvm;
+        }
+
+        private void Button_PatientCategory_Click(object sender, RoutedEventArgs e)
+        {
+            PatientCategory pc = new PatientCategory();
+            pc.ShowDialog();
+            //結束病患分類編輯  更新ComboBox
+        }
     }
 }

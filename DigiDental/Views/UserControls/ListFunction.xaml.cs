@@ -58,6 +58,7 @@ namespace DigiDental.Views.UserControls
             }
 
             DataContext = lfvm;
+            
         }
 
         private void Button_ZoomIn_Click(object sender, RoutedEventArgs e)

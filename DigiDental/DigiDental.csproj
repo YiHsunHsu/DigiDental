@@ -85,6 +85,9 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TabItemModel.cs" />
+    <Compile Include="PatientCategories.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="Patients.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -106,6 +109,7 @@
     <Compile Include="ViewModels\Class\DBTemplateImages.cs" />
     <Compile Include="ViewModels\Class\ImageInfo.cs" />
     <Compile Include="ViewModels\Class\PatientsFolder.cs" />
+    <Compile Include="ViewModels\PatientCategoryViewModel.cs" />
     <Compile Include="ViewModels\PhotoEditorViewModel.cs" />
     <Compile Include="ViewModels\ProcessingDialogViewModel.cs" />
     <Compile Include="ViewModels\ProgressDialogViewModel.cs" />
@@ -118,6 +122,15 @@
     <Compile Include="ViewModels\ViewModelBase\RadioButtonConverter.cs" />
     <Compile Include="Views\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PatientAdd.xaml.cs">
+      <DependentUpon>PatientAdd.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PatientCategory.xaml.cs">
+      <DependentUpon>PatientCategory.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PatientSearch.xaml.cs">
+      <DependentUpon>PatientSearch.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PhotoEditor.xaml.cs">
       <DependentUpon>PhotoEditor.xaml</DependentUpon>
@@ -136,6 +149,12 @@
     </Compile>
     <Compile Include="Views\UserControls\BaseAdjust.xaml.cs">
       <DependentUpon>BaseAdjust.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\EditorCrop.xaml.cs">
+      <DependentUpon>EditorCrop.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\EditorRotate.xaml.cs">
+      <DependentUpon>EditorRotate.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\ListFunction.xaml.cs">
       <DependentUpon>ListFunction.xaml</DependentUpon>
@@ -229,6 +248,18 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\PatientAdd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PatientCategory.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PatientSearch.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\PhotoEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -250,6 +281,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\UserControls\BaseAdjust.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\EditorCrop.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\EditorRotate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

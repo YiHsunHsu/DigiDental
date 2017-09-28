@@ -21,6 +21,8 @@
         <AssociationConnector Association="DigiDentalModel.FK_TemplateImages_Patients" />
         <EntityTypeShape EntityType="DigiDentalModel.Templates" Width="1.5" PointX="5.375" PointY="8" />
         <AssociationConnector Association="DigiDentalModel.FK_TemplateImages_Templates" />
+        <EntityTypeShape EntityType="DigiDentalModel.PatientCategories" Width="1.5" PointX="0.75" PointY="8.875" />
+        <AssociationConnector Association="DigiDentalModel.FK_Patients_PatientCategory" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

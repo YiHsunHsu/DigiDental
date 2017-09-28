@@ -20,8 +20,8 @@
                         Background="Black" >
                 <ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                     <Viewbox Stretch="Uniform">
-                        <Image Name="ImageEdi" MouseMove="Image_MouseMove" Source="{Binding BitmapSource}"
-                           MouseWheel="ImageEdi_MouseWheel">
+                        <Image Name="ImageEdi" Source="{Binding BitmapSource}"
+                               MouseWheel="ImageEdi_MouseWheel">
                         </Image>
                     </Viewbox>
                 </ScrollViewer>
@@ -36,6 +36,8 @@
             <Button Click="Button_RotateRight_Click">右旋轉90</Button>
             <Button Click="Button_MirrorVertical_Click">上下鏡射</Button>
             <Button Click="Button_MirrorHorizontal_Click">左右鏡射</Button>
+            <Button Click="Button_Crop_Click">裁切</Button>
+            <Button Click="Button_Rotate_Click">旋轉</Button>
             <Button Click="Button_AdvancedAdjust_Click">進階</Button>
             <Button Click="Button_LastPhoto_Click">上一張</Button>
             <Button Click="Button_NextPhoto_Click">下一張</Button>

@@ -188,9 +188,18 @@ namespace DigiDental.Views.UserControls
             ImageEdi.RenderTransform = st;
             e.Handled = true;
         }
-        private void Image_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+
+
+        private void Button_Crop_Click(object sender, RoutedEventArgs e)
         {
-            
+            EditorCrop editorCrop = new EditorCrop(ImagesCollection, ImageInfo);
+            Content = editorCrop;
+        }
+
+        private void Button_Rotate_Click(object sender, RoutedEventArgs e)
+        {
+            EditorRotate editorRotate = new EditorRotate(ImagesCollection, ImageInfo);
+            Content = editorRotate;
         }
     }
 }

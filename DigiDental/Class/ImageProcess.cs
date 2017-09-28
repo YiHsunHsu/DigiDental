@@ -2,6 +2,8 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
+using System.Windows;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace DigiDental.Class
@@ -81,6 +83,7 @@ namespace DigiDental.Class
                 }
             }
         }
+
         /// <summary>
         /// 儲存 BitmapIimage 影像
         /// </summary>
@@ -94,6 +97,60 @@ namespace DigiDental.Class
             using (var stream = File.Create(fileName))
             {
                 encoder.Save(stream);
+            }
+        }
+
+        /// <summary>
+        /// 切图
+        /// </summary>
+        /// <param name="bitmapSource">圖源</param>
+        /// <param name="cut">裁切區</param>
+        /// <returns></returns>
+        public static BitmapSource CutImage(BitmapSource bitmapSource, Int32Rect cut)
+        {
+            //計算Stride
+            var stride = bitmapSource.Format.BitsPerPixel * cut.Width;
+            //
+            byte[] data = new byte[cut.Height * stride];
+            //CopyPixels
+            bitmapSource.CopyPixels(cut, data, stride, 0);
+
+            return BitmapSource.Create(cut.Width, cut.Height, 0, 0, PixelFormats.Bgr32, null, data, stride);
+        }
+
+        // ImageSource --> Bitmap
+        public static Bitmap ImageSourceToBitmap(ImageSource imageSource)
+        {
+            BitmapSource m = (BitmapSource)imageSource;
+
+            Bitmap bmp = new Bitmap(m.PixelWidth, m.PixelHeight, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+
+            System.Drawing.Imaging.BitmapData data = bmp.LockBits(
+            new Rectangle(System.Drawing.Point.Empty, bmp.Size), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+
+            m.CopyPixels(Int32Rect.Empty, data.Scan0, data.Height * data.Stride, data.Stride); bmp.UnlockBits(data);
+
+            return bmp;
+        }
+
+        // Bitmap --> BitmapImage
+        public static BitmapImage BitmapToBitmapImage(Bitmap bitmap)
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
+
+                stream.Position = 0;
+                BitmapImage result = new BitmapImage();
+                result.BeginInit();
+                // According to MSDN, "The default OnDemand cache option retains access to the stream until the image is needed."
+                // Force the bitmap to load right now so we can dispose the stream.
+                result.CacheOption = BitmapCacheOption.OnLoad;
+                result.StreamSource = stream;
+                result.EndInit();
+                result.Freeze();
+
+                return result;
             }
         }
     }
