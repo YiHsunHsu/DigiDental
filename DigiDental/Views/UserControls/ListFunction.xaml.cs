@@ -1,6 +1,8 @@
-﻿using DigiDental.ViewModels.Class;
+﻿using DigiDental.Class;
+using DigiDental.ViewModels.Class;
 using DigiDental.ViewModels.UserControlViewModels;
 using DigiDental.ViewModels.ViewModelBase;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -228,6 +230,22 @@ namespace DigiDental.Views.UserControls
             {
                 PhotoEditor pe = new PhotoEditor(new ObservableCollection<ImageInfo>(lfvm.ShowImages.Where(i => i.IsSelected)));
                 pe.Show();
+            }
+        }
+
+        private void Image_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            try
+            {
+                ImageInfo dragImage = (ImageInfo)((Image)e.Source).DataContext;
+                DataObject data = new DataObject(DataFormats.Text, dragImage);
+
+                DragDrop.DoDragDrop((DependencyObject)e.Source, data, DragDropEffects.Copy);
+            }
+            catch (Exception ex)
+            {
+                Error_Log.ErrorMessageOutput(ex.ToString());
+                MessageBox.Show("移動圖片發生錯誤，聯絡資訊人員", "提示", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

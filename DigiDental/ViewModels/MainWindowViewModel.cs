@@ -4,6 +4,7 @@ using DigiDental.ViewModels.ViewModelBase;
 using DigiDental.Views;
 using DigiDental.Views.UserControls;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -32,6 +33,11 @@ namespace DigiDental.ViewModels
                 else
                     ShowImportFunction = false;
 
+                if (!string.IsNullOrEmpty(agencys.Agency_WifiCardPath))
+                    ShowWifiImportFunction = true;
+                else
+                    ShowWifiImportFunction = false;
+
                 if (lf != null)
                 {
                     lf.Agencys = agencys;
@@ -59,6 +65,48 @@ namespace DigiDental.ViewModels
         }
 
         /// <summary>
+        /// binding WIFI匯入圖片 IsEnable
+        /// </summary>
+        private bool showWifiImportFunction = false;
+        public bool ShowWifiImportFunction
+        {
+            get { return showWifiImportFunction; }
+            set
+            {
+                showWifiImportFunction = value;
+                OnPropertyChanged("ShowWifiImportFunction");
+            }
+        }
+
+        /// <summary>
+        /// GroupBox1(病患基本資料) IsEnable
+        /// </summary>
+        public bool PatientInfo
+        {
+            get
+            {
+                if (Patients != null)
+                    return true;
+                else
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// GroupBox2(病患圖片管理) IsEnable
+        /// </summary>
+        public bool PatientImageManage
+        {
+            get
+            {
+                if (Patients != null)
+                    return true;
+                else
+                    return false;
+            }
+        }
+
+        /// <summary>
         /// 病患資料
         /// </summary>
         private Patients patients;
@@ -79,7 +127,6 @@ namespace DigiDental.ViewModels
                 OnPropertyChanged("PatientPhoto");
             }
         }
-
 
         /// <summary>
         /// 選擇匯入的日期(改變的話重新載入圖片)
@@ -295,6 +342,19 @@ namespace DigiDental.ViewModels
             }
         }
 
+        private List<PatientCategoryInfo> patientCategoryInfo;
+
+        public List<PatientCategoryInfo> PatientCategoryInfo
+        {
+            get { return patientCategoryInfo; }
+            set
+            {
+                patientCategoryInfo = value;
+                OnPropertyChanged("PatientCategoryInfo");
+            }
+        }
+
+
         #region MVVM TabControl 建構子
         //private DigiDentalEntities dde;
 
@@ -341,6 +401,11 @@ namespace DigiDental.ViewModels
         /// ProgressDialog(進度條)
         /// </summary>
         private ProgressDialog pd;
+
+        public MainWindowViewModel()
+        {
+        }
+
         public MainWindowViewModel(string hostName, Agencys agencys, Patients patients, DateTime selectedDate)
         {
             if (dde == null)
@@ -354,8 +419,18 @@ namespace DigiDental.ViewModels
             //設定病患大頭貼
             if (!string.IsNullOrEmpty(Patients.Patient_Photo))
             {
-                patientPhoto = new LoadBitmapImage().SettingBitmapImage(Agencys.Agency_ImagePath + @"\" + Patients.Patient_Photo, 400);
+                PatientPhoto = new LoadBitmapImage().SettingBitmapImage(Agencys.Agency_ImagePath + @"\" + Patients.Patient_Photo, 400);
             }
+
+            PatientCategoryInfo = (from pc in dde.PatientCategories
+                                   where pc.Patients.Any(p => p.Patient_ID == Patients.Patient_ID)
+                                   select new PatientCategoryInfo()
+                                   {
+                                       Patient_ID = Patients.Patient_ID,
+                                       PatientCategory_ID = pc.PatientCategory_ID,
+                                       PatientCategory_Title = pc.PatientCategory_Title,
+                                       IsChecked = true
+                                   }).ToList();
 
             //取掛號資訊清單 Registration
             var queryRegistrations = from qr in dde.Registrations
@@ -366,7 +441,7 @@ namespace DigiDental.ViewModels
 
             SelectedDate = selectedDate;
 
-            LoadFunctions();            
+            LoadFunctions();
         }
 
         #region METHOD

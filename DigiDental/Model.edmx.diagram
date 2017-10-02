@@ -9,8 +9,6 @@
         <EntityTypeShape EntityType="DigiDentalModel.sysdiagrams" Width="1.5" PointX="5.75" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DigiDentalModel.Clients" Width="1.5" PointX="7.75" PointY="0.75" />
         <EntityTypeShape EntityType="DigiDentalModel.Connecting_Logs" Width="1.5" PointX="7.75" PointY="3.75" />
-        <EntityTypeShape EntityType="DigiDentalModel.Patients" Width="1.5" PointX="0.75" PointY="1" />
-        <AssociationConnector Association="DigiDentalModel.FK_Registrations_Patients" />
         <EntityTypeShape EntityType="DigiDentalModel.Agencys" Width="1.5" PointX="3" PointY="5" />
         <EntityTypeShape EntityType="DigiDentalModel.Functions" Width="1.5" PointX="0.75" PointY="5.875" />
         <AssociationConnector Association="DigiDentalModel.FK_Agencys_Functions" />
@@ -18,11 +16,13 @@
         <AssociationConnector Association="DigiDentalModel.FK_Images_Registrations" />
         <EntityTypeShape EntityType="DigiDentalModel.TemplateImages" Width="1.5" PointX="10.5" PointY="1.125" />
         <AssociationConnector Association="DigiDentalModel.FK_TemplateImages_Images" />
-        <AssociationConnector Association="DigiDentalModel.FK_TemplateImages_Patients" />
         <EntityTypeShape EntityType="DigiDentalModel.Templates" Width="1.5" PointX="5.375" PointY="8" />
         <AssociationConnector Association="DigiDentalModel.FK_TemplateImages_Templates" />
-        <EntityTypeShape EntityType="DigiDentalModel.PatientCategories" Width="1.5" PointX="0.75" PointY="8.875" />
-        <AssociationConnector Association="DigiDentalModel.FK_Patients_PatientCategory" />
+        <EntityTypeShape EntityType="DigiDentalModel.PatientCategories" Width="2.25" PointX="1.5" PointY="9.75" />
+        <EntityTypeShape EntityType="DigiDentalModel.Patients" Width="1.875" PointX="0.75" PointY="0.875" />
+        <AssociationConnector Association="DigiDentalModel.FK_Registrations_Patients" />
+        <AssociationConnector Association="DigiDentalModel.FK_TemplateImages_Patients" />
+        <AssociationConnector Association="DigiDentalModel.Patients_PatientCategories" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

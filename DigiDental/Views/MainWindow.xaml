@@ -24,10 +24,11 @@
             <MenuItem Header="病患管理">
                 <MenuItem Header="新增病患"></MenuItem>
                 <MenuItem Header="病患搜尋"></MenuItem>
+                <MenuItem Header="病患類別管理" Click="MenuItem_PatientCategory_Click"></MenuItem>
             </MenuItem>
             <MenuItem Header="設定" Click="MenuItem_Setting_Click"></MenuItem>
-                <MenuItem Header="關於"></MenuItem>
-            </Menu>
+            <MenuItem Header="關於"></MenuItem>
+        </Menu>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200" Name="GridLeft"></ColumnDefinition>
@@ -36,53 +37,82 @@
             </Grid.ColumnDefinitions>
             <Grid Grid.Row="0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="0.7*"></RowDefinition>
-                    <RowDefinition Height="0.3*"></RowDefinition>
+                    <RowDefinition Height="0.65*"></RowDefinition>
+                    <RowDefinition Height="0.35*"></RowDefinition>
                 </Grid.RowDefinitions>
-                <StackPanel Grid.Row="0" Margin="5" VerticalAlignment="Stretch">
-                    <Label Margin="5,0,5,0" Content="病歷號碼"/>
-                    <TextBox Margin="5,0,5,0" Text="{Binding Patients.Patient_Number, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-                    <Border Margin="5" BorderBrush="Black" BorderThickness="1" Height="180" >
-                        <Image Source="{Binding PatientPhoto}" AllowDrop="True" Drop="Image_Drop"/>
-                    </Border>
-                    <Label  Margin="5,0,5,0" Content="姓名"/>
-                    <TextBox Margin="5,0,5,0" Text="{Binding Patients.Patient_Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-                    <Label Margin="5,0,5,0" Content="身分證號"/>
-                    <TextBox Margin="5,0,5,0" Text="{Binding Patients.Patient_IDNumber, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-                    <Label Content="性別" Margin="5,0,5,0"/>
-                    <StackPanel Orientation="Horizontal" Margin="5,0,5,0">
-                        <RadioButton GroupName="Gender" Content="男" Margin="10,0,10,0" IsChecked="{Binding Patients.Patient_Gender, Converter={StaticResource ResourceKey=radioButtonConverterKey}, ConverterParameter={StaticResource true}}" />
-                        <RadioButton GroupName="Gender" Content="女" Margin="10,0,10,0" IsChecked="{Binding Patients.Patient_Gender, Converter={StaticResource ResourceKey=radioButtonConverterKey}, ConverterParameter={StaticResource false}}" />
-                    </StackPanel>
-                    <Label Content="生日" Margin="5,0,5,0"/>
-                    <DatePicker Margin="5,0,5,0" SelectedDate="{Binding Patients.Patient_Birth, UpdateSourceTrigger=PropertyChanged}" />
-                    <Grid Margin="5,0,5,0">
+                <GroupBox Grid.Row="0" Header="病患個人資料" Margin="5" Padding="2" IsEnabled="{Binding PatientInfo}">
+                    <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition></ColumnDefinition>
                             <ColumnDefinition Width="auto"></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="病患類別"/>
-                        <Button Grid.Column="1" Content="新增類別" Click="Button_PatientCategory_Click"></Button>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"></RowDefinition>
+                            <RowDefinition Height="auto"></RowDefinition>
+                            <RowDefinition Height="auto"></RowDefinition>
+                            <RowDefinition Height="auto"></RowDefinition>
+                            <RowDefinition Height="auto"></RowDefinition>
+                            <RowDefinition Height="auto"></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Column="0" Grid.Row="0" Content="病歷號碼:"/>
+                        <Label Grid.Column="1" Grid.Row="0" Content="{Binding Patients.Patient_Number}" />
+                        <Border Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="1" Height="200">
+                            <Image Source="{Binding PatientPhoto}" AllowDrop="True" Drop="Image_Drop"/>
+                        </Border>
+                        <Label Grid.Column="0" Grid.Row="2" Content="姓名:"/>
+                        <Label Grid.Column="1" Grid.Row="2" Content="{Binding Patients.Patient_Name}" />
+                        <Label Grid.Column="0" Grid.Row="3" Content="身分證號:"/>
+                        <Label Grid.Column="1" Grid.Row="3" Content="{Binding Patients.Patient_IDNumber}" />
+                        <Label Grid.Column="0" Grid.Row="4" Content="性別:"/>
+                        <StackPanel Grid.Column="1" Grid.Row="4" Orientation="Horizontal">
+                            <RadioButton GroupName="Gender" Content="男" Margin="10,0,10,0" IsChecked="{Binding Patients.Patient_Gender, Converter={StaticResource ResourceKey=radioButtonConverterKey}, ConverterParameter={StaticResource true}}" IsEnabled="False"/>
+                            <RadioButton GroupName="Gender" Content="女" Margin="10,0,10,0" IsChecked="{Binding Patients.Patient_Gender, Converter={StaticResource ResourceKey=radioButtonConverterKey}, ConverterParameter={StaticResource false}}" IsEnabled="False"/>
+                        </StackPanel>
+                        <Label Grid.Column="0" Grid.Row="5" Content="生日:"/>
+                        <DatePicker Grid.Column="1" Grid.Row="5" SelectedDate="{Binding Patients.Patient_Birth, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"/>
+                        <Expander Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="2" IsExpanded="True" BorderBrush="DarkSlateGray">
+                            <Expander.Header>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="115"></ColumnDefinition>
+                                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="病患分類"></TextBlock>
+                                    <Button Grid.Column="1" Content="編輯" Click="Button_PatientCategorySetting_Click"></Button>
+                                </Grid>
+                            </Expander.Header>
+                            <ScrollViewer>
+                                <ListBox IsEnabled="False" ItemsSource="{Binding PatientCategoryInfo}">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Label Content="{Binding PatientCategory_Title}"></Label>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </ScrollViewer>
+                        </Expander>
                     </Grid>
-                    <ComboBox Margin="5,0,5,0"/>
-                </StackPanel>
-                <GroupBox Grid.Row="1" Header="病患圖片管理">
+                </GroupBox>
+                <GroupBox Grid.Row="1" Header="病患圖片管理" Margin="5" Padding="2" IsEnabled="{Binding PatientImageManage}">
                     <StackPanel>
-                        <DatePicker SelectedDate="{Binding SelectedDate}"/>
+                        <DatePicker SelectedDate="{Binding SelectedDate}" IsEnabled="{Binding DatePickerEnable}"/>
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition></ColumnDefinition>
-                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition Width="17*"></ColumnDefinition>
+                                <ColumnDefinition Width="70*"/>
+                                <ColumnDefinition Width="87*"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
                             <Button Grid.Column="0" Content="手動匯入" Margin="5,5,5,0"
                                     IsEnabled="{Binding ShowImportFunction}"
                                     HorizontalAlignment="Stretch"
-                                    Click="Button_Import_Click"/>
-                            <ToggleButton Grid.Column="1" Content="Wifi 匯入" Margin="5,5,5,0"
+                                    Click="Button_Import_Click" Grid.ColumnSpan="2"/>
+                            <ToggleButton Grid.Column="2" Content="Wifi 匯入" Margin="5,5,5,0"
+                                          IsEnabled="{Binding ShowWifiImportFunction}"
                                           HorizontalAlignment="Stretch"
                                           Click="ToggleButton_WifiImport_Click"/>
                         </Grid>
-                        <Label Content="匯入圖片分類"/>
+                        <Label Content="匯入圖片日期"/>
                         <ComboBox ItemsSource="{Binding CusComboBoxItem}" DisplayMemberPath="DisplayName" SelectedValue="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                     </StackPanel>
                 </GroupBox>

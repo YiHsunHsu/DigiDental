@@ -108,7 +108,9 @@
     <Compile Include="ViewModels\Class\DBRegistrations.cs" />
     <Compile Include="ViewModels\Class\DBTemplateImages.cs" />
     <Compile Include="ViewModels\Class\ImageInfo.cs" />
+    <Compile Include="ViewModels\Class\PatientCategoryInfo.cs" />
     <Compile Include="ViewModels\Class\PatientsFolder.cs" />
+    <Compile Include="ViewModels\PatientCategorySettingViewModel.cs" />
     <Compile Include="ViewModels\PatientCategoryViewModel.cs" />
     <Compile Include="ViewModels\PhotoEditorViewModel.cs" />
     <Compile Include="ViewModels\ProcessingDialogViewModel.cs" />
@@ -128,6 +130,9 @@
     </Compile>
     <Compile Include="Views\PatientCategory.xaml.cs">
       <DependentUpon>PatientCategory.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PatientCategorySetting.xaml.cs">
+      <DependentUpon>PatientCategorySetting.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PatientSearch.xaml.cs">
       <DependentUpon>PatientSearch.xaml</DependentUpon>
@@ -253,6 +258,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\PatientCategory.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PatientCategorySetting.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

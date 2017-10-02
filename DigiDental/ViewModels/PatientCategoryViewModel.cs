@@ -1,12 +1,14 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace DigiDental.ViewModels
 {
     public class PatientCategoryViewModel : ViewModelBase.ViewModelBase
     {
-        private ObservableCollection<PatientCategories> patientCategories;
+        private List<PatientCategories> patientCategories;
 
-        public ObservableCollection<PatientCategories> PatientCategories
+        public List<PatientCategories> PatientCategories
         {
             get { return patientCategories; }
             set
@@ -16,12 +18,14 @@ namespace DigiDental.ViewModels
             }
         }
 
+        private DigiDentalEntities dde;
         public PatientCategoryViewModel()
         {
-            if (PatientCategories == null)
+            if (dde == null)
             {
-                PatientCategories = new ObservableCollection<PatientCategories>();
+                dde = new DigiDentalEntities();
             }
+            PatientCategories = dde.PatientCategories.ToList();
         }
     }
 }

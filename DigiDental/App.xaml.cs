@@ -16,18 +16,19 @@ namespace DigiDental
             {
                 if (e.Args.Length > 0)
                 {
-                    DateTime patientBirth;
-                    
                     p.Patient_ID = !string.IsNullOrEmpty(e.Args[0].ToString()) ? e.Args[0].ToString() : string.Empty;
                     p.Patient_Number = !string.IsNullOrEmpty(e.Args[1].ToString()) ? e.Args[1].ToString() : string.Empty;
                     p.Patient_Name = !string.IsNullOrEmpty(e.Args[2].ToString()) ? e.Args[2].ToString() : string.Empty;
-                    p.Patient_Gender = transGender(e.Args[3].ToString());
-                    p.Patient_Birth = DateTime.TryParse(e.Args[4].ToString(), out patientBirth) ? DateTime.Parse(e.Args[4].ToString()) : default(DateTime);
+                    p.Patient_Gender = TransGender(e.Args[3].ToString());
+                    p.Patient_Birth = DateTime.TryParse(e.Args[4].ToString(), out DateTime patientBirth) ? DateTime.Parse(e.Args[4].ToString()) : default(DateTime);
                     p.Patient_IDNumber = !string.IsNullOrEmpty(e.Args[5].ToString()) ? e.Args[5].ToString() : string.Empty;
                 }
                 else
                 {
                     //測試資料
+                    //1. Patient = null
+                    //p = new Patients();
+                    //2. Patient Testing
                     p = new Patients()
                     {
                         Patient_ID = "0001",
@@ -37,6 +38,16 @@ namespace DigiDental
                         Patient_Birth = DateTime.Parse("1986-08-11"),
                         Patient_IDNumber = "W100399932"
                     };
+                    //3. Patient 2 Testing
+                    //p = new Patients()
+                    //{
+                    //    Patient_ID = "0005",
+                    //    Patient_Number = "0005J",
+                    //    Patient_Name = "JOE",
+                    //    Patient_Gender = false,
+                    //    Patient_Birth = DateTime.Parse("1984-11-27"),
+                    //    Patient_IDNumber = "W100339105"
+                    //};
                 }
                 base.OnStartup(e);
             }
@@ -47,7 +58,7 @@ namespace DigiDental
                 Current.Shutdown();
             }
         }
-        private bool transGender(string input)
+        private bool TransGender(string input)
         {
             if (!string.IsNullOrEmpty(input))
             {

@@ -1,11 +1,12 @@
-﻿<Window x:Class="DigiDental.Views.PatientCategory"
+﻿<Window x:Class="DigiDental.Views.PatientCategorySetting"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DigiDental.Views"
         mc:Ignorable="d"
-        Title="PatientCategory" Height="300" Width="400" WindowStartupLocation="CenterScreen"
+        Title="PatientCategorySetting" Height="300" Width="400" 
+        WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded">
     <Grid>
         <Grid.RowDefinitions>
@@ -18,32 +19,34 @@
                 <ColumnDefinition Width="auto"></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" Content="新增類別"/>
+            <Label Grid.Column="0" Content="類別"/>
             <TextBox x:Name="textBoxCategoryInput" Grid.Column="1"/>
-            <Button Grid.Column="2" Margin="2" Content="新增" IsEnabled="{Binding ElementName=textBoxCategoryInput, Path=Text.Length}"
-                    Click="Button_CategoryAdd_Click"/>
+            <Button Grid.Column="2" Margin="2" Content="搜尋" IsEnabled="{Binding ElementName=textBoxCategoryInput, Path=Text.Length}"
+                    Click="Button_Search_Click"/>
+            <Button Grid.Column="3" Margin="2" Content="全部"
+                    Click="Button_SearchAll_Click"/>
         </Grid>
         <GroupBox Grid.Row="1" Header="病患類別清單">
-            <DataGrid Margin="10,10,10,10" ItemsSource="{Binding PatientCategories}" 
-                      AutoGenerateColumns="False" 
-                      CanUserAddRows="False" CanUserResizeColumns="False"
-                      SelectionMode="Single" SelectionUnit="FullRow"
-                      CellEditEnding="DataGrid_Update_CellEditEnding">
+            <DataGrid Margin="10,10,10,10" ItemsSource="{Binding PatientCategoryInfo}"
+                      AutoGenerateColumns="False"
+                      CanUserResizeColumns="False" IsReadOnly="True" HeadersVisibility="Column"
+                      SelectionMode="Single" SelectionUnit="FullRow">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="*" Header="類別名稱" Binding="{Binding PatientCategory_Title}"/>
-                    <DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="0.15*" Header="已使用">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Content="刪除" Click="Button_CategoryDelete_Click"></Button>
+                                <CheckBox IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"></CheckBox>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
+                    <DataGridTextColumn Width="0.85*" Header="類別名稱" Binding="{Binding PatientCategory_Title}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </GroupBox>
         <StackPanel Grid.Row="2" Orientation="Horizontal" FlowDirection="RightToLeft">
-            <Button Margin="5" Content="結束編輯" Click="Button_EditEnd_Click"/>
+            <Button Margin="5" Content="結束" Click="Button_Close_Click"/>
         </StackPanel>
     </Grid>
 </Window>

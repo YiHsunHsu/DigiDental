@@ -48,15 +48,20 @@ namespace DigiDental.Views
                 bool? result = Loading.ShowDialog();
                 if ((bool)result)
                 {
-                    if (mwvm == null)
+                    //Client 電腦名稱
+                    HostName = Loading.HostName;
+                    //Agencys 載入的機構設定
+                    Agencys = Loading.Agencys;
+                    //Patients載入的病患 或 沒有
+                    Patients = Loading.Patients;
+                    
+                    if (Patients != null)
                     {
-                        //Client 電腦名稱
-                        HostName = Loading.HostName;
-                        //Agencys 載入的機構設定
-                        Agencys = Loading.Agencys;
-                        //Patients載入的病患 或 沒有
-                        Patients = Loading.Patients;
                         mwvm = new MainWindowViewModel(HostName, Agencys, Patients, DateTime.Now);
+                    }
+                    else
+                    {
+                        mwvm = new MainWindowViewModel();
                     }
                     DataContext = mwvm;
 
@@ -431,6 +436,12 @@ namespace DigiDental.Views
             Application.Current.Shutdown();
         }
 
+        private void MenuItem_PatientCategory_Click(object sender, RoutedEventArgs e)
+        {
+            PatientCategory pc = new PatientCategory();
+            pc.ShowDialog();
+        }
+
         private void MenuItem_Setting_Click(object sender, RoutedEventArgs e)
         {
             Settings Settings = new Settings(Agencys);
@@ -474,24 +485,32 @@ namespace DigiDental.Views
                 ImageInfo dragImage = new ImageInfo();
                 dragImage = ((ImageInfo)e.Data.GetData(DataFormats.Text));
 
+                pf = new PatientsFolder(Agencys, Patients);
+                if (!Directory.Exists(pf.PatientFullPatientPhotoPath))
+                {
+                    Directory.CreateDirectory(pf.PatientFullPatientPhotoPath);
+                }
+                string newPatientPhotoName = DateTime.Now.ToString("yyyyMMddHHmmssffff") + dragImage.Image_Extension;
+                string newPatientPhotoPath = pf.PatientFullPatientPhotoPath + @"\" + newPatientPhotoName;
+                File.Copy(dragImage.Image_FullPath, newPatientPhotoPath);
+                Thread.Sleep(200);
+
                 LoadBitmapImage lbi = new LoadBitmapImage();
-                img.Source = lbi.SettingBitmapImage(dragImage.Image_FullPath, 400);
+                img.Source = lbi.SettingBitmapImage(newPatientPhotoPath, 400);
 
                 //update database Patients Patient_Photo
                 Patients p = (from q in dde.Patients
                              where q.Patient_ID == Patients.Patient_ID
                              select q).First();
-                p.Patient_Photo = dragImage.Image_Path;
+                p.Patient_Photo = pf.PatientPhotoPath + @"\" + newPatientPhotoName;
                 p.UpdateDate = DateTime.Now;
                 dde.SaveChanges();
-
             }
             catch (Exception ex)
             {
                 Error_Log.ErrorMessageOutput(ex.ToString());
                 MessageBox.Show("移動圖片發生錯誤，聯絡資訊人員", "提示", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-
         }
 
         private void Button_PatientAdd_Click(object sender, RoutedEventArgs e)
@@ -509,11 +528,18 @@ namespace DigiDental.Views
             DataContext = mwvm;
         }
 
-        private void Button_PatientCategory_Click(object sender, RoutedEventArgs e)
+        private void Button_PatientCategorySetting_Click(object sender, RoutedEventArgs e)
         {
-            PatientCategory pc = new PatientCategory();
-            pc.ShowDialog();
-            //結束病患分類編輯  更新ComboBox
+            try
+            {
+                PatientCategorySetting pcs = new PatientCategorySetting(Patients);
+                pcs.ShowDialog();
+                mwvm.PatientCategoryInfo = pcs.PatientCategoryInfo.Where(pci => pci.IsChecked == true).ToList();
+            }
+            catch (Exception ex)
+            {
+                Error_Log.ErrorMessageOutput(ex.ToString());
+            }
         }
     }
 }

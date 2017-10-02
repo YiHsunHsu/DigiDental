@@ -109,21 +109,7 @@ namespace DigiDental.ViewModels.UserControlViewModels
                 CountImages = ShowImages.Count();
             }
         }
-
-        /// <summary>
-        /// 用來Binding List SelectedImage
-        /// </summary>
-        private ImageInfo selectedImage;
-        public ImageInfo SelectedImage
-        {
-            get { return selectedImage; }
-            set
-            {
-                selectedImage = value;
-                OnPropertyChanged("SelectedImage");
-            }
-        }
-
+        
         private int imageSelectedCount = 0;
         public int ImageSelectedCount
         {

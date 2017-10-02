@@ -19,6 +19,7 @@ namespace DigiDental
         {
             this.Registrations = new HashSet<Registrations>();
             this.TemplateImages = new HashSet<TemplateImages>();
+            this.PatientCategories = new HashSet<PatientCategories>();
         }
     
         public string Patient_ID { get; set; }
@@ -30,12 +31,12 @@ namespace DigiDental
         public string Patient_Photo { get; set; }
         public System.DateTime UpdateDate { get; set; }
         public System.DateTime CreateDate { get; set; }
-        public Nullable<int> PatientCategory_ID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Registrations> Registrations { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TemplateImages> TemplateImages { get; set; }
-        public virtual PatientCategories PatientCategories { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PatientCategories> PatientCategories { get; set; }
     }
 }
