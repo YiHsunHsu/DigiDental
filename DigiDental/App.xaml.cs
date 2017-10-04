@@ -28,16 +28,16 @@ namespace DigiDental
                     //測試資料
                     //1. Patient = null
                     //p = new Patients();
-                    //2. Patient Testing
-                    p = new Patients()
-                    {
-                        Patient_ID = "0001",
-                        Patient_Number = "E0001",
-                        Patient_Name = "Eason",
-                        Patient_Gender = true,
-                        Patient_Birth = DateTime.Parse("1986-08-11"),
-                        Patient_IDNumber = "W100399932"
-                    };
+                    //2.Patient Testing
+                   p = new Patients()
+                   {
+                       Patient_ID = "0001",
+                       Patient_Number = "E0001",
+                       Patient_Name = "Eason",
+                       Patient_Gender = true,
+                       Patient_Birth = DateTime.Parse("1986-08-11"),
+                       Patient_IDNumber = "W100399932"
+                   };
                     //3. Patient 2 Testing
                     //p = new Patients()
                     //{

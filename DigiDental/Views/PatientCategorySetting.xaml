@@ -29,7 +29,7 @@
                     Click="Button_SearchAll_Click"/>
         </Grid>
         <GroupBox Grid.Row="1" Header="病患類別清單">
-            <DataGrid Margin="10,10,10,10" ItemsSource="{Binding PatientCategoryInfo}"
+            <DataGrid Margin="10,10,10,10" ItemsSource="{Binding ShowPatientCategoryInfo}"
                       AutoGenerateColumns="False"
                       CanUserResizeColumns="False" IsReadOnly="True" HeadersVisibility="Column"
                       SelectionMode="Single" SelectionUnit="FullRow">

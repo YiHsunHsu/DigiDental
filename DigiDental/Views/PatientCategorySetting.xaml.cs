@@ -16,8 +16,7 @@ namespace DigiDental.Views
         public Patients Patients { get; set; }
         public List<PatientCategoryInfo> PatientCategoryInfo { get { return pcsvm.PatientCategoryInfo; } }
         public string PatientCategory_Title = string.Empty;
-
-        private DigiDentalEntities dde;
+        
         private PatientCategorySettingViewModel pcsvm;
         public PatientCategorySetting(Patients patients)
         {
@@ -27,10 +26,6 @@ namespace DigiDental.Views
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            if (dde == null)
-            {
-                dde = new DigiDentalEntities();
-            }
             if (pcsvm == null)
             {
                 pcsvm = new PatientCategorySettingViewModel(Patients);
@@ -40,6 +35,26 @@ namespace DigiDental.Views
 
         private void Button_Close_Click(object sender, RoutedEventArgs e)
         {
+            using (var dde = new DigiDentalEntities())
+            {
+                Patients patients = (from p in dde.Patients
+                                     where p.Patient_ID == Patients.Patient_ID
+                                     select p).First();
+                foreach (PatientCategoryInfo pci in PatientCategoryInfo)
+                {
+                    PatientCategories patientCategories = dde.PatientCategories.First(pc => pc.PatientCategory_ID == pci.PatientCategory_ID);
+                    if (pci.IsChecked)
+                    {
+                        patients.PatientCategories.Add(patientCategories);
+                    }
+                    else
+                    {
+                        patients.PatientCategories.Remove(patientCategories);
+                    }
+                }
+                dde.SaveChanges();
+            }
+            DialogResult = true;
             Close();
         }
 
@@ -47,16 +62,7 @@ namespace DigiDental.Views
         {
             try
             {
-                var qpc = from pc in dde.PatientCategories
-                          where pc.PatientCategory_Title.Contains(textBoxCategoryInput.Text)
-                          select new PatientCategoryInfo()
-                          {
-                              PatientCategory_ID = pc.PatientCategory_ID,
-                              PatientCategory_Title = pc.PatientCategory_Title,
-                              Patient_ID = Patients.Patient_ID,
-                              IsChecked = pc.Patients.Where(p => p.Patient_ID == Patients.Patient_ID).Count() > 0 ? true : false
-                          };
-                pcsvm.PatientCategoryInfo = qpc.ToList();
+                pcsvm.ShowPatientCategoryInfo = PatientCategoryInfo.Where(w => w.PatientCategory_Title.Contains(textBoxCategoryInput.Text)).ToList();
             }
             catch (Exception ex)
             {
@@ -68,15 +74,7 @@ namespace DigiDental.Views
         {
             try
             {
-                var qpc = from pc in dde.PatientCategories
-                          select new PatientCategoryInfo()
-                          {
-                              PatientCategory_ID = pc.PatientCategory_ID,
-                              PatientCategory_Title = pc.PatientCategory_Title,
-                              Patient_ID = Patients.Patient_ID,
-                              IsChecked = pc.Patients.Where(p => p.Patient_ID == Patients.Patient_ID).Count() > 0 ? true : false
-                          };
-                pcsvm.PatientCategoryInfo = qpc.ToList();
+                pcsvm.ShowPatientCategoryInfo = PatientCategoryInfo;
             }
             catch (Exception ex)
             {

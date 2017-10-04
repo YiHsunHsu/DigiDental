@@ -45,6 +45,7 @@ namespace DigiDental.Views
                 dde.PatientCategories.Add(pc);
                 dde.SaveChanges();
                 pcvm.PatientCategories = dde.PatientCategories.ToList();
+                textBoxCategoryInput.Text = string.Empty;
             }
             catch (Exception ex)
             {
@@ -57,9 +58,10 @@ namespace DigiDental.Views
             try
             {
                 PatientCategories patientCategories = ((FrameworkElement)sender).DataContext as PatientCategories;
-                if (MessageBox.Show("確定刪除<" + patientCategories.PatientCategory_Title + ">分類?", "提示", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                if (MessageBox.Show("確定刪除<" + patientCategories.PatientCategory_Title + ">分類?\r\n如果是的話，所有擁有此分類的病患分類也會被取消", "提示", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
                     var deleteItem = dde.PatientCategories.Where(w => w.PatientCategory_ID == patientCategories.PatientCategory_ID).First();
+                    deleteItem.Patients.Remove(new Patients());
                     dde.PatientCategories.Remove(deleteItem);
                     dde.SaveChanges();
                     pcvm.PatientCategories = dde.PatientCategories.ToList();
