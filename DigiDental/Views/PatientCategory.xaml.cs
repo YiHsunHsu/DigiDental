@@ -81,7 +81,7 @@ namespace DigiDental.Views
                 PatientCategories patientCategories = ((FrameworkElement)e.Row).DataContext as PatientCategories;
                 if (!patientCategories.PatientCategory_Title.Equals(editTex))
                 {
-                    if (MessageBox.Show("確定將\r\n<" + patientCategories.PatientCategory_Title + ">\r\n修改為\r\n<" + editTex + ">?", "提示", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    if (MessageBox.Show("確定將<" + patientCategories.PatientCategory_Title + ">修改為<" + editTex + ">?\r\n如果是的話，所有擁有此分類的病患分類也會被更動", "提示", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                     {
                         PatientCategories updateItem = (from pc in dde.PatientCategories
                                                         where pc.PatientCategory_ID == patientCategories.PatientCategory_ID

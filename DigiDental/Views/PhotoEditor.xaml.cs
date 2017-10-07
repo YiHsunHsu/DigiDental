@@ -28,7 +28,7 @@ namespace DigiDental.Views
 
             ImagesCollection = imagesCollection;
 
-            ImageInfo = imagesCollection[imagesCollection.Count - 1];
+            ImageInfo = imagesCollection[0];
             
             DataContext = pevm;
 

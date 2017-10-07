@@ -1,6 +1,7 @@
 ﻿using DigiDental.ViewModels.Class;
 using DigiDental.ViewModels.ViewModelBase;
 using System.Linq;
+using System.Windows;
 
 namespace DigiDental.ViewModels.UserControlViewModels
 {
@@ -113,10 +114,22 @@ namespace DigiDental.ViewModels.UserControlViewModels
         private int imageSelectedCount = 0;
         public int ImageSelectedCount
         {
-            get { return imageSelectedCount; }
+            get
+            {
+                if (imageSelectedCount > 0)
+                {
+                    IsEditMode = true;
+                }
+                else
+                {
+                    IsEditMode = false;
+                }
+                return imageSelectedCount;
+            }
             set
             {
                 imageSelectedCount = value;
+                OnPropertyChanged("ImageSelectedCount");
                 OnPropertyChanged("TextBlockTips");
             }
         }
@@ -128,6 +141,7 @@ namespace DigiDental.ViewModels.UserControlViewModels
             set
             {
                 countImages = value;
+                OnPropertyChanged("CountImages");
                 OnPropertyChanged("TextBlockTips");
             }
         }
@@ -135,6 +149,17 @@ namespace DigiDental.ViewModels.UserControlViewModels
         public string TextBlockTips
         {
             get { return "以選取圖片 " + ImageSelectedCount + " 張，共 " + CountImages + " 張"; }
+        }
+
+        private bool isEditMode;
+        public bool IsEditMode
+        {
+            get { return isEditMode; }
+            set
+            {
+                isEditMode = value;
+                OnPropertyChanged("IsEditMode");
+            }
         }
 
         public ListFunctionViewModel()

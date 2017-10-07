@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Media.Imaging;
 
 namespace DigiDental.Views
 {
@@ -331,109 +332,17 @@ namespace DigiDental.Views
             }
         }
 
-        //wifi 匯入(舊)
-        //private void Button_WifiImport_Click(object sender, RoutedEventArgs e)
-        //{
-        //    Button btnWifiImport = (Button)sender;
-
-        //    btnWifiImport.Dispatcher.Invoke(() =>
-        //    {
-        //        btnWifiImport.IsEnabled = false;
-        //    });
-
-        //    if (!string.IsNullOrEmpty(Agencys.Agency_WifiCardPath))
-        //    {
-        //        if (Directory.Exists(Agencys.Agency_WifiCardPath))
-        //        {
-        //            if (Directory.GetFiles(Agencys.Agency_WifiCardPath).Length > 0)
-        //            {
-        //                //讀寫Registrations
-        //                //確認掛號資料
-        //                DateTime RegistrationDate = mwvm.SelectedDate;
-        //                int Registration_ID = dbr.CreateRegistrationsAndGetID(Patients, RegistrationDate);
-
-        //                pf = new PatientsFolder(Agencys, Patients, RegistrationDate);
-
-        //                if (!Directory.Exists(pf.PatientFullFolderPath))
-        //                {
-        //                    Directory.CreateDirectory(pf.PatientFullFolderPathOriginal);
-        //                }
-
-        //                pd = new ProgressDialog();
-
-        //                pd.Dispatcher.Invoke(() =>
-        //                {
-        //                    pd.PMinimum = 0;
-        //                    pd.PValue = 0;
-        //                    pd.PMaximum = Directory.GetFiles(Agencys.Agency_WifiCardPath).Count();
-        //                    pd.PText = "圖片匯入中，請稍後( 0" + " / " + pd.PMaximum + " )";
-        //                    pd.Show();
-        //                });
-
-        //                Task t = Task.Factory.StartNew(() =>
-        //                {
-        //                    foreach (string f in Directory.GetFiles(Agencys.Agency_WifiCardPath))
-        //                    {
-        //                        string extension = Path.GetExtension(f).ToUpper();
-        //                        string newFileName = DateTime.Now.ToString("yyyyMMddHHmmssffff");
-
-        //                        File.Copy(f, pf.PatientFullFolderPathOriginal + @"\" + newFileName + @"ori" + extension);
-
-        //                        string imagePath = @"\" + pf.PatientFolderPathOriginal + @"\" + newFileName + @"ori" + extension;
-        //                        string imageFileName = newFileName + @"ori" + extension;
-        //                        string imageSize = "Original";
-        //                        string imageExtension = extension;
-        //                        //寫資料庫
-        //                        dbi.InsertImage(imagePath, imageFileName, imageSize, imageExtension, Registration_ID);
-
-        //                        File.Delete(f);
-
-        //                        pd.Dispatcher.Invoke(() =>
-        //                        {
-        //                            pd.PValue++;
-        //                            pd.PText = "圖片匯入中，請稍後( " + pd.PValue + " / " + pd.PMaximum + " )";
-        //                        });
-
-        //                        Thread.Sleep(200);
-        //                    }
-        //                }).ContinueWith(cw =>
-        //                {
-        //                    pd.Dispatcher.Invoke(() =>
-        //                    {
-        //                        pd.PText = "匯入完成";
-        //                        pd.Close();
-        //                    });
-
-        //                    ReloadRegistration(Registration_ID, RegistrationDate);
-        //                    GC.Collect();
-        //                }, CancellationToken.None, TaskContinuationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
-        //            }
-        //            else
-        //            {
-        //                MessageBox.Show("資料夾尚未有圖片", "提示", MessageBoxButton.OK, MessageBoxImage.Error);
-        //            }
-        //        }
-        //        else
-        //        {
-        //            MessageBox.Show("Wifi Card實體資料夾位置尚未建立", "提示", MessageBoxButton.OK, MessageBoxImage.Error);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        MessageBox.Show("尚未設置Wifi Card資料夾位置", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
-        //    }
-        //    btnWifiImport.Dispatcher.Invoke(() =>
-        //    {
-        //        btnWifiImport.IsEnabled = true;
-        //    });
-        //}
-
-
         #region MenuItem Functions
 
         private void MenuItem_Exit_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void MenuItem_PatientAdd_Click(object sender, RoutedEventArgs e)
+        {
+            Patient patient = new Patient(Agencys);
+            patient.ShowDialog();
         }
 
         private void MenuItem_PatientCategory_Click(object sender, RoutedEventArgs e)
@@ -446,7 +355,6 @@ namespace DigiDental.Views
                                         {
                                             PatientCategory_ID = pcs.PatientCategory_ID,
                                             PatientCategory_Title = pcs.PatientCategory_Title,
-                                            Patient_ID = Patients.Patient_ID,
                                             IsChecked = true
                                         }).ToList();
         }
@@ -508,12 +416,15 @@ namespace DigiDental.Views
                 img.Source = lbi.SettingBitmapImage(newPatientPhotoPath, 400);
 
                 //update database Patients Patient_Photo
-                Patients p = (from q in dde.Patients
+                Patients patients = (from q in dde.Patients
                              where q.Patient_ID == Patients.Patient_ID
                              select q).First();
-                p.Patient_Photo = pf.PatientPhotoPath + @"\" + newPatientPhotoName;
-                p.UpdateDate = DateTime.Now;
+                patients.Patient_Photo = pf.PatientPhotoPath + @"\" + newPatientPhotoName;
+                patients.UpdateDate = DateTime.Now;
                 dde.SaveChanges();
+
+                Patients = patients;
+                mwvm.Patients = patients;
             }
             catch (Exception ex)
             {
@@ -536,21 +447,37 @@ namespace DigiDental.Views
             mwvm = new MainWindowViewModel(HostName, Agencys, Patients, DateTime.Now);
             DataContext = mwvm;
         }
-
-        private void Button_PatientCategorySetting_Click(object sender, RoutedEventArgs e)
+        
+        private void Button_Edit_Click(object sender, RoutedEventArgs e)
         {
-            try
+            Patient patient = new Patient(Agencys, Patients);
+            patient.ShowDialog();
+            if (patient.DialogResult == true)
             {
-                PatientCategorySetting pcs = new PatientCategorySetting(Patients);
-                pcs.ShowDialog();
-                if (pcs.DialogResult == true)
+                using (var dde = new DigiDentalEntities())
                 {
-                    mwvm.PatientCategoryInfo = pcs.PatientCategoryInfo.Where(pci => pci.IsChecked == true).ToList();
+                    Patients patients = (from p in dde.Patients
+                                         where p.Patient_ID == Patients.Patient_ID
+                                         select p).First();
+                    Patients = patients;
+                    mwvm.Patients = patients;
+                    if (!string.IsNullOrEmpty(patients.Patient_Photo))
+                    {
+                        mwvm.PatientPhoto = new LoadBitmapImage().SettingBitmapImage(Agencys.Agency_ImagePath + @"\" + Patients.Patient_Photo, 400);
+                    }
+                    else
+                    {
+                        mwvm.PatientPhoto = new BitmapImage(new Uri(@"C:\Users\Eason_Hsu\Desktop\icon\user.png"));
+                    }
+                    mwvm.PatientCategoryInfo = (from pc in dde.PatientCategories
+                                                where pc.Patients.Any(p => p.Patient_ID == Patients.Patient_ID)
+                                                select new PatientCategoryInfo()
+                                                {
+                                                    PatientCategory_ID = pc.PatientCategory_ID,
+                                                    PatientCategory_Title = pc.PatientCategory_Title,
+                                                    IsChecked = true
+                                                }).ToList();
                 }
-            }
-            catch (Exception ex)
-            {
-                Error_Log.ErrorMessageOutput(ex.ToString());
             }
         }
     }

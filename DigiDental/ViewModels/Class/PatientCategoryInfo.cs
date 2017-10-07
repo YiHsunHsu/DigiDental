@@ -2,7 +2,6 @@
 {
     public class PatientCategoryInfo : ViewModelBase.ViewModelBase
     {
-        public string Patient_ID { get; set; }
         public string PatientCategory_Title { get; set; }
         public int PatientCategory_ID { get; set; }
 

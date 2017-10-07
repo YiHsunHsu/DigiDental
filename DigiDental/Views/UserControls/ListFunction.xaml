@@ -33,9 +33,9 @@
                     <Button Content="匯入" Width="30" Click="Button_Import_Click"/>
                 </StackPanel>-->
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
-                    <Button Content="編輯模式" Click="Button_PhotoEditor_Click"/>
-                    <Button Content="匯出"/>
-                    <Button Content="刪除"/>
+                    <Button Content="編輯模式" Click="Button_PhotoEditor_Click" IsEnabled="{Binding IsEditMode}"/>
+                    <Button Content="匯出" IsEnabled="{Binding IsEditMode}"/>
+                    <Button Content="刪除" Click="Button_Delete_Click" IsEnabled="{Binding IsEditMode}"/>
                 </StackPanel>
                 <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button DockPanel.Dock="Left" Content="放大" Click="Button_ZoomIn_Click"/>

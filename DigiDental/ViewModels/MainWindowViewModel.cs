@@ -113,7 +113,11 @@ namespace DigiDental.ViewModels
         public Patients Patients
         {
             get { return patients; }
-            set { patients = value; }
+            set
+            {
+                patients = value;
+                OnPropertyChanged("Patients");
+            }
         }
 
         private BitmapImage patientPhoto = new BitmapImage(new Uri(@"C:\Users\Eason_Hsu\Desktop\icon\user.png"));
@@ -416,6 +420,7 @@ namespace DigiDental.ViewModels
             HostName = hostName;
             Agencys = agencys;
             Patients = patients;
+
             //設定病患大頭貼
             if (!string.IsNullOrEmpty(Patients.Patient_Photo))
             {
@@ -426,7 +431,6 @@ namespace DigiDental.ViewModels
                                    where pc.Patients.Any(p => p.Patient_ID == Patients.Patient_ID)
                                    select new PatientCategoryInfo()
                                    {
-                                       Patient_ID = Patients.Patient_ID,
                                        PatientCategory_ID = pc.PatientCategory_ID,
                                        PatientCategory_Title = pc.PatientCategory_Title,
                                        IsChecked = true
@@ -451,27 +455,30 @@ namespace DigiDental.ViewModels
         /// <param name="date">條件日</param>
         private void SetImagesCollectionByDate(DateTime date)
         {
-            //載入Images
-            //取圖片清單 Images
-            var queryImages = from r in RegistrationsCollection
-                              where r.Registration_Date.Date == date.Date
-                              join i in dde.Images
-                              on r.Registration_ID equals i.Registration_ID into ri
-                              from qri in ri.DefaultIfEmpty()
-                              where qri.Image_Size.Equals("Original")
-                                    && qri.Image_IsEnable == true
-                              select new ImageInfo()
-                              {
-                                  Registration_Date = qri.Registrations.Registration_Date,
-                                  Image_ID = qri.Image_ID,
-                                  Image_Path = qri.Image_Path,
-                                  Image_FullPath = Agencys.Agency_ImagePath + qri.Image_Path,
-                                  Image_FileName = qri.Image_FileName,
-                                  Image_Extension = qri.Image_Extension,
-                                  Registration_ID = qri.Registration_ID,
-                                  CreateDate = qri.CreateDate
-                              };
-            ImageInfo = new ObservableCollection<ImageInfo>(queryImages);
+            using (var dde = new DigiDentalEntities())
+            {
+                //載入Images
+                //取圖片清單 Images
+                var queryImages = from r in RegistrationsCollection
+                                  where r.Registration_Date.Date == date.Date
+                                  join i in dde.Images
+                                  on r.Registration_ID equals i.Registration_ID into ri
+                                  from qri in ri.DefaultIfEmpty()
+                                  where qri.Image_Size.Equals("Original")
+                                        && qri.Image_IsEnable == true
+                                  select new ImageInfo()
+                                  {
+                                      Registration_Date = qri.Registrations.Registration_Date,
+                                      Image_ID = qri.Image_ID,
+                                      Image_Path = qri.Image_Path,
+                                      Image_FullPath = Agencys.Agency_ImagePath + qri.Image_Path,
+                                      Image_FileName = qri.Image_FileName,
+                                      Image_Extension = qri.Image_Extension,
+                                      Registration_ID = qri.Registration_ID,
+                                      CreateDate = qri.CreateDate
+                                  };
+                ImageInfo = new ObservableCollection<ImageInfo>(queryImages);
+            }
         }
 
         /// <summary>
@@ -479,26 +486,29 @@ namespace DigiDental.ViewModels
         /// </summary>
         private void SetImagesCollectionAll()
         {
-            //載入Images
-            //取圖片清單 Images
-            var queryImages = from r in RegistrationsCollection
-                              join i in dde.Images
-                              on r.Registration_ID equals i.Registration_ID into ri
-                              from qri in ri.DefaultIfEmpty()
-                              where qri.Image_Size.Equals("Original")
-                                    && qri.Image_IsEnable == true
-                              select new ImageInfo()
-                              {
-                                  Registration_Date = qri.Registrations.Registration_Date,
-                                  Image_ID = qri.Image_ID,
-                                  Image_Path = qri.Image_Path,
-                                  Image_FullPath = Agencys.Agency_ImagePath + qri.Image_Path,
-                                  Image_FileName = qri.Image_FileName,
-                                  Image_Extension = qri.Image_Extension,
-                                  Registration_ID = qri.Registration_ID,
-                                  CreateDate = qri.CreateDate
-                              };
-            ImageInfo = new ObservableCollection<ImageInfo>(queryImages);
+            using (var dde = new DigiDentalEntities())
+            {
+                //載入Images
+                //取圖片清單 Images
+                var queryImages = from r in RegistrationsCollection
+                                  join i in dde.Images
+                                  on r.Registration_ID equals i.Registration_ID into ri
+                                  from qri in ri.DefaultIfEmpty()
+                                  where qri.Image_Size.Equals("Original")
+                                        && qri.Image_IsEnable == true
+                                  select new ImageInfo()
+                                  {
+                                      Registration_Date = qri.Registrations.Registration_Date,
+                                      Image_ID = qri.Image_ID,
+                                      Image_Path = qri.Image_Path,
+                                      Image_FullPath = Agencys.Agency_ImagePath + qri.Image_Path,
+                                      Image_FileName = qri.Image_FileName,
+                                      Image_Extension = qri.Image_Extension,
+                                      Registration_ID = qri.Registration_ID,
+                                      CreateDate = qri.CreateDate
+                                  };
+                ImageInfo = new ObservableCollection<ImageInfo>(queryImages);
+            }
         }
 
         /// <summary>

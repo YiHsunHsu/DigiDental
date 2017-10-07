@@ -12,7 +12,7 @@
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <Button x:Name="buttonSure" Content="確定修改" Click="Button_Sure_Click" IsEnabled="False"/>
+            <Button x:Name="buttonSure" Content="儲存" Click="Button_Sure_Click" IsEnabled="False"/>
             <Button x:Name="buttonUndo" Content="復原" Click="Button_Undo_Click" IsEnabled="False"/>
             <Button Content="離開編輯" Click="Button_ExitEditor_Click"/></StackPanel>
         <Canvas Grid.Row="1" x:Name="Cvs" Background="Black"

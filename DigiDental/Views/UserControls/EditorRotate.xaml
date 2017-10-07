@@ -15,7 +15,7 @@
         <StackPanel Grid.Row="0" Orientation="Horizontal">
             <Button Content="儲存" Click="Button_Save_Click"/>
             <Button Content="復原" Click="Button_Undo_Click"/>
-            <Button Content="取消" Click="Button_Cancel_Click"/>
+            <Button Content="離開編輯" Click="Button_Cancel_Click"/>
             <ToggleButton x:Name="ShowGridLine" Content="格線" IsChecked="False"/>
         </StackPanel>
         <Grid Grid.Row="1">

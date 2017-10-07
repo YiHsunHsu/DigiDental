@@ -110,6 +110,7 @@
     <Compile Include="ViewModels\Class\ImageInfo.cs" />
     <Compile Include="ViewModels\Class\PatientCategoryInfo.cs" />
     <Compile Include="ViewModels\Class\PatientsFolder.cs" />
+    <Compile Include="ViewModels\PatientViewModel.cs" />
     <Compile Include="ViewModels\PatientCategorySettingViewModel.cs" />
     <Compile Include="ViewModels\PatientCategoryViewModel.cs" />
     <Compile Include="ViewModels\PhotoEditorViewModel.cs" />
@@ -125,8 +126,8 @@
     <Compile Include="Views\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\PatientAdd.xaml.cs">
-      <DependentUpon>PatientAdd.xaml</DependentUpon>
+    <Compile Include="Views\Patient.xaml.cs">
+      <DependentUpon>Patient.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PatientCategory.xaml.cs">
       <DependentUpon>PatientCategory.xaml</DependentUpon>
@@ -253,7 +254,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\PatientAdd.xaml">
+    <Page Include="Views\Patient.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

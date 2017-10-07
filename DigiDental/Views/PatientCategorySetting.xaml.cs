@@ -18,6 +18,12 @@ namespace DigiDental.Views
         public string PatientCategory_Title = string.Empty;
         
         private PatientCategorySettingViewModel pcsvm;
+
+        public PatientCategorySetting()
+        {
+            InitializeComponent();
+        }
+
         public PatientCategorySetting(Patients patients)
         {
             InitializeComponent();
@@ -28,32 +34,22 @@ namespace DigiDental.Views
         {
             if (pcsvm == null)
             {
-                pcsvm = new PatientCategorySettingViewModel(Patients);
+                if (Patients != null)
+                {
+                    //更新病患(需要載入已勾選項目)
+                    pcsvm = new PatientCategorySettingViewModel(Patients);
+                }
+                else
+                {
+                    //新增病患(尚未有Patient資訊)
+                    pcsvm = new PatientCategorySettingViewModel();
+                }
             }
             DataContext = pcsvm;
         }
 
         private void Button_Close_Click(object sender, RoutedEventArgs e)
         {
-            using (var dde = new DigiDentalEntities())
-            {
-                Patients patients = (from p in dde.Patients
-                                     where p.Patient_ID == Patients.Patient_ID
-                                     select p).First();
-                foreach (PatientCategoryInfo pci in PatientCategoryInfo)
-                {
-                    PatientCategories patientCategories = dde.PatientCategories.First(pc => pc.PatientCategory_ID == pci.PatientCategory_ID);
-                    if (pci.IsChecked)
-                    {
-                        patients.PatientCategories.Add(patientCategories);
-                    }
-                    else
-                    {
-                        patients.PatientCategories.Remove(patientCategories);
-                    }
-                }
-                dde.SaveChanges();
-            }
             DialogResult = true;
             Close();
         }

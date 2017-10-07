@@ -22,7 +22,7 @@
                 <MenuItem Header="離開" Click="MenuItem_Exit_Click"></MenuItem>
             </MenuItem>
             <MenuItem Header="病患管理">
-                <MenuItem Header="新增病患"></MenuItem>
+                <MenuItem Header="新增病患" Click="MenuItem_PatientAdd_Click"></MenuItem>
                 <MenuItem Header="病患搜尋"></MenuItem>
                 <MenuItem Header="病患類別管理" Click="MenuItem_PatientCategory_Click"></MenuItem>
             </MenuItem>
@@ -45,6 +45,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"></ColumnDefinition>
                             <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"></RowDefinition>
@@ -57,39 +58,30 @@
                         </Grid.RowDefinitions>
                         <Label Grid.Column="0" Grid.Row="0" Content="病歷號碼:"/>
                         <Label Grid.Column="1" Grid.Row="0" Content="{Binding Patients.Patient_Number}" />
-                        <Border Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="1" Height="200">
+                        <Button Grid.Column="2" Grid.Row="0" Margin="0,5,0,5" Content="修改" Click="Button_Edit_Click"/>
+                        <Border Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" BorderBrush="Black" BorderThickness="1" Height="200" Width="150">
                             <Image Source="{Binding PatientPhoto}" AllowDrop="True" Drop="Image_Drop"/>
                         </Border>
                         <Label Grid.Column="0" Grid.Row="2" Content="姓名:"/>
-                        <Label Grid.Column="1" Grid.Row="2" Content="{Binding Patients.Patient_Name}" />
+                        <Label Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" Content="{Binding Patients.Patient_Name}" />
                         <Label Grid.Column="0" Grid.Row="3" Content="身分證號:"/>
-                        <Label Grid.Column="1" Grid.Row="3" Content="{Binding Patients.Patient_IDNumber}" />
+                        <Label Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2" Content="{Binding Patients.Patient_IDNumber}" />
                         <Label Grid.Column="0" Grid.Row="4" Content="性別:"/>
-                        <StackPanel Grid.Column="1" Grid.Row="4" Orientation="Horizontal">
+                        <StackPanel Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal" VerticalAlignment="Center">
                             <RadioButton GroupName="Gender" Content="男" Margin="10,0,10,0" IsChecked="{Binding Patients.Patient_Gender, Converter={StaticResource ResourceKey=radioButtonConverterKey}, ConverterParameter={StaticResource true}}" IsEnabled="False"/>
                             <RadioButton GroupName="Gender" Content="女" Margin="10,0,10,0" IsChecked="{Binding Patients.Patient_Gender, Converter={StaticResource ResourceKey=radioButtonConverterKey}, ConverterParameter={StaticResource false}}" IsEnabled="False"/>
                         </StackPanel>
                         <Label Grid.Column="0" Grid.Row="5" Content="生日:"/>
-                        <DatePicker Grid.Column="1" Grid.Row="5" SelectedDate="{Binding Patients.Patient_Birth, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"/>
-                        <Expander Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="2" IsExpanded="True" BorderBrush="DarkSlateGray">
-                            <Expander.Header>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="115"></ColumnDefinition>
-                                        <ColumnDefinition Width="auto"></ColumnDefinition>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Text="病患分類"></TextBlock>
-                                    <Button Grid.Column="1" Content="編輯" Click="Button_PatientCategorySetting_Click"></Button>
-                                </Grid>
-                            </Expander.Header>
+                        <DatePicker Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="2" SelectedDate="{Binding Patients.Patient_Birth, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"/>
+                        <Expander Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="3" IsExpanded="True" BorderBrush="DarkSlateGray" Header="病患類別">
                             <ScrollViewer>
-                                <ListBox IsEnabled="False" ItemsSource="{Binding PatientCategoryInfo}">
-                                    <ListBox.ItemTemplate>
+                                <ItemsControl ItemsSource="{Binding PatientCategoryInfo}">
+                                    <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <Label Content="{Binding PatientCategory_Title}"></Label>
                                         </DataTemplate>
-                                    </ListBox.ItemTemplate>
-                                </ListBox>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
                             </ScrollViewer>
                         </Expander>
                     </Grid>

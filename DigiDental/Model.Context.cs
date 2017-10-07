@@ -25,16 +25,16 @@ namespace DigiDental
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Registrations> Registrations { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<Clients> Clients { get; set; }
         public virtual DbSet<Connecting_Logs> Connecting_Logs { get; set; }
         public virtual DbSet<Agencys> Agencys { get; set; }
         public virtual DbSet<Functions> Functions { get; set; }
         public virtual DbSet<Images> Images { get; set; }
-        public virtual DbSet<TemplateImages> TemplateImages { get; set; }
         public virtual DbSet<Templates> Templates { get; set; }
         public virtual DbSet<PatientCategories> PatientCategories { get; set; }
         public virtual DbSet<Patients> Patients { get; set; }
+        public virtual DbSet<Registrations> Registrations { get; set; }
+        public virtual DbSet<TemplateImages> TemplateImages { get; set; }
     }
 }

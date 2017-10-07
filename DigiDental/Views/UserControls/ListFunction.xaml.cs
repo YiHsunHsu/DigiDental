@@ -5,6 +5,7 @@ using DigiDental.ViewModels.ViewModelBase;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -228,8 +229,42 @@ namespace DigiDental.Views.UserControls
         {
             if (lfvm.ShowImages.Where(i => i.IsSelected).Count() > 0)
             {
-                PhotoEditor pe = new PhotoEditor(new ObservableCollection<ImageInfo>(lfvm.ShowImages.Where(i => i.IsSelected)));
+                PhotoEditor pe = new PhotoEditor(new ObservableCollection<ImageInfo>(lfvm.ShowImages.Where(i => i.IsSelected).OrderBy(o => o.Registration_Date).OrderBy(o2 => o2.Image_ID)));
                 pe.Show();
+            }
+        }
+
+        private void Button_Delete_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("確定刪除已選定的" + lfvm.ImageSelectedCount + "個項目?", "提示", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                using (var dde = new DigiDentalEntities())
+                {
+                    try
+                    {
+                        var selectedItemID = from si in lfvm.ShowImages
+                                             where si.IsSelected == true
+                                             select si.Image_ID;
+                        var deleteItem = (from i in dde.Images
+                                          where selectedItemID.Contains(i.Image_ID)
+                                          select i).ToList();
+                        deleteItem.ForEach(i => i.Image_IsEnable = false);
+                        dde.SaveChanges();
+
+                        var selectedItem = from si in lfvm.ShowImages
+                                           where si.IsSelected == true
+                                           select si;
+                        foreach (ImageInfo ii in selectedItem.ToArray())
+                        {
+                            lfvm.ShowImages.Remove(ii);
+                        }
+                        lfvm.CountImages = ShowImages.Count();
+                    }
+                    catch (Exception ex)
+                    {
+                        Error_Log.ErrorMessageOutput(ex.ToString());
+                    }
+                }
             }
         }
 

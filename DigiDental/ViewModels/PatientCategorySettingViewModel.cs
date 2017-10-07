@@ -28,6 +28,21 @@ namespace DigiDental.ViewModels
             }
         }
 
+        public PatientCategorySettingViewModel()
+        {
+            using (var dde = new DigiDentalEntities())
+            {
+                var qpc = from pc in dde.PatientCategories
+                          select new PatientCategoryInfo()
+                          {
+                              PatientCategory_ID = pc.PatientCategory_ID,
+                              PatientCategory_Title = pc.PatientCategory_Title,
+                              IsChecked = false
+                          };
+                ShowPatientCategoryInfo = PatientCategoryInfo = qpc.ToList();
+            }
+        }
+
         public PatientCategorySettingViewModel(Patients patients)
         {
             using (var dde = new DigiDentalEntities())
@@ -37,7 +52,6 @@ namespace DigiDental.ViewModels
                           {
                               PatientCategory_ID = pc.PatientCategory_ID,
                               PatientCategory_Title = pc.PatientCategory_Title,
-                              Patient_ID = patients.Patient_ID,
                               IsChecked = pc.Patients.Where(p => p.Patient_ID == patients.Patient_ID).Count() > 0 ? true : false
                           };
                 ShowPatientCategoryInfo = PatientCategoryInfo = qpc.ToList();

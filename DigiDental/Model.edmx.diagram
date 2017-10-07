@@ -5,7 +5,6 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="f2071f8bdaa94dac9262b2aede91b1dc" Name="Diagram1">
-        <EntityTypeShape EntityType="DigiDentalModel.Registrations" Width="1.5" PointX="3" PointY="1.375" IsExpanded="true" />
         <EntityTypeShape EntityType="DigiDentalModel.sysdiagrams" Width="1.5" PointX="5.75" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DigiDentalModel.Clients" Width="1.5" PointX="7.75" PointY="0.75" />
         <EntityTypeShape EntityType="DigiDentalModel.Connecting_Logs" Width="1.5" PointX="7.75" PointY="3.75" />
@@ -13,15 +12,16 @@
         <EntityTypeShape EntityType="DigiDentalModel.Functions" Width="1.5" PointX="0.75" PointY="5.875" />
         <AssociationConnector Association="DigiDentalModel.FK_Agencys_Functions" />
         <EntityTypeShape EntityType="DigiDentalModel.Images" Width="1.5" PointX="5.25" PointY="1" />
-        <AssociationConnector Association="DigiDentalModel.FK_Images_Registrations" />
-        <EntityTypeShape EntityType="DigiDentalModel.TemplateImages" Width="1.5" PointX="10.5" PointY="1.125" />
-        <AssociationConnector Association="DigiDentalModel.FK_TemplateImages_Images" />
         <EntityTypeShape EntityType="DigiDentalModel.Templates" Width="1.5" PointX="5.375" PointY="8" />
-        <AssociationConnector Association="DigiDentalModel.FK_TemplateImages_Templates" />
-        <EntityTypeShape EntityType="DigiDentalModel.PatientCategories" Width="2.25" PointX="1.5" PointY="9.75" />
-        <EntityTypeShape EntityType="DigiDentalModel.Patients" Width="1.875" PointX="0.75" PointY="0.875" />
+        <EntityTypeShape EntityType="DigiDentalModel.PatientCategories" Width="2.25" PointX="0.75" PointY="9.375" />
+        <EntityTypeShape EntityType="DigiDentalModel.Patients" Width="1.5" PointX="0.625" PointY="0.625" />
+        <EntityTypeShape EntityType="DigiDentalModel.Registrations" Width="1.5" PointX="3" PointY="5.375" />
+        <EntityTypeShape EntityType="DigiDentalModel.TemplateImages" Width="1.5" PointX="2.375" PointY="0.625" />
+        <AssociationConnector Association="DigiDentalModel.FK_Images_Registrations" />
+        <AssociationConnector Association="DigiDentalModel.FK_TemplateImages_Images" />
         <AssociationConnector Association="DigiDentalModel.FK_Registrations_Patients" />
         <AssociationConnector Association="DigiDentalModel.FK_TemplateImages_Patients" />
+        <AssociationConnector Association="DigiDentalModel.FK_TemplateImages_Templates" />
         <AssociationConnector Association="DigiDentalModel.Patients_PatientCategories" />
         </Diagram>
     </edmx:Diagrams>
