@@ -339,10 +339,22 @@ namespace DigiDental.Views
             Application.Current.Shutdown();
         }
 
-        private void MenuItem_PatientAdd_Click(object sender, RoutedEventArgs e)
+        private void MenuItem_PatientAddEdit_Click(object sender, RoutedEventArgs e)
         {
             Patient patient = new Patient(Agencys);
             patient.ShowDialog();
+        }
+
+        private void MenuItem_PatientSearch_Click(object sender, RoutedEventArgs e)
+        {
+            PatientSearch patientSearch = new PatientSearch();
+            patientSearch.ShowDialog();
+            if (patientSearch.DialogResult == true)
+            {
+                Patients = patientSearch.Patients;
+                mwvm = new MainWindowViewModel(HostName, Agencys, Patients, DateTime.Now);
+                DataContext = mwvm;
+            }
         }
 
         private void MenuItem_PatientCategory_Click(object sender, RoutedEventArgs e)
@@ -390,7 +402,6 @@ namespace DigiDental.Views
             //mwvm.SelectedItem = new CusComboBoxItem(registrationDate.ToString("yyyy-MM-dd"), registrationID);
         }
 
-
         #endregion
 
         private void Image_Drop(object sender, DragEventArgs e)
@@ -411,9 +422,8 @@ namespace DigiDental.Views
                 string newPatientPhotoPath = pf.PatientFullPatientPhotoPath + @"\" + newPatientPhotoName;
                 File.Copy(dragImage.Image_FullPath, newPatientPhotoPath);
                 Thread.Sleep(200);
-
-                LoadBitmapImage lbi = new LoadBitmapImage();
-                img.Source = lbi.SettingBitmapImage(newPatientPhotoPath, 400);
+                
+                mwvm.PatientPhoto = new LoadBitmapImage().SettingBitmapImage(newPatientPhotoPath, 400);
 
                 //update database Patients Patient_Photo
                 Patients patients = (from q in dde.Patients
@@ -431,21 +441,6 @@ namespace DigiDental.Views
                 Error_Log.ErrorMessageOutput(ex.ToString());
                 MessageBox.Show("移動圖片發生錯誤，聯絡資訊人員", "提示", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }
-
-        private void Button_PatientAdd_Click(object sender, RoutedEventArgs e)
-        {
-            Patients = new Patients()
-            {
-                Patient_ID = "0005",
-                Patient_Number = "0005J",
-                Patient_Name = "JOE",
-                Patient_Gender = false,
-                Patient_Birth = DateTime.Parse("1984-11-27"),
-                Patient_IDNumber = "W100339105"
-            };
-            mwvm = new MainWindowViewModel(HostName, Agencys, Patients, DateTime.Now);
-            DataContext = mwvm;
         }
         
         private void Button_Edit_Click(object sender, RoutedEventArgs e)

@@ -104,16 +104,36 @@ namespace DigiDental.ViewModels
             }
         }
 
-        private bool gender = true;
-        public bool Gender
+        private bool genderM = true;
+        public bool GenderM
         {
-            get { return gender; }
+            get { return genderM; }
             set
             {
-                gender = value;
-                OnPropertyChanged("Gender");
+                genderM = value;
+                OnPropertyChanged("GenderM");
+                if (!value)
+                {
+                    GenderF = true;
+                }
+                else
+                {
+                    genderF = false;
+                }
             }
         }
+
+        private bool genderF;
+        public bool GenderF
+        {
+            get { return genderF; }
+            set
+            {
+                genderF = value;
+                OnPropertyChanged("GenderF");
+            }
+        }
+
 
         private DateTime birth = DateTime.Now.Date;
         public DateTime Birth
@@ -169,7 +189,7 @@ namespace DigiDental.ViewModels
             PatientNumber = Patients.Patient_Number;
             PatientName = Patients.Patient_Name;
             PatientIDNumber = Patients.Patient_IDNumber;
-            Gender = Patients.Patient_Gender;
+            GenderM = Patients.Patient_Gender;
             Birth = Patients.Patient_Birth.Date;
             if (!string.IsNullOrEmpty(Patients.Patient_Photo))
             {

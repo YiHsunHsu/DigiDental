@@ -4,8 +4,8 @@ using DigiDental.ViewModels.UserControlViewModels;
 using DigiDental.ViewModels.ViewModelBase;
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -227,10 +227,38 @@ namespace DigiDental.Views.UserControls
 
         private void Button_PhotoEditor_Click(object sender, RoutedEventArgs e)
         {
-            if (lfvm.ShowImages.Where(i => i.IsSelected).Count() > 0)
+            if (lfvm.ShowImages.Count() > 0)
             {
-                PhotoEditor pe = new PhotoEditor(new ObservableCollection<ImageInfo>(lfvm.ShowImages.Where(i => i.IsSelected).OrderBy(o => o.Registration_Date).OrderBy(o2 => o2.Image_ID)));
+                PhotoEditor pe;
+                if (lfvm.ShowImages.Where(i => i.IsSelected).Count() > 0)
+                {
+                    pe = new PhotoEditor(new ObservableCollection<ImageInfo>(lfvm.ShowImages.Where(i => i.IsSelected).OrderBy(o => o.Registration_Date).OrderBy(o2 => o2.Image_ID)));
+                }
+                else
+                {
+                    pe = new PhotoEditor(new ObservableCollection<ImageInfo>(lfvm.ShowImages.OrderBy(o => o.Registration_Date).OrderBy(o2 => o2.Image_ID)));
+                }
                 pe.Show();
+                lbImages.UnselectAll();
+            }
+            else
+            {
+                MessageBox.Show("尚未載入圖片", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+        private void Button_Outport_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.FolderBrowserDialog folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            folderBrowserDialog.Description = "請選擇圖片匯出的位置";
+            if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                var listIsSelectedItem = lfvm.ShowImages.Where(w => w.IsSelected == true);
+                foreach (ImageInfo ii in listIsSelectedItem)
+                {
+                    File.Copy(ii.Image_FullPath, folderBrowserDialog.SelectedPath + @"\" + ii.Image_FileName + ii.Image_Extension);
+                }
+                MessageBox.Show("匯出完成", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 

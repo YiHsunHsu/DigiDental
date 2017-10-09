@@ -48,8 +48,8 @@
                         <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding PatientIDNumber}"></TextBox>
                         <Label Grid.Row="4" Content="性別:"></Label>
                         <StackPanel Grid.Column="1" Grid.Row="4" Orientation="Horizontal" VerticalAlignment="Center">
-                            <RadioButton GroupName="Gender" Content="男" Margin="10,0,10,0" IsChecked="{Binding Gender}"/>
-                            <RadioButton GroupName="Gender" Content="女" Margin="10,0,10,0"/>
+                            <RadioButton GroupName="Gender" Content="男" Margin="10,0,10,0" IsChecked="{Binding GenderM}"/>
+                            <RadioButton GroupName="Gender" Content="女" Margin="10,0,10,0" IsChecked="{Binding GenderF}"/>
                         </StackPanel>
                         <Label Grid.Row="5" Content="生日:"></Label>
                         <DatePicker Grid.Row="5" Grid.Column="1" SelectedDate="{Binding Birth}"/>

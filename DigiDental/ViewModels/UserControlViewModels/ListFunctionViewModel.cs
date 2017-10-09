@@ -119,10 +119,14 @@ namespace DigiDental.ViewModels.UserControlViewModels
                 if (imageSelectedCount > 0)
                 {
                     IsEditMode = true;
+                    SelectedAll = false;
+                    SelectedList = true;
                 }
                 else
                 {
                     IsEditMode = false;
+                    SelectedAll = true;
+                    SelectedList = false;
                 }
                 return imageSelectedCount;
             }
@@ -145,7 +149,29 @@ namespace DigiDental.ViewModels.UserControlViewModels
                 OnPropertyChanged("TextBlockTips");
             }
         }
-        
+
+        private bool selectedAll;
+        public bool SelectedAll
+        {
+            get { return selectedAll; }
+            set
+            {
+                selectedAll = value;
+                OnPropertyChanged("SelectedAll");
+            }
+        }
+
+        private bool selectedList;
+        public bool SelectedList
+        {
+            get { return selectedList; }
+            set
+            {
+                selectedList = value;
+                OnPropertyChanged("SelectedList");
+            }
+        }
+
         public string TextBlockTips
         {
             get { return "以選取圖片 " + ImageSelectedCount + " 張，共 " + CountImages + " 張"; }

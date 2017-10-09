@@ -99,7 +99,7 @@ namespace DigiDental.Views
                             patients.Patient_Name = pvm.PatientName;
                             patients.Patient_IDNumber = pvm.PatientIDNumber;
                             patients.Patient_Birth = pvm.Birth;
-                            patients.Patient_Gender = pvm.Gender;
+                            patients.Patient_Gender = pvm.GenderM;
                             patients.UpdateDate = updateTime;
                             if (IsRemove)
                             {
@@ -159,7 +159,7 @@ namespace DigiDental.Views
                                 Patient_Name = pvm.PatientName,
                                 Patient_IDNumber = pvm.PatientIDNumber,
                                 Patient_Birth = pvm.Birth,
-                                Patient_Gender = pvm.Gender,
+                                Patient_Gender = pvm.GenderM,
                                 CreateDate = newPatientDate,
                                 UpdateDate = newPatientDate
                             };

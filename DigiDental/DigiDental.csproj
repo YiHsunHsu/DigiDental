@@ -110,6 +110,7 @@
     <Compile Include="ViewModels\Class\ImageInfo.cs" />
     <Compile Include="ViewModels\Class\PatientCategoryInfo.cs" />
     <Compile Include="ViewModels\Class\PatientsFolder.cs" />
+    <Compile Include="ViewModels\PatientSearchViewModel.cs" />
     <Compile Include="ViewModels\PatientViewModel.cs" />
     <Compile Include="ViewModels\PatientCategorySettingViewModel.cs" />
     <Compile Include="ViewModels\PatientCategoryViewModel.cs" />
