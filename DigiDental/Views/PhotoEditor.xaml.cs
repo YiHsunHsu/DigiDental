@@ -1,6 +1,7 @@
 ﻿using DigiDental.ViewModels;
 using DigiDental.ViewModels.Class;
 using DigiDental.Views.UserControls;
+using System;
 using System.Collections.ObjectModel;
 using System.Windows;
 
@@ -38,6 +39,13 @@ namespace DigiDental.Views
             }
 
             EditorContent.Content = ba;
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            GC.Collect();
+            DialogResult = true;
+
         }
     }
 }

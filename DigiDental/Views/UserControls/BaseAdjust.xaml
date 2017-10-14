@@ -27,7 +27,7 @@
                 </ScrollViewer>
             </Border>
         </Grid>
-        <StackPanel Grid.Row="0" Orientation="Horizontal">
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Background="Beige">
             <Button Click="Button_Save_Click">儲存</Button>
             <Button Click="Button_SaveAs_Click">另存新檔</Button>
             <!--<Button Click="Button_ZoomIn_Click">放大</Button>

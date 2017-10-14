@@ -380,6 +380,8 @@ namespace DigiDental.Views.UserControls
 
             BaseAdjust ba = new BaseAdjust(ImagesCollection, ImageInfo);
             Content = ba;
+
+            GC.Collect();
         }
     }
 }

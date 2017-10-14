@@ -6,8 +6,11 @@ using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 
 namespace DigiDental.Views.UserControls
 {
@@ -225,6 +228,10 @@ namespace DigiDental.Views.UserControls
             lfvm.ImageSelectedCount = lfvm.ShowImages.Where(i => i.IsSelected).Count();
         }
 
+        /// <summary>
+        /// ProgressDialog(進度條)
+        /// </summary>
+        private ProgressDialog pd;
         private void Button_PhotoEditor_Click(object sender, RoutedEventArgs e)
         {
             if (lfvm.ShowImages.Count() > 0)
@@ -238,7 +245,62 @@ namespace DigiDental.Views.UserControls
                 {
                     pe = new PhotoEditor(new ObservableCollection<ImageInfo>(lfvm.ShowImages.OrderBy(o => o.Registration_Date).OrderBy(o2 => o2.Image_ID)));
                 }
-                pe.Show();
+                if (pe.ShowDialog() == true)
+                {
+                    try
+                    {
+                        pd = new ProgressDialog();
+
+                        pd.Dispatcher.Invoke(() =>
+                        {
+                            pd.PText = "圖片載入中( 0 / " + lfvm.ShowImages.Count() + " )";
+                            pd.PMinimum = 0;
+                            pd.PValue = 0;
+                            pd.PMaximum = lfvm.ShowImages.Count();
+                            pd.Show();
+                        });
+
+                        //multi - thread
+                        Task t = Task.Factory.StartNew(() =>
+                        {
+                            Parallel.ForEach(lfvm.ShowImages, imgs =>
+                            {
+                                BitmapImage bi = new BitmapImage();
+
+                                if (File.Exists(imgs.Image_FullPath))
+                                {
+                                    FileStream fs = new FileStream(imgs.Image_FullPath, FileMode.Open);
+                                    bi.BeginInit();
+                                    bi.StreamSource = fs;
+                                    bi.DecodePixelWidth = 800;
+                                    bi.CacheOption = BitmapCacheOption.OnLoad;
+                                    bi.EndInit();
+                                    bi.Freeze();
+                                    fs.Close();
+                                }
+                                imgs.BitmapImageSet = bi;
+
+                                pd.Dispatcher.Invoke(() =>
+                                {
+                                    pd.PValue++;
+                                    pd.PText = "圖片載入中( " + pd.PValue + " / " + lfvm.ShowImages.Count() + " )";
+                                });
+                            });
+                        }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).ContinueWith(cw =>
+                        {
+                            pd.Dispatcher.Invoke(() =>
+                            {
+                                pd.PText = "載入完成";
+                                pd.Close();
+                            });
+                            GC.Collect();
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        Error_Log.ErrorMessageOutput(ex.ToString());
+                    }
+                }
                 lbImages.UnselectAll();
             }
             else

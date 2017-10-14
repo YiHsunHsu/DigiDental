@@ -381,6 +381,12 @@ namespace DigiDental.Views
             }
         }
 
+        private void MenuItem_About_Click(object sender, RoutedEventArgs e)
+        {
+            About about = new About();
+            about.ShowDialog();
+        }
+
         #endregion
 
         #region Methods

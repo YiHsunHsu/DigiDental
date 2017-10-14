@@ -23,5 +23,10 @@ namespace DigiDental.Views
         {
             InitializeComponent();
         }
+
+        private void Button_Exit_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }

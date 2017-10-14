@@ -26,13 +26,8 @@
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <!--<StackPanel Grid.Column="0" Orientation="Horizontal">
-                    <Label Content="日期"/>
-                    <DatePicker SelectedDate="{Binding SelectedDate}" Width="200"/>
-                    <Button Content="匯入" Width="30" Click="Button_Import_Click"/>
-                </StackPanel>-->
                 <StackPanel Grid.Column="0" Orientation="Horizontal">
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" IsEnabled="False">
                         <RadioButton GroupName="EditMode" Content="全部" IsChecked="{Binding SelectedAll}"/>
                         <RadioButton GroupName="EditMode" Content="選擇" IsChecked="{Binding SelectedList}"/>
                     </StackPanel>

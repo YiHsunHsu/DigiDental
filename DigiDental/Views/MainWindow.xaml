@@ -27,7 +27,7 @@
                 <MenuItem Header="病患類別管理" Click="MenuItem_PatientCategory_Click"></MenuItem>
             </MenuItem>
             <MenuItem Header="設定" Click="MenuItem_Setting_Click"></MenuItem>
-            <MenuItem Header="關於"></MenuItem>
+            <MenuItem Header="關於" Click="MenuItem_About_Click"></MenuItem>
         </Menu>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -73,7 +73,7 @@
                         </StackPanel>
                         <Label Grid.Column="0" Grid.Row="5" Content="生日:"/>
                         <DatePicker Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="2" SelectedDate="{Binding Patients.Patient_Birth, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"/>
-                        <Expander Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="3" IsExpanded="True" BorderBrush="DarkSlateGray" Header="病患類別">
+                        <Expander Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="3" Margin="0,5,0,0" IsExpanded="True" BorderBrush="DarkSlateGray" Header="病患類別">
                             <ScrollViewer>
                                 <ItemsControl ItemsSource="{Binding PatientCategoryInfo}">
                                     <ItemsControl.ItemTemplate>
