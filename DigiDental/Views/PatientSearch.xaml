@@ -58,15 +58,15 @@
                             <Button Grid.Column="3" Content="全部" Margin="0,5,5,5" Click="Button_PatientCategorySearchAll_Click"/>
                         </Grid>
                         <DataGrid Grid.Row="2" Margin="20,5,10,5" AutoGenerateColumns="False"
-                                  CanUserResizeColumns="False" IsReadOnly="True" HeadersVisibility="Column"
+                                  CanUserResizeColumns="False" CanUserAddRows="False" IsReadOnly="True" HeadersVisibility="Column"
                                   SelectionMode="Single" SelectionUnit="FullRow"
                                   ItemsSource="{Binding ListPatientCategories}">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Width="*" Header="類別名稱" Binding="{Binding PatientCategory_Title}"/>
-                                <DataGridTemplateColumn Width="auto">
+                                <DataGridTemplateColumn Width="50">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Button Content="選擇" HorizontalAlignment="Center" Click="Button_PatientCategory_Click"></Button>
+                                            <Button Content="選擇" Click="Button_PatientCategory_Click"></Button>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>

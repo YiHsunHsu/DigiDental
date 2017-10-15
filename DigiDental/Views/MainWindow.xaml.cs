@@ -361,14 +361,20 @@ namespace DigiDental.Views
         {
             PatientCategory pc = new PatientCategory();
             pc.ShowDialog();
-            mwvm.PatientCategoryInfo = (from pcs in dde.PatientCategories
-                                        where pcs.Patients.Any(p => p.Patient_ID == Patients.Patient_ID)
-                                        select new PatientCategoryInfo()
-                                        {
-                                            PatientCategory_ID = pcs.PatientCategory_ID,
-                                            PatientCategory_Title = pcs.PatientCategory_Title,
-                                            IsChecked = true
-                                        }).ToList();
+            if (Patients != null)
+            {
+                using (var dde = new DigiDentalEntities())
+                {
+                    mwvm.PatientCategoryInfo = (from pcs in dde.PatientCategories
+                                                where pcs.Patients.Any(p => p.Patient_ID == Patients.Patient_ID)
+                                                select new PatientCategoryInfo()
+                                                {
+                                                    PatientCategory_ID = pcs.PatientCategory_ID,
+                                                    PatientCategory_Title = pcs.PatientCategory_Title,
+                                                    IsChecked = true
+                                                }).ToList();
+                }
+            }
         }
 
         private void MenuItem_Setting_Click(object sender, RoutedEventArgs e)

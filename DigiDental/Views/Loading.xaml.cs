@@ -91,7 +91,7 @@ namespace DigiDental.Views
                         Status.Text = "本機尚未註冊...";
                         Status.Refresh();
 
-                        InputDialog idVerify = new InputDialog("第一次登入，請輸入產品驗證碼:", "Verify");
+                        InputDialog idVerify = new InputDialog("此台電腦為第一次登入，請輸入產品驗證碼:", "Verify");
                         if (idVerify.ShowDialog() == true)
                         {
                             VerificationCodeClient = idVerify.Answer;
@@ -99,6 +99,7 @@ namespace DigiDental.Views
                             {
                                 Client_HostName = HostName,
                                 Client_IP = LocalIP,
+                                Client_IsVerify = true,
                                 Agency_VerificationCode = VerificationCodeClient
                             });
                             dde.SaveChanges();

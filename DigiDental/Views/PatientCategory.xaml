@@ -26,13 +26,13 @@
         </Grid>
         <GroupBox Grid.Row="1" Header="病患類別清單">
             <DataGrid Margin="10,10,10,10" ItemsSource="{Binding PatientCategories}" 
-                      AutoGenerateColumns="False" 
+                      AutoGenerateColumns="False" IsReadOnly="True"
                       CanUserAddRows="False" CanUserResizeColumns="False" HeadersVisibility="Column"
                       SelectionMode="Single" SelectionUnit="FullRow"
                       CellEditEnding="DataGrid_Update_CellEditEnding">
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="*" Header="類別名稱" Binding="{Binding PatientCategory_Title}"/>
-                    <DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="50">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Content="刪除" Click="Button_CategoryDelete_Click"></Button>
