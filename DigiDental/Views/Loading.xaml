@@ -5,15 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DigiDental.Views"
         mc:Ignorable="d"
-        Title="Loading" Height="400" Width="500" 
+        Title="Loading" Height="330" Width="450" 
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen"  WindowStyle="None"
-        Background="Salmon"
         ContentRendered="Window_ContentRendered">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.8*"></RowDefinition>
-            <RowDefinition Height="0.2*"></RowDefinition>
+            <RowDefinition Height="300"></RowDefinition>
+            <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
+        <Image Grid.Row="0" Source="/DigiDental;component/Resource/dental-care.jpg"></Image>
         <TextBlock Grid.Row="1" Name="Status" VerticalAlignment="Center"  Text="INITIALIZE" FontSize="16" FontFamily="Microsoft JhengHei" />
     </Grid>
 </Window>
