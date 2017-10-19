@@ -16,6 +16,7 @@ namespace DigiDental
     {
         public int TemplateImage_ID { get; set; }
         public string TemplateImage_Number { get; set; }
+        public System.DateTime TemplateImage_ImportDate { get; set; }
         public int Template_ID { get; set; }
         public Nullable<int> Image_ID { get; set; }
         public string Image_Path { get; set; }

@@ -24,17 +24,19 @@ namespace DigiDental.ViewModels.Class
             }
         }
 
-        public void ShowTemplateImage(Agencys agencys, Patients patients, Templates templates, int templateImagePixelWidth, Grid mainGrid)
+        public void ShowTemplateImage(Agencys agencys, Patients patients, Templates templates, int templateImagePixelWidth, Grid mainGrid, DateTime templateImportDate)
         {
             try
             {
                 var IsImageExist = (from iie in dde.TemplateImages
                                     where iie.Template_ID == templates.Template_ID &&
-                                    iie.Patient_ID == patients.Patient_ID
+                                    iie.Patient_ID == patients.Patient_ID &&
+                                    iie.TemplateImage_ImportDate == templateImportDate.Date
                                     select new
                                     {
                                         TemplateImage_ID = iie.TemplateImage_ID,
                                         TemplateImage_Number = iie.TemplateImage_Number,
+                                        TemplateImage_ImportDate = iie.TemplateImage_ImportDate,
                                         Template_ID = iie.Template_ID,
                                         Image_ID = iie.Image_ID,
                                         Image_Path = agencys.Agency_ImagePath + iie.Image_Path,
@@ -43,6 +45,7 @@ namespace DigiDental.ViewModels.Class
                                     {
                                         TemplateImage_ID = s.TemplateImage_ID,
                                         TemplateImage_Number = s.TemplateImage_Number,
+                                        TemplateImage_ImportDate = s.TemplateImage_ImportDate,
                                         Template_ID = s.Template_ID,
                                         Image_ID = s.Image_ID,
                                         Image_Path = s.Image_Path,
@@ -100,11 +103,12 @@ namespace DigiDental.ViewModels.Class
             }
         }
 
-        public void InsertOrUpdateImage(Patients patients, Templates templates, int imageID, string imagePath, string tiNumber)
+        public void InsertOrUpdateImage(Patients patients, Templates templates, DateTime templateImportDate, int imageID, string imagePath, string tiNumber)
         {
             var IsImageExist = from iie in dde.TemplateImages
                                where iie.Template_ID == templates.Template_ID &&
                                iie.TemplateImage_Number == tiNumber &&
+                               iie.TemplateImage_ImportDate == templateImportDate.Date &&
                                iie.Patient_ID == patients.Patient_ID
                                select iie;
             if (IsImageExist.Count() > 0)
@@ -121,6 +125,7 @@ namespace DigiDental.ViewModels.Class
                 {
                     TemplateImage_Number = tiNumber,
                     Template_ID = templates.Template_ID,
+                    TemplateImage_ImportDate = templateImportDate.Date,
                     Image_ID = imageID,
                     Image_Path = imagePath,
                     Patient_ID = patients.Patient_ID
@@ -129,15 +134,25 @@ namespace DigiDental.ViewModels.Class
             }
         }
 
-        public ObservableCollection<TemplateImages> GetTemplateImagesCollection(Agencys agencys, Patients patients, Templates templates)
+        /// <summary>
+        /// 選擇樣板回傳的圖片集合
+        /// </summary>
+        /// <param name="agencys"></param>
+        /// <param name="patients"></param>
+        /// <param name="templates"></param>
+        /// <param name="templateImportDate"></param>
+        /// <returns></returns>
+        public ObservableCollection<TemplateImages> GetTemplateImagesCollection(Agencys agencys, Patients patients, Templates templates, DateTime templateImportDate)
         {
             var IsImageExist = (from iie in dde.TemplateImages
                                 where iie.Template_ID == templates.Template_ID &&
+                                iie.TemplateImage_ImportDate == templateImportDate.Date &&
                                 iie.Patient_ID == patients.Patient_ID
                                 select new
                                 {
                                     TemplateImage_ID = iie.TemplateImage_ID,
                                     TemplateImage_Number = iie.TemplateImage_Number,
+                                    TemplateImage_ImportDate = iie.TemplateImage_ImportDate,
                                     Template_ID = iie.Template_ID,
                                     Image_ID = iie.Image_ID,
                                     Image_Path = agencys.Agency_ImagePath + iie.Image_Path,
@@ -146,6 +161,7 @@ namespace DigiDental.ViewModels.Class
                                 {
                                     TemplateImage_ID = s.TemplateImage_ID,
                                     TemplateImage_Number = s.TemplateImage_Number,
+                                    TemplateImage_ImportDate = s.TemplateImage_ImportDate,
                                     Template_ID = s.Template_ID,
                                     Image_ID = s.Image_ID,
                                     Image_Path = s.Image_Path,

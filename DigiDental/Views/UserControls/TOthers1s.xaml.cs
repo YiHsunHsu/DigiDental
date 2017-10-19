@@ -14,12 +14,13 @@ namespace DigiDental.Views.UserControls
         public Agencys Agencys { get; set; }
         public Patients Patients { get; set; }
         public Templates Templates { get; set; }
+        public DateTime TemplateImportDate { get; set; }
 
         private DBTemplateImages dbTI;
         //控制頁面載入所有圖的解析
         private int TemplateImagePixelWidth;
 
-        public TOthers1s(Agencys agencys, Patients patients, Templates templates)
+        public TOthers1s(Agencys agencys, Patients patients, Templates templates, DateTime templateImportDate)
         {
             InitializeComponent();
 
@@ -31,12 +32,14 @@ namespace DigiDental.Views.UserControls
 
             TemplateImagePixelWidth = (int)Templates.Template_DecodePixelWidth;
 
+            TemplateImportDate = templateImportDate;
+
             if (dbTI == null)
             {
                 dbTI = new DBTemplateImages();
             }
 
-            dbTI.ShowTemplateImage(Agencys, Patients, Templates, TemplateImagePixelWidth, MainGrid);
+            dbTI.ShowTemplateImage(Agencys, Patients, Templates, TemplateImagePixelWidth, MainGrid, TemplateImportDate);
         }
 
         private void Image_Drop(object sender, DragEventArgs e)
@@ -52,7 +55,7 @@ namespace DigiDental.Views.UserControls
                 img.Source = lbi.SettingBitmapImage(dragImage.Image_FullPath, TemplateImagePixelWidth);
 
                 //BEFORE TemplateImage_Number = 0
-                dbTI.InsertOrUpdateImage(Patients, Templates, dragImage.Image_ID, dragImage.Image_Path, img.Uid);
+                dbTI.InsertOrUpdateImage(Patients, Templates, TemplateImportDate, dragImage.Image_ID, dragImage.Image_Path, img.Uid);
             }
             catch (Exception ex)
             {

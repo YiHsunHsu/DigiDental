@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:DigiDental.Views"
         mc:Ignorable="d"
         Title="Loading" Height="330" Width="450" 
-        ResizeMode="NoResize" WindowStartupLocation="CenterScreen"  WindowStyle="None"
+        ResizeMode="NoResize" WindowStartupLocation="CenterScreen"  WindowStyle="None" Topmost="True"
         ContentRendered="Window_ContentRendered">
     <Grid>
         <Grid.RowDefinitions>
@@ -14,6 +14,6 @@
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <Image Grid.Row="0" Source="/DigiDental;component/Resource/dental-care.jpg"></Image>
-        <TextBlock Grid.Row="1" Name="Status" VerticalAlignment="Center"  Text="INITIALIZE" FontSize="16" FontFamily="Microsoft JhengHei" />
+        <TextBlock Grid.Row="1" Name="Status" VerticalAlignment="Center"  Text="INITIALIZE" FontSize="16" FontFamily="Microsoft JhengHei"/>
     </Grid>
 </Window>

@@ -2,6 +2,7 @@
 using DigiDental.ViewModels.ViewModelBase;
 using DigiDental.Views.UserControls;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Controls;
@@ -248,6 +249,58 @@ namespace DigiDental.ViewModels.UserControlViewModels
             }
         }
 
+        private DateTime templateImportDate = DateTime.Now.Date;
+
+        public DateTime TemplateImportDate
+        {
+            get { return templateImportDate; }
+            set
+            {
+                if (templateImportDate != value)
+                {
+                    templateImportDate = value;
+                    OnPropertyChanged("TemplateImportDate");
+                    SetTemplateContent(TemplateItem);
+                    ImportDateString = (from i in ImportDateCollect
+                                        where i == templateImportDate.ToString("yyyy-MM-dd")
+                                        select i).ToList().Count() > 0 ? templateImportDate.ToString("yyyy-MM-dd") : null;
+                }
+            }
+        }
+
+        private List<string> importDateCollect;
+
+        public List<string> ImportDateCollect
+        {
+            get { return importDateCollect; }
+            set
+            {
+                importDateCollect = value;
+                OnPropertyChanged("ImportDateCollect");
+            }
+        }
+
+
+        private string importDateString;
+
+        public string ImportDateString
+        {
+            get { return importDateString; }
+            set
+            {
+                if (importDateString != value)
+                {
+                    importDateString = value;
+                    OnPropertyChanged("ImportDateString");
+                    if (importDateString != null)
+                        TemplateImportDate = DateTime.Parse(importDateString);
+                    else
+                        TemplateImportDate = TemplateImportDate;
+                }
+            }
+        }
+
+
         private TBeforeAfter tBA;
         private TIn6s tI6;
         private TInOut9s tIO9;
@@ -369,14 +422,12 @@ namespace DigiDental.ViewModels.UserControlViewModels
             Agencys = agencys;
             Patients = patients;
             ShowImages = showImages;
-            if (dde == null)
+            using (var dde = new DigiDentalEntities())
             {
-                dde = new DigiDentalEntities();
+                var temp = from t in dde.Templates
+                           select t;
+                Templates = new ObservableCollection<Templates>(temp);
             }
-
-            var temp = from t in dde.Templates
-                        select t;
-            Templates = new ObservableCollection<Templates>(temp);
         }
 
         private void SetTemplateLayout()
@@ -423,75 +474,95 @@ namespace DigiDental.ViewModels.UserControlViewModels
             switch (templateItem.Template_UserControlName)
             {
                 case "TBeforeAfter":
-                    if (tBA == null)
-                    {
-                        tBA = new TBeforeAfter(Agencys, Patients, templateItem);
-                    }
+                    //if (tBA == null)
+                    //{
+                    //    tBA = new TBeforeAfter(Agencys, Patients, templateItem, TemplateImportDate);
+                    //}
+                    tBA = new TBeforeAfter(Agencys, Patients, templateItem, TemplateImportDate);
                     TemplateContent = tBA;
                     break;
                 case "TIn6s":
-                    if (tI6 == null)
-                    {
-                        tI6 = new TIn6s(Agencys, Patients, templateItem);
-                    }
+                    //if (tI6 == null)
+                    //{
+                    //    tI6 = new TIn6s(Agencys, Patients, templateItem, TemplateImportDate);
+                    //}
+                    tI6 = new TIn6s(Agencys, Patients, templateItem, TemplateImportDate);
                     TemplateContent = tI6;
                     break;
                 case "TInOut9s":
-                    if (tIO9 == null)
-                    {
-                        tIO9 = new TInOut9s(Agencys, Patients, templateItem);
-                    }
+                    //if (tIO9 == null)
+                    //{
+                    //    tIO9 = new TInOut9s(Agencys, Patients, templateItem, TemplateImportDate);
+                    //}
+                    tIO9 = new TInOut9s(Agencys, Patients, templateItem, TemplateImportDate);
                     TemplateContent = tIO9;
                     break;
                 case "TInOut10s":
-                    if (tIO10 == null)
-                    {
-                        tIO10 = new TInOut10s(Agencys, Patients, templateItem);
-                    }
+                    //if (tIO10 == null)
+                    //{
+                    //    tIO10 = new TInOut10s(Agencys, Patients, templateItem, TemplateImportDate);
+                    //}
+                    tIO10 = new TInOut10s(Agencys, Patients, templateItem, TemplateImportDate);
                     TemplateContent = tIO10;
                     break;
                 case "TInOut11s":
-                    if (tIO11 == null)
-                    {
-                        tIO11 = new TInOut11s(Agencys, Patients, templateItem);
-                    }
+                    //if (tIO11 == null)
+                    //{
+                    //    tIO11 = new TInOut11s(Agencys, Patients, templateItem, TemplateImportDate);
+                    //}
+                    tIO11 = new TInOut11s(Agencys, Patients, templateItem, TemplateImportDate);
                     TemplateContent = tIO11;
                     break;
                 case "TXRay6s":
-                    if (tXR6 == null)
-                    {
-                        tXR6 = new TXRay6s(Agencys, Patients, templateItem);
-                    }
+                    //if (tXR6 == null)
+                    //{
+                    //    tXR6 = new TXRay6s(Agencys, Patients, templateItem, TemplateImportDate);
+                    //}
+                    tXR6 = new TXRay6s(Agencys, Patients, templateItem, TemplateImportDate);
                     TemplateContent = tXR6;
                     break;
                 case "TXRay19s":
-                    if (tXR19 == null)
-                    {
-                        tXR19 = new TXRay19s(Agencys, Patients, templateItem);
-                    }
+                    //if (tXR19 == null)
+                    //{
+                    //    tXR19 = new TXRay19s(Agencys, Patients, templateItem, TemplateImportDate);
+                    //}
+                    tXR19 = new TXRay19s(Agencys, Patients, templateItem, TemplateImportDate);
                     TemplateContent = tXR19;
                     break;
                 case "TPlasterModel5s":
-                    if (tPM15 == null)
-                    {
-                        tPM15 = new TPlasterModel5s(Agencys, Patients, templateItem);
-                    }
+                    //if (tPM15 == null)
+                    //{
+                    //    tPM15 = new TPlasterModel5s(Agencys, Patients, templateItem, TemplateImportDate);
+                    //}
+                    tPM15 = new TPlasterModel5s(Agencys, Patients, templateItem, TemplateImportDate);
                     TemplateContent = tPM15;
                     break;
                 case "TFdi52s":
-                    if (tF52 == null)
-                    {
-                        tF52 = new TFdi52s(Agencys, Patients, templateItem);
-                    }
+                    //if (tF52 == null)
+                    //{
+                    //    tF52 = new TFdi52s(Agencys, Patients, templateItem, TemplateImportDate);
+                    //}
+                    tF52 = new TFdi52s(Agencys, Patients, templateItem, TemplateImportDate);
                     TemplateContent = tF52;
                     break;
                 case "TOthers1s":
-                    if (tO1 == null)
-                    {
-                        tO1 = new TOthers1s(Agencys, Patients, templateItem);
-                    }
+                    //if (tO1 == null)
+                    //{
+                    //    tO1 = new TOthers1s(Agencys, Patients, templateItem, TemplateImportDate);
+                    //}
+                    tO1 = new TOthers1s(Agencys, Patients, templateItem, TemplateImportDate);
                     TemplateContent = tO1;
                     break;
+            }
+            using (var dde = new DigiDentalEntities())
+            {
+                var queryImportDate = from ti in dde.TemplateImages
+                                       where ti.Patient_ID == Patients.Patient_ID &&
+                                       ti.Template_ID == TemplateItem.Template_ID
+                                       group ti by ti.TemplateImage_ImportDate into tt
+                                       select tt.Key.ToString();
+                ImportDateCollect = queryImportDate.ToList();
+                //ImportDateCollect = new ObservableCollection<string>(queryImportDate);
             }
         }
     }

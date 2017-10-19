@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:DigiDental.Views.UserControls"
              xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              mc:Ignorable="d" 
-             d:DesignHeight="500" d:DesignWidth="500" 
+             d:DesignHeight="500" d:DesignWidth="800" 
              Loaded="UserControl_Loaded">
     <UserControl.Resources>
         <CollectionViewSource x:Key="SortedItems" Source="{Binding ShowImages}">
@@ -29,8 +29,12 @@
                 <ColumnDefinition Width="auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0" Orientation="Horizontal">
-                <Label Content="選擇模板類型"/>
-                <ComboBox x:Name="ComboBoxItem" Width="200" ItemsSource="{Binding Templates}" DisplayMemberPath="Template_Title" SelectedItem="{Binding TemplateItem}"/>
+                <Label Content="模板日期"/>
+                <DatePicker SelectedDate="{Binding TemplateImportDate}"/>
+                <Label Content="選擇模板"/>
+                <ComboBox x:Name="ComboBoxItem" Width="150" ItemsSource="{Binding Templates}" DisplayMemberPath="Template_Title" SelectedItem="{Binding TemplateItem}"/>
+                <Label Content="瀏覽"/>
+                <ComboBox x:Name="ComboBoxImportDate" ItemsSource="{Binding ImportDateCollect}" SelectedItem="{Binding ImportDateString}"/>
             </StackPanel>
             <ToolBarPanel>
             </ToolBarPanel>

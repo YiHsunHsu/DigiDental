@@ -190,7 +190,7 @@ namespace DigiDental.Views.UserControls
                     }
 
                     tICollection = new ObservableCollection<TemplateImages>();
-                    tICollection = dbti.GetTemplateImagesCollection(Agencys, Patients, TemplateItem);
+                    tICollection = dbti.GetTemplateImagesCollection(Agencys, Patients, TemplateItem, tfvm.TemplateImportDate);
 
                     //default Image[i] in UserControl Templates
                     int Imagei = 0;
@@ -244,7 +244,7 @@ namespace DigiDental.Views.UserControls
                                     iTarget = (Image)TemplateContent.FindName("Image" + Imagei);
 
                                     //INSERT TemplateImages
-                                    dbti.InsertOrUpdateImage(Patients, TemplateItem, imageID, imagePath, iTarget.Uid);
+                                    dbti.InsertOrUpdateImage(Patients, TemplateItem, tfvm.TemplateImportDate, imageID, imagePath, iTarget.Uid);
                                     iTarget.Source = lbi.SettingBitmapImage(pf.PatientFullFolderPathOriginal + @"\" + newFileName + @"ori" + extension, DecodePixelWidth);
                                     isChanged = true;
                                 });
