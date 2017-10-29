@@ -24,116 +24,116 @@
         <Border BorderBrush="PowderBlue" BorderThickness="0.5"
                 Grid.Column="0" Grid.Row="0">
             <Image x:Name="Image0" Uid="0"
-                   Source="C:\Users\Eason_Hsu\Desktop\icon\no.png"
+                   Source="/DigiDental;component/Resource/no.png"
                    AllowDrop="True" Drop="Image_Drop"></Image>
         </Border>
         <Border BorderBrush="PowderBlue" BorderThickness="0.5"
                 Grid.Column="1" Grid.Row="0">
         <Image x:Name="Image1" Uid="1"
-                   Source="C:\Users\Eason_Hsu\Desktop\icon\no.png"
+                   Source="/DigiDental;component/Resource/no.png"
                    AllowDrop="True" Drop="Image_Drop"></Image>
         </Border>
         <Border BorderBrush="PowderBlue" BorderThickness="0.5"
                 Grid.Column="2" Grid.Row="0"
                 Grid.ColumnSpan="3">
             <Image x:Name="Image2" Uid="2"
-                   Source="C:\Users\Eason_Hsu\Desktop\icon\no.png"
+                   Source="/DigiDental;component/Resource/no.png"
                    AllowDrop="True" Drop="Image_Drop"></Image>
         </Border>
         <Border BorderBrush="PowderBlue" BorderThickness="0.5"
                 Grid.Column="5" Grid.Row="0">
             <Image x:Name="Image3" Uid="3"
-                   Source="C:\Users\Eason_Hsu\Desktop\icon\no.png"
+                   Source="/DigiDental;component/Resource/no.png"
                    AllowDrop="True" Drop="Image_Drop"></Image>
         </Border>
         <Border BorderBrush="PowderBlue" BorderThickness="0.5"
                 Grid.Column="6" Grid.Row="0">
             <Image x:Name="Image4" Uid="4"
-                   Source="C:\Users\Eason_Hsu\Desktop\icon\no.png"
+                   Source="/DigiDental;component/Resource/no.png"
                    AllowDrop="True" Drop="Image_Drop"></Image>
         </Border>
         <Border BorderBrush="PowderBlue" BorderThickness="0.5"
                 Grid.Column="0" Grid.Row="1">
             <Image x:Name="Image5" Uid="5"
-                   Source="C:\Users\Eason_Hsu\Desktop\icon\no.png"
+                   Source="/DigiDental;component/Resource/no.png"
                    AllowDrop="True" Drop="Image_Drop"></Image>
         </Border>
         <Border BorderBrush="PowderBlue" BorderThickness="0.5"
                 Grid.Column="1" Grid.Row="1">
             <Image x:Name="Image6" Uid="6"
-                   Source="C:\Users\Eason_Hsu\Desktop\icon\no.png"
+                   Source="/DigiDental;component/Resource/no.png"
                    AllowDrop="True" Drop="Image_Drop"></Image>
         </Border>
         <Border BorderBrush="PowderBlue" BorderThickness="0.5"
                 Grid.Column="2" Grid.Row="1">
             <Image x:Name="Image7" Uid="7"
-                   Source="C:\Users\Eason_Hsu\Desktop\icon\no.png"
+                   Source="/DigiDental;component/Resource/no.png"
                    AllowDrop="True" Drop="Image_Drop"></Image>
         </Border>
         <Border BorderBrush="PowderBlue" BorderThickness="0.5"
                 Grid.Column="3" Grid.Row="1">
             <Image x:Name="Image8" Uid="8"
-                   Source="C:\Users\Eason_Hsu\Desktop\icon\no.png"
+                   Source="/DigiDental;component/Resource/no.png"
                    AllowDrop="True" Drop="Image_Drop"></Image>
         </Border>
         <Border BorderBrush="PowderBlue" BorderThickness="0.5"
                 Grid.Column="4" Grid.Row="1">
             <Image x:Name="Image9" Uid="9"
-                   Source="C:\Users\Eason_Hsu\Desktop\icon\no.png"
+                   Source="/DigiDental;component/Resource/no.png"
                    AllowDrop="True" Drop="Image_Drop"></Image>
         </Border>
         <Border BorderBrush="PowderBlue" BorderThickness="0.5"
                 Grid.Column="5" Grid.Row="1">
             <Image x:Name="Image10" Uid="10"
-                   Source="C:\Users\Eason_Hsu\Desktop\icon\no.png"
+                   Source="/DigiDental;component/Resource/no.png"
                    AllowDrop="True" Drop="Image_Drop"></Image>
         </Border>
         <Border BorderBrush="PowderBlue" BorderThickness="0.5"
                 Grid.Column="6" Grid.Row="1">
             <Image x:Name="Image11" Uid="11"
-                   Source="C:\Users\Eason_Hsu\Desktop\icon\no.png"
+                   Source="/DigiDental;component/Resource/no.png"
                    AllowDrop="True" Drop="Image_Drop"></Image>
         </Border>
         <Border BorderBrush="PowderBlue" BorderThickness="0.5"
                 Grid.Column="0" Grid.Row="2">
             <Image x:Name="Image12" Uid="12"
-                   Source="C:\Users\Eason_Hsu\Desktop\icon\no.png"
+                   Source="/DigiDental;component/Resource/no.png"
                    AllowDrop="True" Drop="Image_Drop"></Image>
         </Border>
         <Border BorderBrush="PowderBlue" BorderThickness="0.5"
                 Grid.Column="1" Grid.Row="2">
             <Image x:Name="Image13" Uid="13"
-                   Source="C:\Users\Eason_Hsu\Desktop\icon\no.png"
+                   Source="/DigiDental;component/Resource/no.png"
                    AllowDrop="True" Drop="Image_Drop"></Image>
         </Border>
         <Border BorderBrush="PowderBlue" BorderThickness="0.5"
                 Grid.Column="2" Grid.Row="2">
             <Image x:Name="Image14" Uid="14"
-                   Source="C:\Users\Eason_Hsu\Desktop\icon\no.png"
+                   Source="/DigiDental;component/Resource/no.png"
                    AllowDrop="True" Drop="Image_Drop"></Image>
         </Border>
         <Border BorderBrush="PowderBlue" BorderThickness="0.5"
                 Grid.Column="3" Grid.Row="2">
             <Image x:Name="Image15" Uid="15"
-                   Source="C:\Users\Eason_Hsu\Desktop\icon\no.png"
+                   Source="/DigiDental;component/Resource/no.png"
                    AllowDrop="True" Drop="Image_Drop"></Image>
         </Border>
         <Border BorderBrush="PowderBlue" BorderThickness="0.5"
                 Grid.Column="4" Grid.Row="2">
             <Image x:Name="Image16" Uid="16"
-                   Source="C:\Users\Eason_Hsu\Desktop\icon\no.png"
+                   Source="/DigiDental;component/Resource/no.png"
                    AllowDrop="True" Drop="Image_Drop"></Image>
         </Border>
         <Border BorderBrush="PowderBlue" BorderThickness="0.5"
                 Grid.Column="5" Grid.Row="2">
             <Image x:Name="Image17" Uid="17"
-                   Source="C:\Users\Eason_Hsu\Desktop\icon\no.png"
+                   Source="/DigiDental;component/Resource/no.png"
                    AllowDrop="True" Drop="Image_Drop"></Image>
         </Border>
         <Border BorderBrush="PowderBlue" BorderThickness="0.5"
                 Grid.Column="6" Grid.Row="2">
             <Image x:Name="Image18" Uid="18"
-                   Source="C:\Users\Eason_Hsu\Desktop\icon\no.png"
+                   Source="/DigiDental;component/Resource/no.png"
                    AllowDrop="True" Drop="Image_Drop"></Image>
         </Border>
     </Grid>

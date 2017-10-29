@@ -18,31 +18,31 @@
             <RowDefinition Height="0.25*"></RowDefinition>
         </Grid.RowDefinitions>
         <Border Grid.Column="0" Grid.Row="0">
-            <Image x:Name="Image0" Uid="0" Source="C:\Users\Eason_Hsu\Desktop\icon\no.png" 
+            <Image x:Name="Image0" Uid="0" Source="/DigiDental;component/Resource/no.png" 
                    AllowDrop="True" Drop="Image_Drop"></Image></Border>
         <Border Grid.Column="1" Grid.Row="0">
-            <Image x:Name="Image1" Uid="1" Source="C:\Users\Eason_Hsu\Desktop\icon\no.png" 
+            <Image x:Name="Image1" Uid="1" Source="/DigiDental;component/Resource/no.png" 
                    AllowDrop="True" Drop="Image_Drop"></Image></Border>
         <Border Grid.Column="2" Grid.Row="0">
-            <Image x:Name="Image2" Uid="2" Source="C:\Users\Eason_Hsu\Desktop\icon\no.png" 
+            <Image x:Name="Image2" Uid="2" Source="/DigiDental;component/Resource/no.png" 
                    AllowDrop="True" Drop="Image_Drop"></Image></Border>
         <Border Grid.Column="0" Grid.Row="1">
-            <Image x:Name="Image3" Uid="3" Source="C:\Users\Eason_Hsu\Desktop\icon\no.png" 
+            <Image x:Name="Image3" Uid="3" Source="/DigiDental;component/Resource/no.png" 
                    AllowDrop="True" Drop="Image_Drop"></Image></Border>
         <Border Grid.Column="1" Grid.Row="1">
-            <Image x:Name="Image4" Uid="4" Source="C:\Users\Eason_Hsu\Desktop\icon\no.png" 
+            <Image x:Name="Image4" Uid="4" Source="/DigiDental;component/Resource/no.png" 
                    AllowDrop="True" Drop="Image_Drop"></Image></Border>
         <Border Grid.Column="2" Grid.Row="1">
-            <Image x:Name="Image5" Uid="5" Source="C:\Users\Eason_Hsu\Desktop\icon\no.png" 
+            <Image x:Name="Image5" Uid="5" Source="/DigiDental;component/Resource/no.png" 
                    AllowDrop="True" Drop="Image_Drop"></Image></Border>
         <Border Grid.Column="0" Grid.Row="2">
-            <Image x:Name="Image6" Uid="6" Source="C:\Users\Eason_Hsu\Desktop\icon\no.png" 
+            <Image x:Name="Image6" Uid="6" Source="/DigiDental;component/Resource/no.png" 
                    AllowDrop="True" Drop="Image_Drop"></Image></Border>
         <Border Grid.Column="1" Grid.Row="2">
-            <Image x:Name="Image7" Uid="7" Source="C:\Users\Eason_Hsu\Desktop\icon\no.png" 
+            <Image x:Name="Image7" Uid="7" Source="/DigiDental;component/Resource/no.png" 
                    AllowDrop="True" Drop="Image_Drop"></Image></Border>
         <Border Grid.Column="2" Grid.Row="2">
-            <Image x:Name="Image8" Uid="8" Source="C:\Users\Eason_Hsu\Desktop\icon\no.png" 
+            <Image x:Name="Image8" Uid="8" Source="/DigiDental;component/Resource/no.png" 
                    AllowDrop="True" Drop="Image_Drop"></Image></Border>
     </Grid>
 </UserControl>

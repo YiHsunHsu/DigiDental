@@ -426,6 +426,10 @@
       <DependentUpon>Model.edmx</DependentUpon>
       <LastGenOutput>Model.cs</LastGenOutput>
     </Content>
+    <Resource Include="Resource\key.ico" />
+    <Resource Include="Resource\no.png" />
+    <Resource Include="Resource\user.png" />
+    <Resource Include="Resource\yes.png" />
     <Resource Include="Resource\dental-care.jpg" />
   </ItemGroup>
   <ItemGroup>

@@ -264,7 +264,7 @@ namespace DigiDental.Views
         {
             IsRemove = true;
             ImportPatientPhotoPath = string.Empty;
-            pvm.PatientPhoto = new BitmapImage(new Uri(@"C:\Users\Eason_Hsu\Desktop\icon\user.png"));
+            pvm.PatientPhoto = new BitmapImage(new Uri(@"/DigiDental;component/Resource/user.png", UriKind.RelativeOrAbsolute));
         }
     }
 }

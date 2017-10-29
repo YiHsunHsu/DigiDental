@@ -8,7 +8,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid x:Name="MainGrid">
         <Image x:Name="Image0" Uid="0" 
-               Source="C:\Users\Eason_Hsu\Desktop\icon\no.png" 
+               Source="/DigiDental;component/Resource/no.png" 
                AllowDrop="True" Drop="Image_Drop"/>
     </Grid>
 </UserControl>

@@ -120,7 +120,7 @@ namespace DigiDental.ViewModels
             }
         }
 
-        private BitmapImage patientPhoto = new BitmapImage(new Uri(@"C:\Users\Eason_Hsu\Desktop\icon\user.png"));
+        private BitmapImage patientPhoto = new BitmapImage(new Uri(@"/DigiDental;component/Resource/user.png", UriKind.RelativeOrAbsolute));
 
         public BitmapImage PatientPhoto
         {

@@ -207,7 +207,9 @@ namespace DigiDental.Views.UserControls
                         {
                             iTarget = new Image();
                             iTarget = (Image)TemplateContent.FindName("Image" + Imagei);
-                            iTarget.Source = lbi.SettingBitmapImage(@"C:\Users\Eason_Hsu\Desktop\icon\yes.png", DecodePixelWidth);
+
+                            iTarget.Source = new BitmapImage(new Uri(@"/DigiDental;component/Resource/yes.png", UriKind.RelativeOrAbsolute));
+                            //iTarget.Source = lbi.SettingBitmapImage(@"/DigiDental;component/Resource/yes.png", DecodePixelWidth);
                         });
 
                         //set the paramater default
@@ -269,7 +271,8 @@ namespace DigiDental.Views.UserControls
                                     }
                                     else
                                     {
-                                        iTarget.Source = lbi.SettingBitmapImage(@"C:\Users\Eason_Hsu\Desktop\icon\key.ico", DecodePixelWidth);
+                                        iTarget.Source = new BitmapImage(new Uri(@"/DigiDental;component/Resource/no.png", UriKind.RelativeOrAbsolute));
+                                        //iTarget.Source = lbi.SettingBitmapImage(@"/DigiDental;component/Resource/key.ico", DecodePixelWidth);
                                     }
                                 });
                                 return;
@@ -294,7 +297,8 @@ namespace DigiDental.Views.UserControls
                                             }
                                             else
                                             {
-                                                iTarget.Source = lbi.SettingBitmapImage(@"C:\Users\Eason_Hsu\Desktop\icon\key.ico", DecodePixelWidth);
+                                                iTarget.Source = new BitmapImage(new Uri(@"/DigiDental;component/Resource/no.png", UriKind.RelativeOrAbsolute));
+                                                //iTarget.Source = lbi.SettingBitmapImage(@"/DigiDental;component/Resource/key.ico", DecodePixelWidth);
                                             }
                                         });
                                     }

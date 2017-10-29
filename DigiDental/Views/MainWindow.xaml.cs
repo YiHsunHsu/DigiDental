@@ -474,7 +474,7 @@ namespace DigiDental.Views
                     }
                     else
                     {
-                        mwvm.PatientPhoto = new BitmapImage(new Uri(@"C:\Users\Eason_Hsu\Desktop\icon\user.png"));
+                        mwvm.PatientPhoto = new BitmapImage(new Uri(@"/DigiDental;component/Resource/user.png", UriKind.RelativeOrAbsolute));
                     }
                     mwvm.PatientCategoryInfo = (from pc in dde.PatientCategories
                                                 where pc.Patients.Any(p => p.Patient_ID == Patients.Patient_ID)
