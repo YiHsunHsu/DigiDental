@@ -70,6 +70,7 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Class\Error_Log.cs" />
+    <Compile Include="Class\ImageHelper.cs" />
     <Compile Include="Class\ImageProcess.cs" />
     <Compile Include="Class\LoadBitmapImage.cs" />
     <Compile Include="Clients.cs">

@@ -4,6 +4,7 @@ using DigiDental.ViewModels.Class;
 using Microsoft.Win32;
 using System;
 using System.Collections.ObjectModel;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -148,8 +149,23 @@ namespace DigiDental.Views
                         {
                             string extension = Path.GetExtension(fileName).ToUpper();
                             string newFileName = DateTime.Now.ToString("yyyyMMddHHmmssffff");
-                            //複製原圖到目的Original
-                            File.Copy(fileName, pf.PatientFullFolderPathOriginal + @"\" + newFileName + @"ori" + extension);
+
+                            //System.Drawing.RotateFlipType rft = ImageHelper.RotateImageByExifOrientationData(fileName, pf.PatientFullFolderPathOriginal + @"\" + newFileName + @"ori" + extension, GetImageFormat(extension), true);
+
+                            ////複製原圖到目的Original
+                            //File.Copy(fileName, pf.PatientFullFolderPathOriginal + @"\" + newFileName + @"ori" + extension);
+
+                            // Rotate the image according to EXIF data
+                            var bmp = new System.Drawing.Bitmap(fileName);
+                            System.Drawing.RotateFlipType fType = ImageHelper.RotateImageByExifOrientationData(bmp, true);
+                            if (fType != System.Drawing.RotateFlipType.RotateNoneFlipNone)
+                            {
+                                bmp.Save(pf.PatientFullFolderPathOriginal + @"\" + newFileName + @"ori" + extension, GetImageFormat(extension));
+                            }
+                            else
+                            {
+                                File.Copy(fileName, pf.PatientFullFolderPathOriginal + @"\" + newFileName + @"ori" + extension);
+                            }
 
                             string imagePath = @"\" + pf.PatientFolderPathOriginal + @"\" + newFileName + @"ori" + extension;
                             string imageFileName = newFileName + @"ori" + extension;
@@ -270,7 +286,22 @@ namespace DigiDental.Views
                                     string extension = Path.GetExtension(f).ToUpper();
                                     string newFileName = DateTime.Now.ToString("yyyyMMddHHmmssffff");
 
-                                    File.Copy(f, pf.PatientFullFolderPathOriginal + @"\" + newFileName + @"ori" + extension);
+                                    //System.Drawing.RotateFlipType rft = ImageHelper.RotateImageByExifOrientationData(f, pf.PatientFullFolderPathOriginal + @"\" + newFileName + @"ori" + extension, GetImageFormat(extension), true);
+
+                                    ////複製原圖到目的Original
+                                    //File.Copy(f, pf.PatientFullFolderPathOriginal + @"\" + newFileName + @"ori" + extension);
+
+                                    // Rotate the image according to EXIF data
+                                    var bmp = new System.Drawing.Bitmap(f);
+                                    System.Drawing.RotateFlipType fType = ImageHelper.RotateImageByExifOrientationData(bmp, true);
+                                    if (fType != System.Drawing.RotateFlipType.RotateNoneFlipNone)
+                                    {
+                                        bmp.Save(pf.PatientFullFolderPathOriginal + @"\" + newFileName + @"ori" + extension, GetImageFormat(extension));
+                                    }
+                                    else
+                                    {
+                                        File.Copy(f, pf.PatientFullFolderPathOriginal + @"\" + newFileName + @"ori" + extension);
+                                    }
 
                                     string imagePath = @"\" + pf.PatientFolderPathOriginal + @"\" + newFileName + @"ori" + extension;
                                     string imageFileName = newFileName + @"ori" + extension;
@@ -486,6 +517,25 @@ namespace DigiDental.Views
                                                 }).ToList();
                 }
             }
+        }
+
+        private ImageFormat GetImageFormat(string imageExtension)
+        {
+            ImageFormat imageFormat = new ImageFormat(Guid.NewGuid());
+            switch (imageExtension)
+            {
+                case ".JPG":
+                case ".JPEG":
+                    imageFormat = ImageFormat.Jpeg;
+                    break;
+                case ".PNG":
+                    imageFormat = ImageFormat.Png;
+                    break;
+                case ".GIF":
+                    imageFormat = ImageFormat.Gif;
+                    break;
+            }
+            return imageFormat;
         }
     }
 }

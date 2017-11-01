@@ -33,8 +33,8 @@ namespace DigiDental
         public virtual DbSet<Images> Images { get; set; }
         public virtual DbSet<Templates> Templates { get; set; }
         public virtual DbSet<PatientCategories> PatientCategories { get; set; }
-        public virtual DbSet<Patients> Patients { get; set; }
         public virtual DbSet<Registrations> Registrations { get; set; }
         public virtual DbSet<TemplateImages> TemplateImages { get; set; }
+        public virtual DbSet<Patients> Patients { get; set; }
     }
 }

@@ -176,9 +176,9 @@ namespace DigiDental.Views
                                 patients.Patient_Photo = pf.PatientPhotoPath + @"\" + newFileName + extension;
                             }
                             //寫入分類
-                            List<PatientCategoryInfo> PatientCategoryInfo = pvm.PatientCategoryInfo.FindAll(pcs => pcs.IsChecked == true);
-                            if (PatientCategoryInfo.Count > 0)
+                            if (pvm.PatientCategoryInfo != null)
                             {
+                                List<PatientCategoryInfo> PatientCategoryInfo = pvm.PatientCategoryInfo.FindAll(pcs => pcs.IsChecked == true);
                                 foreach (PatientCategoryInfo pci in PatientCategoryInfo)
                                 {
                                     PatientCategories patientCategories = (from pc in dde.PatientCategories

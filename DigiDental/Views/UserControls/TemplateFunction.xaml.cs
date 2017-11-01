@@ -8,6 +8,7 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -228,7 +229,23 @@ namespace DigiDental.Views.UserControls
                                 {
                                     Directory.CreateDirectory(pf.PatientFullFolderPathOriginal);
                                 }
-                                File.Copy(f, pf.PatientFullFolderPathOriginal + @"\" + newFileName + @"ori" + extension);
+
+                                //System.Drawing.RotateFlipType rft = ImageHelper.RotateImageByExifOrientationData(f, pf.PatientFullFolderPathOriginal + @"\" + newFileName + @"ori" + extension, GetImageFormat(extension), true);
+
+                                ////複製原圖到目的Original
+                                //File.Copy(f, pf.PatientFullFolderPathOriginal + @"\" + newFileName + @"ori" + extension);
+
+                                // Rotate the image according to EXIF data
+                                var bmp = new System.Drawing.Bitmap(f);
+                                System.Drawing.RotateFlipType fType = ImageHelper.RotateImageByExifOrientationData(bmp, true);
+                                if (fType != System.Drawing.RotateFlipType.RotateNoneFlipNone)
+                                {
+                                    bmp.Save(pf.PatientFullFolderPathOriginal + @"\" + newFileName + @"ori" + extension, GetImageFormat(extension));
+                                }
+                                else
+                                {
+                                    File.Copy(f, pf.PatientFullFolderPathOriginal + @"\" + newFileName + @"ori" + extension);
+                                }
 
                                 Registration_ID = dbr.CreateRegistrationsAndGetID(Patients, Registration_Date);
 
@@ -472,5 +489,25 @@ namespace DigiDental.Views.UserControls
             }
         }
         #endregion
+
+
+        private ImageFormat GetImageFormat(string imageExtension)
+        {
+            ImageFormat imageFormat = new ImageFormat(Guid.NewGuid());
+            switch (imageExtension)
+            {
+                case ".JPG":
+                case ".JPEG":
+                    imageFormat = ImageFormat.Jpeg;
+                    break;
+                case ".PNG":
+                    imageFormat = ImageFormat.Png;
+                    break;
+                case ".GIF":
+                    imageFormat = ImageFormat.Gif;
+                    break;
+            }
+            return imageFormat;
+        }
     }
 }
