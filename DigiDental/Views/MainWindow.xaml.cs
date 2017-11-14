@@ -126,7 +126,7 @@ namespace DigiDental.Views
                     //string PatientFullFolderPathSmall = pf.PatientFullFolderPathSmall;
                     #endregion
 
-                    if (!Directory.Exists(pf.PatientFullFolderPath))
+                    if (!Directory.Exists(pf.PatientFullFolderPathOriginal))
                     {
                         Directory.CreateDirectory(pf.PatientFullFolderPathOriginal);
                         //Directory.CreateDirectory(PatientFullFolderPathSmall);
